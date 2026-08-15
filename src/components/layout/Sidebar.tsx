@@ -1,7 +1,6 @@
-import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Home, ClipboardList, Map, Truck, Fuel, Receipt, BarChart2, Bell, LogOut, ChevronLeft, Menu } from 'lucide-react';
+import {  Fuel, LogOut, ChevronLeft,  } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useSession } from '@/stores/session.store';
 import { useLayoutStore } from '@/stores/layout.store';
