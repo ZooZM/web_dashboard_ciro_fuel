@@ -1,0 +1,92 @@
+{
+  "common": {
+    "appName": "لوحة تحكم كيرو للوقود",
+    "save": "حفظ",
+    "cancel": "إلغاء",
+    "submit": "إرسال",
+    "signOut": "تسجيل الخروج",
+    "loading": "جارٍ التحميل...",
+    "retry": "إعادة المحاولة",
+    "back": "رجوع",
+    "language": "اللغة",
+    "fullName": "الاسم الكامل"
+  },
+  "auth": {
+    "login": {
+      "title": "تسجيل الدخول",
+      "email": "البريد الإلكتروني",
+      "password": "كلمة المرور",
+      "submit": "دخول",
+      "invalidCredentials": "البريد الإلكتروني أو كلمة المرور غير صحيحة"
+    }
+  },
+  "nav": {
+    "orders": "الطلبات",
+    "drivers": "السائقون",
+    "clients": "العملاء",
+    "settings": "الإعدادات",
+    "companies": "الشركات"
+  },
+  "errors": {
+    "generic": "حدث خطأ ما. الرجاء المحاولة مرة أخرى.",
+    "notFound": "لم يتم العثور على المورد المطلوب.",
+    "forbidden": "غير مصرح لك بالوصول إلى هذا القسم."
+  },
+  "orders": {
+    "title": "الطلبات",
+    "status": "الحالة",
+    "estimatedPrice": "السعر التقديري",
+    "finalPrice": "السعر النهائي",
+    "approve": "اعتماد",
+    "reject": "رفض",
+    "cancel": "إلغاء الطلب",
+    "forceComplete": "إنهاء يدوي",
+    "reason": "السبب",
+    "empty": "لا توجد طلبات حالياً",
+    "detail": "تفاصيل الطلب"
+  },
+  "drivers": {
+    "title": "السائقون",
+    "add": "إضافة سائق",
+    "plateNumber": "رقم اللوحة",
+    "maxCapacity": "السعة القصوى باللتر",
+    "fuelTypes": "أنواع الوقود المدعومة",
+    "active": "نشط",
+    "inactive": "غير نشط",
+    "empty": "لا يوجد سائقون بعد"
+  },
+  "clients": {
+    "title": "العملاء",
+    "add": "إضافة عميل",
+    "stationLocation": "موقع المحطة",
+    "latitude": "خط العرض",
+    "longitude": "خط الطول",
+    "empty": "لا يوجد عملاء بعد"
+  },
+  "settings": {
+    "title": "الإعدادات",
+    "companyProfile": "بيانات الشركة",
+    "fuelPrices": "أسعار الوقود الأساسية",
+    "basePricePerLiter": "السعر الأساسي لكل لتر"
+  },
+  "companies": {
+    "title": "الشركات",
+    "onboard": "إضافة شركة جديدة",
+    "status": "الحالة",
+    "active": "نشطة",
+    "suspended": "موقوفة",
+    "suspend": "إيقاف",
+    "activate": "تفعيل",
+    "name": "اسم الشركة",
+    "commercialRegister": "السجل التجاري",
+    "adminEmail": "بريد المسؤول",
+    "adminFullName": "اسم المسؤول",
+    "adminPhone": "هاتف المسؤول",
+    "adminPassword": "كلمة مرور المسؤول",
+    "onboardSuccess": "تم إنشاء الشركة والمسؤول الأول بنجاح",
+    "empty": "لا توجد شركات بعد",
+    "fileTypeError": "نوع الملف غير مدعوم",
+    "fileSizeError": "حجم الملف كبير جداً (الحد الأقصى 10 ميغابايت)",
+    "fileRequired": "ملف السجل التجاري مطلوب"
+  }
+}

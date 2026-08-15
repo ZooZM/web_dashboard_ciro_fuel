@@ -1,0 +1,92 @@
+{
+  "common": {
+    "appName": "Ciro Fuel Admin Dashboard",
+    "save": "Save",
+    "cancel": "Cancel",
+    "submit": "Submit",
+    "signOut": "Sign out",
+    "loading": "Loading...",
+    "retry": "Retry",
+    "back": "Back",
+    "language": "Language",
+    "fullName": "Full name"
+  },
+  "auth": {
+    "login": {
+      "title": "Sign in",
+      "email": "Email",
+      "password": "Password",
+      "submit": "Sign in",
+      "invalidCredentials": "Invalid email or password"
+    }
+  },
+  "nav": {
+    "orders": "Orders",
+    "drivers": "Drivers",
+    "clients": "Clients",
+    "settings": "Settings",
+    "companies": "Companies"
+  },
+  "errors": {
+    "generic": "Something went wrong. Please try again.",
+    "notFound": "The requested resource could not be found.",
+    "forbidden": "You are not authorized to access this area."
+  },
+  "orders": {
+    "title": "Orders",
+    "status": "Status",
+    "estimatedPrice": "Estimated price",
+    "finalPrice": "Final price",
+    "approve": "Approve",
+    "reject": "Reject",
+    "cancel": "Cancel order",
+    "forceComplete": "Force complete",
+    "reason": "Reason",
+    "empty": "No orders yet",
+    "detail": "Order detail"
+  },
+  "drivers": {
+    "title": "Drivers",
+    "add": "Add driver",
+    "plateNumber": "Plate number",
+    "maxCapacity": "Max capacity (liters)",
+    "fuelTypes": "Supported fuel types",
+    "active": "Active",
+    "inactive": "Inactive",
+    "empty": "No drivers yet"
+  },
+  "clients": {
+    "title": "Clients",
+    "add": "Add client",
+    "stationLocation": "Station location",
+    "latitude": "Latitude",
+    "longitude": "Longitude",
+    "empty": "No clients yet"
+  },
+  "settings": {
+    "title": "Settings",
+    "companyProfile": "Company profile",
+    "fuelPrices": "Base fuel prices",
+    "basePricePerLiter": "Base price per liter"
+  },
+  "companies": {
+    "title": "Companies",
+    "onboard": "Onboard company",
+    "status": "Status",
+    "active": "Active",
+    "suspended": "Suspended",
+    "suspend": "Suspend",
+    "activate": "Activate",
+    "name": "Company name",
+    "commercialRegister": "Commercial register",
+    "adminEmail": "Admin email",
+    "adminFullName": "Admin full name",
+    "adminPhone": "Admin phone",
+    "adminPassword": "Admin password",
+    "onboardSuccess": "Company and initial admin created successfully",
+    "empty": "No companies yet",
+    "fileTypeError": "Unsupported file type",
+    "fileSizeError": "File too large (max 10MB)",
+    "fileRequired": "Commercial register file is required"
+  }
+}
