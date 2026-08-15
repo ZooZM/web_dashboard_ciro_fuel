@@ -6,6 +6,6 @@ export function useLogout() {
 
   return async function logout(): Promise<void> {
     await performLogout();
-    navigate('/login', { replace: true });
+    navigate('/', { replace: true });
   };
 }
