@@ -1,4 +1,3 @@
-import { cn } from '@/lib/utils';
 
 export interface NewOrder {
   logo: string;
