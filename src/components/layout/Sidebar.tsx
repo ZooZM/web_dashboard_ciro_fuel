@@ -1,6 +1,6 @@
 import { NavLink } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import {  Fuel, LogOut, ChevronLeft,  } from 'lucide-react';
+import {Fuel, LogOut, ChevronLeft,  } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useSession } from '@/stores/session.store';
 import { useLayoutStore } from '@/stores/layout.store';
