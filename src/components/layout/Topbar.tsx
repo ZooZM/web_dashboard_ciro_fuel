@@ -1,25 +1,51 @@
-import { useTranslation } from 'react-i18next';
-import { LogOut } from 'lucide-react';
 import { useSession } from '@/stores/session.store';
-import { useLogout } from '@/features/auth/hooks/useLogout';
-import { Button } from '@/components/ui/button';
-import { LangSwitcher } from '@/components/layout/LangSwitcher';
 
 export function Topbar() {
-  const { t } = useTranslation();
   const { user } = useSession();
-  const logout = useLogout();
 
   return (
-    <header className="flex h-14 shrink-0 items-center justify-between border-b px-4">
-      <span className="font-semibold">{t('common.appName')}</span>
-      <div className="flex items-center gap-3">
-        {user ? <span className="text-sm text-muted-foreground">{user.fullName}</span> : null}
-        <LangSwitcher />
-        <Button variant="ghost" size="sm" onClick={() => void logout()} aria-label={t('common.signOut')}>
-          <LogOut className="h-4 w-4" />
-          {t('common.signOut')}
-        </Button>
+    <header className="flex h-20 shrink-0 items-center justify-between border-b rounded-xl mx-3 my-2 border-slate-200 bg-white px-6 shadow-sm" dir="ltr">
+      {/* Left side: Logo */}
+      <div className="flex items-center gap-2">
+        <img src="/topBar/topBarLogo.svg" alt="CIRO FUEL" className="h-6" />
+      </div>
+
+      {/* Center: Search */}
+      <div className="flex flex-1 items-center justify-end border-r  border-slate-200 pr-3 mr-4">
+        <div className="flex items-center w-[246px] h-[32px] rounded-lg border border-slate-200 bg-slate-50 px-4 gap-2 transition-all focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500" dir="rtl">
+          <img src="/topBar/search.svg" alt="Search" className="w-4 h-4 object-contain opacity-50 shrink-0" />
+          <input 
+            type="text" 
+            placeholder="ابحث بكود الطلب أو الشركة..." 
+            className="flex-1 bg-transparent border-none outline-none text-[11px] text-slate-700 placeholder:text-slate-400 w-full h-full"
+          />
+        </div>
+      </div>
+
+      {/* Right side: Actions & Profile */}
+      <div className="flex items-center gap-6">
+        <div className="flex items-center gap-4">
+          <button className="text-blue-500 hover:text-blue-600 transition-colors">
+            <img src="/topBar/i.svg" alt="Info" className="h-5 w-5 object-contain" />
+          </button>
+          <button className="relative text-blue-500 hover:text-blue-600 transition-colors">
+            <img src="/topBar/notification.svg" alt="Notification" className="h-5 w-5 object-contain" />
+            <span className="absolute -top-1 -right-1 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-orange-500 text-[8px] font-bold text-white border-2 border-white">
+              5
+            </span>
+          </button>
+        </div>
+
+        <div className="h-8 w-px bg-slate-200"></div>
+
+        <div className="flex items-center gap-3 cursor-pointer group">
+          <img src="/topBar/profilePic.jpg" alt="Avatar" className="h-10 w-10 rounded-full object-cover border-2 border-white shadow-sm" />
+          <div className="flex flex-col text-right" dir="rtl">
+            <span className="text-sm font-bold text-slate-800">{user?.fullName || 'أحمد السبيعي'}</span>
+            <span className="text-[10px] text-slate-500">مدير عمليات</span>
+          </div>
+          <img src="/topBar/chevronDown.svg" alt="Menu" className="h-3 w-3 object-contain opacity-50 group-hover:opacity-80 transition-opacity" />
+        </div>
       </div>
     </header>
   );

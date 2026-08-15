@@ -1,42 +1,228 @@
+import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
-import { Package, Truck, Users, Settings, Building2, ClipboardList } from 'lucide-react';
-import { Role } from '@/constants/roles';
-import { RoleGate } from '@/routing/RoleGate';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Home, ClipboardList, Map, Truck, Fuel, Receipt, BarChart2, Bell, LogOut, ChevronLeft, Menu } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useSession } from '@/stores/session.store';
+import { useLayoutStore } from '@/stores/layout.store';
+import { useLogout } from '@/features/auth/hooks/useLogout';
 
-function NavItem({ to, icon: Icon, label }: { to: string; icon: typeof Package; label: string }) {
+function NavItem({ to, icon: Icon, label, badge, active, isCollapsed }: { to: string; icon: any; label: string; badge?: number; active?: boolean; isCollapsed: boolean }) {
   return (
     <NavLink
       to={to}
+      title={isCollapsed ? label : undefined}
       className={({ isActive }) =>
         cn(
-          'flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium',
-          isActive ? 'bg-accent text-accent-foreground' : 'text-muted-foreground hover:bg-accent/50',
+          'flex items-center rounded-xl group relative transition-all duration-300',
+          isCollapsed ? 'justify-center p-3 mx-auto w-12 h-12' : 'px-4 py-3 w-full',
+          isActive || active
+            ? 'bg-[#2563EB] text-white shadow-lg shadow-blue-500/20'
+            : 'text-slate-400 hover:bg-slate-800/50 hover:text-slate-200',
         )
       }
     >
-      <Icon className="h-4 w-4" />
-      {label}
+      {({ isActive }) => (
+        <>
+          <motion.div layout="position" className="relative flex items-center justify-center shrink-0">
+             {typeof Icon === 'string' ? (
+                <img 
+                  src={Icon} 
+                  alt={label} 
+                  className={cn(
+                    "transition-all duration-300 object-contain", 
+                    isCollapsed ? "h-5 w-5" : "h-5 w-5",
+                    (isActive || active) ? "brightness-0 invert" : "opacity-70 group-hover:opacity-100"
+                  )} 
+                />
+             ) : (
+                <Icon className={cn("transition-all duration-300", isCollapsed ? "h-5 w-5" : "h-5 w-5", (isActive || active) ? "text-white" : "text-slate-400 group-hover:text-slate-200")} />
+             )}
+          </motion.div>
+          
+          <AnimatePresence initial={false}>
+            {!isCollapsed && (
+              <motion.div
+                initial={{ opacity: 0, width: 0 }}
+                animate={{ opacity: 1, width: "auto" }}
+                exit={{ opacity: 0, width: 0 }}
+                transition={{ duration: 0.2 }}
+                className="overflow-hidden whitespace-nowrap flex-1"
+              >
+                <div className="pr-3 text-right text-sm font-medium">{label}</div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {badge ? (
+            <motion.span 
+              layout="position"
+              className={cn(
+                "flex items-center justify-center rounded-full bg-[#F97316] font-bold text-white shadow-sm shadow-[#0b1121] z-10 transition-all duration-300",
+                isCollapsed 
+                  ? "absolute top-1.5 right-1.5 h-4 w-4 text-[9px]" 
+                  : "h-5 w-5 shrink-0 text-[10px]"
+              )}
+            >
+              {badge}
+            </motion.span>
+          ) : null}
+        </>
+      )}
     </NavLink>
   );
 }
 
 export function Sidebar() {
-  const { t } = useTranslation();
+  const { user } = useSession();
+  const logout = useLogout();
+  const { isSidebarCollapsed: isCollapsed, toggleSidebar } = useLayoutStore();
 
   return (
-    <nav className="flex w-56 shrink-0 flex-col gap-1 border-e p-3">
-      <RoleGate allow={[Role.SUPER_ADMIN]}>
-        <NavItem to="/companies" icon={Building2} label={t('nav.companies')} />
-        <NavItem to="/platform-orders" icon={ClipboardList} label={t('nav.orders')} />
-      </RoleGate>
-      <RoleGate allow={[Role.COMPANY_ADMIN]}>
-        <NavItem to="/orders" icon={Package} label={t('nav.orders')} />
-        <NavItem to="/drivers" icon={Truck} label={t('nav.drivers')} />
-        <NavItem to="/clients" icon={Users} label={t('nav.clients')} />
-        <NavItem to="/settings" icon={Settings} label={t('nav.settings')} />
-      </RoleGate>
-    </nav>
+    <motion.aside 
+      dir="rtl" 
+      animate={{ width: isCollapsed ? 90 : 260 }}
+      transition={{ type: "spring", stiffness: 300, damping: 30 }}
+      className="flex h-screen sticky top-0 shrink-0 flex-col bg-[#0b1121] border-l border-slate-800/50 overflow-hidden"
+    >
+      <div className={cn("p-5 pb-2 flex flex-col transition-all duration-300", isCollapsed ? "px-3" : "px-5")}>
+        
+        {/* Header (Logo + Toggle) */}
+        <div className={cn("flex items-center transition-all duration-300 mb-8", isCollapsed ? "flex-col justify-center gap-4 h-auto" : "justify-between h-8")}>
+          <motion.div layout="position" className="overflow-hidden flex items-center justify-center">
+            <img 
+              src={isCollapsed ? "/LOGO/LogoDark.svg" : "/LOGO/LogoDark.svg"} 
+              alt="CIRO FUEL" 
+              className={cn("object-contain transition-all duration-300", isCollapsed ? "h-6 w-auto" : "h-6")} 
+              onError={(e) => {
+                if (isCollapsed) (e.target as HTMLImageElement).src = "/LOGO/LogoDark.svg";
+              }}
+            />
+          </motion.div>
+          <motion.button 
+            layout="position"
+            onClick={toggleSidebar}
+            className={cn(
+              "flex items-center justify-center rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 shrink-0 z-10 transition-colors",
+              isCollapsed ? "mx-auto p-2" : "p-1.5"
+            )}
+            title={isCollapsed ? "توسيع القائمة" : "طي القائمة"}
+          >
+            <motion.div animate={{ rotate: isCollapsed ? 180 : 0 }} transition={{ type: "spring", stiffness: 200, damping: 20 }}>
+              <img src="/sideBar/Menu.svg" alt="Menu" className={cn("transition-all duration-300 object-contain", isCollapsed ? "h-5 w-8 scale-90" : "h-6 w-10 scale-110")} />
+            </motion.div>
+          </motion.button>
+        </div>
+        
+        {/* Company Card */}
+        <motion.div 
+          layout="position"
+          className={cn(
+            "flex items-center mb-6 rounded-xl overflow-hidden transition-all duration-300", 
+            isCollapsed 
+              ? "justify-center w-12 h-12 mx-auto" 
+              : "bg-[#1e293b]/40 p-3 border border-slate-700/50 w-full"
+          )}
+        >
+          <motion.div layout="position" className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white relative z-10">
+            <Fuel className="h-5 w-5 text-[#2563EB]" />
+          </motion.div>
+          <AnimatePresence initial={false}>
+            {!isCollapsed && (
+              <motion.div
+                initial={{ opacity: 0, width: 0 }}
+                animate={{ opacity: 1, width: "auto" }}
+                exit={{ opacity: 0, width: 0 }}
+                transition={{ duration: 0.2 }}
+                className="overflow-hidden whitespace-nowrap flex-1"
+              >
+                <div className="flex flex-col text-right pr-3">
+                  <span className="text-sm font-bold text-white">بترو أمان</span>
+                  <span className="text-[11px] text-slate-400 mt-0.5">BRN-2024-001</span>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </motion.div>
+
+        {/* Navigation */}
+        <nav className="flex flex-col gap-1 w-full">
+          <NavItem to="/" icon="/sideBar/home.svg" label="الرئيسية" active={true} isCollapsed={isCollapsed} />
+          <NavItem to="/orders" icon="/sideBar/order.svg" label="الطلبات" badge={5} isCollapsed={isCollapsed} />
+          <NavItem to="/tracking" icon="/sideBar/map.svg" label="تتبع الشحنات" isCollapsed={isCollapsed} />
+          <NavItem to="/companies" icon="/sideBar/truck.svg" label="شركات النقل" isCollapsed={isCollapsed} />
+          <NavItem to="/stations" icon="/sideBar/steering.svg" label="المحطات" isCollapsed={isCollapsed} />
+          <NavItem to="/invoices" icon="/sideBar/greyTruck.svg" label="الفواتير و المدفوعات" isCollapsed={isCollapsed} />
+          <NavItem to="/reports" icon="/sideBar/charts.svg" label="التقارير" isCollapsed={isCollapsed} />
+          <NavItem to="/notifications" icon="/sideBar/notification.svg" label="الاشعارات" badge={5} isCollapsed={isCollapsed} />
+        </nav>
+      </div>
+
+      {/* Bottom User Profile */}
+      <div className={cn("mt-auto pt-2 flex flex-col gap-3 w-full transition-all duration-300", isCollapsed ? "p-3 pb-5" : "p-5 pb-5")}>
+        <motion.div 
+          layout="position"
+          className={cn(
+            "flex items-center rounded-xl overflow-hidden transition-all duration-300",
+            isCollapsed 
+              ? "justify-center mx-auto w-12 h-12" 
+              : "bg-[#1e293b]/40 p-3 border border-slate-700/50 w-full"
+          )}
+        >
+          <motion.img 
+            layout="position"
+            src="https://ui-avatars.com/api/?name=Ibrahim&background=random" 
+            alt="Avatar" 
+            className="h-10 w-10 shrink-0 rounded-full object-cover border border-slate-700 relative z-10" 
+          />
+          <AnimatePresence initial={false}>
+            {!isCollapsed && (
+              <motion.div
+                initial={{ opacity: 0, width: 0 }}
+                animate={{ opacity: 1, width: "auto" }}
+                exit={{ opacity: 0, width: 0 }}
+                transition={{ duration: 0.2 }}
+                className="overflow-hidden whitespace-nowrap flex-1"
+              >
+                <div className="flex items-center pr-3">
+                  <div className="flex flex-1 flex-col text-right">
+                    <span className="text-sm font-bold text-white">{user?.fullName || 'إبراهيم القحطاني'}</span>
+                    <span className="text-[11px] text-slate-400 mt-0.5">مدير العمليات</span>
+                  </div>
+                  <ChevronLeft className="h-4 w-4 text-slate-400 shrink-0 ml-1" />
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </motion.div>
+        
+        <motion.button 
+          layout="position"
+          onClick={() => logout()}
+          className={cn(
+            "flex items-center justify-center rounded-xl border border-slate-700/50 bg-transparent text-red-500 hover:bg-slate-800/50 overflow-hidden transition-all duration-300",
+            isCollapsed ? "mx-auto w-12 h-12 p-0" : "py-3 w-full text-sm font-bold"
+          )}
+          title="تسجيل الخروج"
+        >
+          <motion.div layout="position" className="relative z-10">
+            <LogOut className={cn("-scale-x-100 shrink-0 transition-all duration-300", isCollapsed ? "h-5 w-5" : "h-4 w-4")} />
+          </motion.div>
+          <AnimatePresence initial={false}>
+            {!isCollapsed && (
+              <motion.div
+                initial={{ opacity: 0, width: 0 }}
+                animate={{ opacity: 1, width: "auto" }}
+                exit={{ opacity: 0, width: 0 }}
+                transition={{ duration: 0.2 }}
+                className="overflow-hidden whitespace-nowrap"
+              >
+                <span className="block pr-2">تسجيل الخروج</span>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </motion.button>
+      </div>
+    </motion.aside>
   );
 }
