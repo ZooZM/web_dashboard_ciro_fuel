@@ -33,7 +33,7 @@ export function LoginPage() {
         'dummy-token'
       );
       toast.success('تم تسجيل الدخول بنجاح');
-      navigate('/');
+      navigate('/home');
       return;
     }
 
@@ -52,12 +52,12 @@ export function LoginPage() {
 
   return (
     <div
-      className="flex h-svh w-full flex-col relative overflow-hidden bg-cover bg-center"
+      className="flex min-h-svh w-full flex-col relative overflow-y-auto bg-cover bg-center"
       style={{ backgroundImage: 'url(/signIn/bg-truck.png)' }}
       dir="rtl"
     >
       {/* Main Content Area */}
-      <div className="flex-1 flex w-full max-w-7xl mx-auto items-center justify-start px-4 md:px-8">
+      <div className="flex-1 flex w-full max-w-7xl mx-auto items-center justify-start px-4 md:px-8 py-8 md:py-0">
         
         {/* Login Card */}
         <div className="w-full max-w-[400px] bg-white/40 backdrop-blur-lg border border-white/60 rounded-[2.5rem] p-8 shadow-2xl flex flex-col gap-6 mt-8 md:mt-0">

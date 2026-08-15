@@ -14,16 +14,16 @@ export function MapTrackingCard() {
       </div>
 
       {/* Legend */}
-      <div className="grid grid-cols-4 divide-x divide-x-reverse divide-slate-200 mt-5 mb-1 text-center">
-        <div className="flex flex-col items-center">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-y-4 divide-x-0 md:divide-x md:divide-x-reverse divide-slate-200 mt-5 mb-1 text-center">
+        <div className="flex flex-col items-center border-l-0 md:border-l border-slate-200">
           <span className="text-lg font-black text-slate-500">2</span>
           <span className="text-[11px] font-bold text-slate-500 mt-0.5">لم يتم الاستلام</span>
         </div>
-        <div className="flex flex-col items-center">
+        <div className="flex flex-col items-center border-l border-slate-200">
           <span className="text-lg font-black text-[#F97316]">1</span>
           <span className="text-[11px] font-bold text-[#F97316] mt-0.5">متأخر</span>
         </div>
-        <div className="flex flex-col items-center">
+        <div className="flex flex-col items-center border-l-0 md:border-l border-slate-200">
           <span className="text-lg font-black text-[#12A150]">12</span>
           <span className="text-[11px] font-bold text-[#12A150] mt-0.5">جاري التوصيل</span>
         </div>

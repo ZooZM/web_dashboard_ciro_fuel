@@ -1,5 +1,6 @@
 import { NavLink } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useEffect } from 'react';
 import {  Fuel, LogOut, ChevronLeft,  } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useSession } from '@/stores/session.store';
@@ -75,15 +76,41 @@ function NavItem({ to, icon: Icon, label, badge, active, isCollapsed }: { to: st
 export function Sidebar() {
   const { user } = useSession();
   const logout = useLogout();
-  const { isSidebarCollapsed: isCollapsed, toggleSidebar } = useLayoutStore();
+  const { isSidebarCollapsed: isCollapsed, toggleSidebar, setSidebarCollapsed } = useLayoutStore();
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener('resize', handleResize);
+    
+    // Collapse by default on mobile on initial load
+    if (window.innerWidth < 768) {
+      setSidebarCollapsed(true);
+    }
+    
+    return () => window.removeEventListener('resize', handleResize);
+  }, [setSidebarCollapsed]);
 
   return (
-    <motion.aside 
-      dir="rtl" 
-      animate={{ width: isCollapsed ? 90 : 260 }}
-      transition={{ type: "spring", stiffness: 300, damping: 30 }}
-      className="flex h-screen sticky top-0 shrink-0 flex-col bg-[#0b1121] border-l border-slate-800/50 overflow-hidden"
-    >
+    <>
+      {isMobile && !isCollapsed && (
+        <div 
+          className="fixed inset-0 bg-black/50 z-40"
+          onClick={toggleSidebar}
+        />
+      )}
+      <motion.aside 
+        dir="rtl" 
+        animate={{ 
+          width: isMobile ? 260 : (isCollapsed ? 90 : 260),
+          x: isMobile && isCollapsed ? '100%' : 0
+        }}
+        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+        className={cn(
+          "flex h-screen shrink-0 flex-col bg-[#0b1121] border-l border-slate-800/50 overflow-hidden",
+          isMobile ? "fixed top-0 right-0 z-50" : "sticky top-0"
+        )}
+      >
       <div className={cn("p-5 pb-2 flex flex-col transition-all duration-300", isCollapsed ? "px-3" : "px-5")}>
         
         {/* Header (Logo + Toggle) */}
@@ -146,7 +173,7 @@ export function Sidebar() {
 
         {/* Navigation */}
         <nav className="flex flex-col gap-1 w-full">
-          <NavItem to="/" icon="/sideBar/home.svg" label="الرئيسية" active={true} isCollapsed={isCollapsed} />
+          <NavItem to="/home" icon="/sideBar/home.svg" label="الرئيسية" isCollapsed={isCollapsed} />
           <NavItem to="/orders" icon="/sideBar/order.svg" label="الطلبات" badge={5} isCollapsed={isCollapsed} />
           <NavItem to="/tracking" icon="/sideBar/map.svg" label="تتبع الشحنات" isCollapsed={isCollapsed} />
           <NavItem to="/companies" icon="/sideBar/truck.svg" label="شركات النقل" isCollapsed={isCollapsed} />
@@ -222,6 +249,7 @@ export function Sidebar() {
           </AnimatePresence>
         </motion.button>
       </div>
-    </motion.aside>
+      </motion.aside>
+    </>
   );
 }

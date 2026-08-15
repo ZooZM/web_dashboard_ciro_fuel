@@ -51,38 +51,44 @@ export function InvoicesSection() {
         </div>
       </div>
 
-      {/* Chart */}
-      <div className="flex-1 flex mt-auto h-36 relative w-full pr-8">
+      {/* Chart Container */}
+      <div className="flex-1 flex mt-auto min-h-[144px] h-[144px] relative w-full">
         
-        {/* Y Axis */}
-        <div className="absolute right-0 top-0 bottom-6 w-8 flex flex-col justify-between text-[9px] font-semibold text-slate-500 text-right pr-2">
+        {/* Y Axis (Fixed on right) */}
+        <div className="absolute right-0 top-0 bottom-6 w-8 flex flex-col justify-between text-[9px] font-semibold text-slate-500 text-right pr-2 bg-white z-20">
           <span>2.4 م</span>
           <span>1.6 م</span>
           <span>0.8 م</span>
           <span>0</span>
         </div>
 
-        {/* Grid lines */}
-        <div className="absolute left-0 right-8 top-0 bottom-6 flex flex-col justify-between">
-          <div className="w-full border-t border-dashed border-slate-200" />
-          <div className="w-full border-t border-dashed border-slate-200" />
-          <div className="w-full border-t border-dashed border-slate-200" />
-          <div className="w-full border-t border-slate-200" />
-        </div>
-
-        {/* Bars */}
-        <div className="absolute left-0 right-8 top-0 bottom-0 flex items-end justify-between px-2">
-          {chartData.map((data, i) => (
-            <div key={i} className="flex flex-col items-center gap-2 h-full justify-end w-full max-w-[20px] group cursor-pointer">
-              <div className="flex items-end gap-[1px] h-[calc(100%-24px)] w-full relative z-10">
-                <div className="flex-1 bg-[#A78BFA] rounded-t-sm transition-all group-hover:opacity-80" style={{ height: `${data.paid}%` }} />
-                <div className="flex-1 bg-[#FCA5A5] rounded-t-sm transition-all group-hover:opacity-80" style={{ height: `${data.due}%` }} />
+        {/* Scrollable Chart Area */}
+        <div className="flex-1 h-full mr-8 overflow-x-auto overflow-y-hidden relative scrollbar-hide" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+           <div className="min-w-[400px] w-full h-[144px] relative">
+              
+              {/* Grid lines */}
+              <div className="absolute left-0 right-0 top-0 bottom-6 flex flex-col justify-between pointer-events-none">
+                <div className="w-full border-t border-dashed border-slate-200" />
+                <div className="w-full border-t border-dashed border-slate-200" />
+                <div className="w-full border-t border-dashed border-slate-200" />
+                <div className="w-full border-t border-slate-200" />
               </div>
-              <span className="text-[8px] font-bold text-slate-500 -rotate-45 -ml-1 whitespace-nowrap h-4">{data.label}</span>
-            </div>
-          ))}
-        </div>
 
+              {/* Bars */}
+              <div className="absolute left-0 right-0 top-0 bottom-0 flex items-end justify-between px-2">
+                {chartData.map((data, i) => (
+                  <div key={i} className="flex flex-col items-center gap-2 h-full justify-end w-full max-w-[20px] group cursor-pointer shrink-0">
+                    <div className="flex items-end gap-[1px] h-[calc(100%-24px)] w-full relative z-10">
+                      <div className="flex-1 bg-[#A78BFA] rounded-t-sm transition-all group-hover:opacity-80" style={{ height: `${data.paid}%` }} />
+                      <div className="flex-1 bg-[#FCA5A5] rounded-t-sm transition-all group-hover:opacity-80" style={{ height: `${data.due}%` }} />
+                    </div>
+                    <span className="text-[8px] font-bold text-slate-500 -rotate-45 -ml-1 whitespace-nowrap h-4">{data.label}</span>
+                  </div>
+                ))}
+              </div>
+              
+           </div>
+        </div>
       </div>
 
       {/* Footer Button */}

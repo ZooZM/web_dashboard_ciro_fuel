@@ -22,7 +22,7 @@ export function StatCard({
   iconBgClass = 'bg-slate-50',
 }: StatCardProps) {
   return (
-    <div className="bg-white border border-slate-200 rounded-2xl p-4 flex flex-col h-[130px] shadow-sm hover:shadow-md transition-shadow">
+    <div className="bg-white border border-slate-200 rounded-2xl p-4 flex flex-col min-h-[130px] h-auto shadow-sm hover:shadow-md transition-shadow">
 
       {/* Top row: Icon left, Title right */}
       <div className="flex items-center justify-between mb-2">

@@ -15,14 +15,16 @@ import { CompaniesListPage } from '@/features/companies/components/CompaniesList
 import { CompanyDetailPage } from '@/features/companies/components/CompanyDetailPage';
 import { OnboardCompanyPage } from '@/features/companies/components/OnboardCompany';
 import { PlatformOrdersPage } from '@/features/companies/components/PlatformOrders';
+import { NotificationsPage } from '@/features/notifications/components/NotificationsPage';
 
 export const router = createBrowserRouter([
-  { path: '/login', element: <LoginPage /> },
+  { path: '/', element: <LoginPage /> },
   { path: '/403', element: <Forbidden /> },
   {
     element: <AppShell />,
     children: [
-      { path: '/', element: <RoleHome /> },
+      { path: '/home', element: <RoleHome /> },
+      { path: '/notifications', element: <NotificationsPage /> },
       {
         element: <ProtectedRoute allow={[Role.SUPER_ADMIN]} />,
         children: [
@@ -46,3 +48,5 @@ export const router = createBrowserRouter([
   },
   { path: '*', element: <NotFound /> },
 ]);
+
+// Trigger TS Language Server refresh

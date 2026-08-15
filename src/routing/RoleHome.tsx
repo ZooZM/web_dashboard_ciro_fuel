@@ -64,7 +64,7 @@ export function RoleHome() {
     <div className="w-full max-w-[1400px] mx-auto p-2" dir="rtl">
 
       {/* ── Header ── */}
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
         <div className="flex flex-col text-right">
           <h1 className="text-2xl font-black text-slate-900">
             مرحباً {user?.fullName?.split(' ')[0] || 'أحمد'}
@@ -73,7 +73,7 @@ export function RoleHome() {
             إليك ملخص عمليات النقل و التوصيل اليوم
           </p>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-3">
           <div className="flex items-center gap-3 bg-white border border-slate-200 rounded-xl px-4 py-2.5 shadow-sm cursor-pointer hover:bg-slate-50 transition-colors">
             <span className="text-[11px] font-bold text-slate-700">كل الشركات</span>
             <img src="/home/chevronDown.svg" className="w-3.5 h-3.5 opacity-50" />
@@ -108,7 +108,7 @@ export function RoleHome() {
       {/* ── Quick Actions ── */}
       <div className="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm mb-6">
         <h2 className="text-sm font-black text-slate-800 mb-5 mr-2 text-right">إجراءات سريعة</h2>
-        <div className="flex items-center gap-5">
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {ACTION_CARDS.map((action) => (
             <ActionCard key={action.title} {...action} />
           ))}
