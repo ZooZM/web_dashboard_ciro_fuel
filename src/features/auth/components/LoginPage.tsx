@@ -33,7 +33,7 @@ export function LoginPage() {
         'dummy-token'
       );
       toast.success('تم تسجيل الدخول بنجاح');
-      navigate('/');
+      navigate('/home');
       return;
     }
 

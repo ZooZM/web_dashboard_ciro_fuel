@@ -17,12 +17,12 @@ import { OnboardCompanyPage } from '@/features/companies/components/OnboardCompa
 import { PlatformOrdersPage } from '@/features/companies/components/PlatformOrders';
 
 export const router = createBrowserRouter([
-  { path: '/login', element: <LoginPage /> },
+  { path: '/', element: <LoginPage /> },
   { path: '/403', element: <Forbidden /> },
   {
     element: <AppShell />,
     children: [
-      { path: '/', element: <RoleHome /> },
+      { path: '/home', element: <RoleHome /> },
       {
         element: <ProtectedRoute allow={[Role.SUPER_ADMIN]} />,
         children: [
