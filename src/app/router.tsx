@@ -19,6 +19,7 @@ import { NotificationsPage } from '@/features/notifications/components/Notificat
 
 export const router = createBrowserRouter([
   { path: '/', element: <LoginPage /> },
+  { path: '/', element: <LoginPage /> },
   { path: '/403', element: <Forbidden /> },
   {
     element: <AppShell />,
