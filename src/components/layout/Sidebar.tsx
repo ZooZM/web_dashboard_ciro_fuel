@@ -1,7 +1,7 @@
 import { NavLink } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect } from 'react';
-import {  Fuel, LogOut, ChevronLeft,  } from 'lucide-react';
+import { LogOut, ChevronLeft } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useSession } from '@/stores/session.store';
 import { useLayoutStore } from '@/stores/layout.store';
@@ -151,7 +151,7 @@ export function Sidebar() {
           )}
         >
           <motion.div layout="position" className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white relative z-10">
-            <Fuel className="h-5 w-5 text-[#2563EB]" />
+            <img src="/sideBar/truck.svg" alt="truck" className="h-5 w-5 text-[#2563EB]" />
           </motion.div>
           <AnimatePresence initial={false}>
             {!isCollapsed && (
@@ -176,9 +176,9 @@ export function Sidebar() {
           <NavItem to="/home" icon="/sideBar/home.svg" label="الرئيسية" isCollapsed={isCollapsed} />
           <NavItem to="/orders" icon="/sideBar/order.svg" label="الطلبات" badge={5} isCollapsed={isCollapsed} />
           <NavItem to="/tracking" icon="/sideBar/map.svg" label="تتبع الشحنات" isCollapsed={isCollapsed} />
-          <NavItem to="/companies" icon="/sideBar/truck.svg" label="شركات النقل" isCollapsed={isCollapsed} />
+          <NavItem to="/companies" icon="/sideBar/greyTruck.svg" label="شركات النقل" isCollapsed={isCollapsed} />
           <NavItem to="/stations" icon="/sideBar/steering.svg" label="المحطات" isCollapsed={isCollapsed} />
-          <NavItem to="/invoices" icon="/sideBar/greyTruck.svg" label="الفواتير و المدفوعات" isCollapsed={isCollapsed} />
+          <NavItem to="/invoices" icon="/sideBar/order.svg" label="الفواتير و المدفوعات" isCollapsed={isCollapsed} />
           <NavItem to="/reports" icon="/sideBar/charts.svg" label="التقارير" isCollapsed={isCollapsed} />
           <NavItem to="/notifications" icon="/sideBar/notification.svg" label="الاشعارات" badge={5} isCollapsed={isCollapsed} />
         </nav>
