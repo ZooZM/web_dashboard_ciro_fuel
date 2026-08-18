@@ -177,7 +177,7 @@ export function Sidebar() {
           <NavItem to="/orders" icon="/sideBar/order.svg" label="الطلبات" badge={5} isCollapsed={isCollapsed} />
           <NavItem to="/tracking" icon="/sideBar/map.svg" label="تتبع الشحنات" isCollapsed={isCollapsed} />
           <NavItem to="/companies" icon="/sideBar/greyTruck.svg" label="شركات النقل" isCollapsed={isCollapsed} />
-          <NavItem to="/stations" icon="/sideBar/steering.svg" label="المحطات" isCollapsed={isCollapsed} />
+          <NavItem to="/drivers" icon="/sideBar/steering.svg" label="السائقين" isCollapsed={isCollapsed} />
           <NavItem to="/invoices" icon="/sideBar/order.svg" label="الفواتير و المدفوعات" isCollapsed={isCollapsed} />
           <NavItem to="/reports" icon="/sideBar/charts.svg" label="التقارير" isCollapsed={isCollapsed} />
           <NavItem to="/notifications" icon="/sideBar/notification.svg" label="الاشعارات" badge={5} isCollapsed={isCollapsed} />
@@ -226,7 +226,7 @@ export function Sidebar() {
           layout="position"
           onClick={() => logout()}
           className={cn(
-            "flex items-center justify-center rounded-xl border border-slate-700/50 bg-transparent text-red-500 hover:bg-slate-800/50 overflow-hidden transition-all duration-300",
+            "flex items-center justify-center rounded-xl border border-slate-700/50 bg-transparent text-red-500 hover:bg-slate-800/50 overflow-hidden transition-all duration-300 mb-",
             isCollapsed ? "mx-auto w-12 h-12 p-0" : "py-3 w-full text-sm font-bold"
           )}
           title="تسجيل الخروج"

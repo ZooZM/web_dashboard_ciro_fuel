@@ -1,6 +1,7 @@
 /* eslint-disable i18next/no-literal-string */
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
+import { useNavigate } from 'react-router-dom';
 
 type NotificationType = 'success' | 'warning' | 'info' | 'system' | 'error';
 
@@ -156,13 +157,15 @@ export function NotificationsPage() {
 
   const dateEntries = Object.entries(groupedNotifications);
 
+  const navigate = useNavigate();
+
   return (
     <div className="flex flex-col flex-1 text-right font-sans bg-[#F3F4F6] -m-6 p-6" dir="rtl">
 
       {/* ── Breadcrumb ── */}
       <div className="pb-4 shrink-0 flex justify-start">
         <div className="inline-flex items-center gap-2 px-5 py-2.5text-[13.5px] text-slate-600 cursor-pointer">
-          <div className="bg-white border border-slate-100 rounded-xl shadow-sm w-8 h-8 flex font-bold items-center justify-center">
+          <div className="bg-white border border-slate-100 rounded-xl shadow-sm w-8 h-8 flex font-bold items-center justify-center" onClick={()=>window.history.back()}>
             <img src="/notification/chevronRight.svg" className="w-4 h-4" alt="" />
           </div>
           <span className="text-[20px] text-slate-900">الإشعارات</span>

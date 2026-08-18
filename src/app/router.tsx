@@ -7,8 +7,12 @@ import { RoleHome } from '@/routing/RoleHome';
 import { AppShell } from '@/components/layout/AppShell';
 import { LoginPage } from '@/features/auth/components/LoginPage';
 import { OrdersListPage } from '@/features/orders/components/OrdersListPage';
+import { InvoicesListPage } from '@/features/invoices/components/InvoicesListPage';
+import { TrackingPage } from '@/features/tracking/components/TrackingPage';
 import { OrderDetailPage } from '@/features/orders/components/OrderDetailPage';
+import { OrderEditPage } from '@/features/orders/components/OrderEditPage';
 import { DriversPage } from '@/features/drivers/components/DriversPage';
+import { DriverDetailsPage } from '@/features/drivers/components/driver-details/DriverDetailsPage';
 import { ClientsPage } from '@/features/clients/components/ClientsPage';
 import { SettingsPage } from '@/features/settings/components/SettingsPage';
 import { CompaniesListPage } from '@/features/companies/components/CompaniesListPage';
@@ -40,7 +44,11 @@ export const router = createBrowserRouter([
         children: [
           { path: '/orders', element: <OrdersListPage /> },
           { path: '/orders/:id', element: <OrderDetailPage /> },
+          { path: '/orders/:id/edit', element: <OrderEditPage /> },
+          { path: '/tracking', element: <TrackingPage /> },
+          { path: '/invoices', element: <InvoicesListPage /> },
           { path: '/drivers', element: <DriversPage /> },
+          { path: '/drivers/:id', element: <DriverDetailsPage /> },
           { path: '/clients', element: <ClientsPage /> },
           { path: '/settings', element: <SettingsPage /> },
         ],

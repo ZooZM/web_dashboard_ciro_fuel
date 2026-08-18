@@ -1,11 +1,14 @@
 import { useSession } from '@/stores/session.store';
 import { useLayoutStore } from '@/stores/layout.store';
+import { useNavigate } from 'react-router-dom';
 
 export function Topbar() {
   const { user } = useSession();
   const { toggleSidebar } = useLayoutStore();
 
+  const navigate = useNavigate();
   return (
+
     <header className="flex h-20 shrink-0 items-center justify-between border-b rounded-xl mx-3 my-2 border-slate-200 bg-white px-4 md:px-6 shadow-sm" dir="ltr">
       {/* Left side: Logo & Mobile Toggle */}
       <div className="flex items-center gap-2 sm:gap-3 shrink-0">
@@ -31,7 +34,7 @@ export function Topbar() {
           <button className="text-blue-500 hover:text-blue-600 transition-colors">
             <img src="/topBar/i.svg" alt="Info" className="h-5 w-5 object-contain" />
           </button>
-          <button className="relative text-blue-500 hover:text-blue-600 transition-colors">
+          <button className="relative text-blue-500 hover:text-blue-600 transition-colors" onClick={()=> navigate('/notifications')}>
             <img src="/topBar/notification.svg" alt="Notification" className="h-5 w-5 object-contain" />
             <span className="absolute -top-1 -right-1 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-orange-500 text-[8px] font-bold text-white border-2 border-white">
               5
