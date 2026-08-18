@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import {useNavigate } from 'react-router-dom';
 import {performLogout } from '@/features/auth/bootstrap-session';
 
 export function useLogout() {
