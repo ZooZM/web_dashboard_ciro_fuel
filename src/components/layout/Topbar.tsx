@@ -23,6 +23,10 @@ export function Topbar() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  let basePath = '/transport';
+  if (user?.role === 'SUPER_ADMIN') basePath = '/admin';
+  else if (user?.role === 'CLIENT') basePath = '/petrol';
+
   return (
 
     <header className="flex h-20 shrink-0 items-center justify-between border-b rounded-xl mx-3 my-2 border-slate-200 bg-white px-4 md:px-6 shadow-sm" dir="ltr">
@@ -48,9 +52,9 @@ export function Topbar() {
       <div className="flex items-center gap-3 md:gap-6 ml-auto md:ml-0">
         <div className="flex items-center gap-3 md:gap-4">
           <button className="text-blue-500 hover:text-blue-600 transition-colors">
-            <img src="/topBar/i.svg" alt="Info" className="h-5 w-5 object-contain" onClick={()=> navigate('/terms')} />
+            <img src="/topBar/i.svg" alt="Info" className="h-5 w-5 object-contain" onClick={()=> navigate(`${basePath}/terms`)} />
           </button>
-          <button className="relative text-blue-500 hover:text-blue-600 transition-colors" onClick={()=> navigate('/notifications')}>
+          <button className="relative text-blue-500 hover:text-blue-600 transition-colors" onClick={()=> navigate(`${basePath}/notifications`)}>
             <img src="/topBar/notification.svg" alt="Notification" className="h-5 w-5 object-contain" />
             <span className="absolute -top-1 -right-1 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-orange-500 text-[8px] font-bold text-white border-2 border-white">
               5
@@ -75,7 +79,7 @@ export function Topbar() {
 
           {isDropdownOpen && (
             <div className="absolute right-0 mt-3 w-56 bg-white border border-slate-100 rounded-2xl shadow-lg z-50 p-2 flex flex-col gap-1 text-right" dir="rtl">
-              <button onClick={() => { setIsDropdownOpen(false); navigate('/profile'); }} className="flex items-center justify-between px-3 py-2.5 hover:bg-slate-50 rounded-xl transition-colors group">
+              <button onClick={() => { setIsDropdownOpen(false); navigate(`${basePath}/profile`); }} className="flex items-center justify-between px-3 py-2.5 hover:bg-slate-50 rounded-xl transition-colors group">
                 <div className="flex items-center gap-3">
                   <User className="w-5 h-5 text-blue-600" />
                   <span className="text-sm font-bold text-slate-700">الحساب</span>
@@ -116,7 +120,7 @@ export function Topbar() {
 
               <div className="h-px bg-slate-100 mx-2" />
 
-              <button onClick={() => { setIsDropdownOpen(false); navigate('/help'); }} className="flex items-center justify-between px-3 py-2.5 hover:bg-slate-50 rounded-xl transition-colors group">
+              <button onClick={() => { setIsDropdownOpen(false); navigate(`${basePath}/help`); }} className="flex items-center justify-between px-3 py-2.5 hover:bg-slate-50 rounded-xl transition-colors group">
                 <div className="flex items-center gap-3">
                   <LifeBuoy className="w-5 h-5 text-blue-600" />
                   <span className="text-sm font-bold text-slate-700">الدعم والمساعدة</span>
@@ -126,7 +130,7 @@ export function Topbar() {
 
               <div className="h-px bg-slate-100 mx-2" />
 
-              <button onClick={() => { setIsDropdownOpen(false); navigate('/terms'); }} className="flex items-center justify-between px-3 py-2.5 hover:bg-slate-50 rounded-xl transition-colors group">
+              <button onClick={() => { setIsDropdownOpen(false); navigate(`${basePath}/terms`); }} className="flex items-center justify-between px-3 py-2.5 hover:bg-slate-50 rounded-xl transition-colors group">
                 <div className="flex items-center gap-3">
                   <Info className="w-5 h-5 text-blue-600" />
                   <span className="text-sm font-bold text-slate-700">الشروط والأحكام</span>

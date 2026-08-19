@@ -39,6 +39,10 @@ export const router = createBrowserRouter([
     children: [
       { path: '', element: <Navigate to="dashboard" replace /> },
       { path: 'dashboard', element: <div className="p-6">Admin Dashboard (Coming Soon)</div> },
+      { path: 'profile', element: <div className="p-6">Profile (Coming Soon)</div> },
+      { path: 'help', element: <div className="p-6">Help & Support (Coming Soon)</div> },
+      { path: 'terms', element: <div className="p-6">Terms & Conditions (Coming Soon)</div> },
+      { path: 'notifications', element: <div className="p-6">Notifications (Coming Soon)</div> },
       { path: 'companies', element: <CompaniesListPage /> },
       { path: 'companies/new', element: <OnboardCompanyPage /> },
       { path: 'companies/:id', element: <CompanyDetailPage /> },
@@ -53,6 +57,10 @@ export const router = createBrowserRouter([
     children: [
       { path: '', element: <Navigate to="dashboard" replace /> },
       { path: 'dashboard', element: <div className="p-6">Petrol Brand Dashboard (Coming Soon)</div> },
+      { path: 'profile', element: <div className="p-6">Profile (Coming Soon)</div> },
+      { path: 'help', element: <div className="p-6">Help & Support (Coming Soon)</div> },
+      { path: 'terms', element: <div className="p-6">Terms & Conditions (Coming Soon)</div> },
+      { path: 'notifications', element: <div className="p-6">Notifications (Coming Soon)</div> },
     ]
   },
 
