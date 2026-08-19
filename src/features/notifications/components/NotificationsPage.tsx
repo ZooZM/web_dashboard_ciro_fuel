@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
 
 type NotificationType = 'success' | 'warning' | 'info' | 'system' | 'error';
 
@@ -160,7 +161,7 @@ export function NotificationsPage() {
   const navigate = useNavigate();
 
   return (
-    <div className="flex flex-col flex-1 text-right font-sans bg-[#F3F4F6] -m-6 p-6" dir="rtl">
+    <div className="flex flex-col flex-1 text-right font-sans bg-[#F8FAFC] -mt-4 border border-[#E7E9EF] rounded-2xl min-h-full p-6" dir="rtl">
 
       {/* ── Breadcrumb ── */}
       <div className="pb-4 shrink-0 flex justify-start">
@@ -200,20 +201,28 @@ export function NotificationsPage() {
           {/* Filters row */}
           <div className="px-8 pb-4 flex justify-start">
             <div className="flex gap-2.5">
-              {filters.map(f => (
-                <button
-                  key={f}
-                  onClick={() => setActiveFilter(f)}
-                  className={cn(
-                    "px-6 py-[7.5px] rounded-full text-[13.5px] font-bold transition-colors",
-                    activeFilter === f
-                      ? "bg-[#2563EB] text-white"
-                      : "bg-[#F1F5F9] text-slate-600 hover:bg-slate-200"
-                  )}
-                >
-                  {f}
-                </button>
-              ))}
+              {filters.map(f => {
+                const isActive = activeFilter === f;
+                return (
+                  <button
+                    key={f}
+                    onClick={() => setActiveFilter(f)}
+                    className={cn(
+                      "relative px-6 py-[7.5px] text-[13.5px] font-bold rounded-lg transition-colors whitespace-nowrap bg-slate-200 cursor-pointer",
+                      isActive ? "text-white" : "text-slate-600 hover:bg-slate-200/50"
+                    )}
+                  >
+                    {isActive && (
+                      <motion.div
+                        layoutId="active-notif-filter"
+                        className="absolute inset-0 bg-[#2563EB] rounded-lg shadow-sm"
+                        transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+                      />
+                    )}
+                    <span className="relative z-10">{f}</span>
+                  </button>
+                );
+              })}
             </div>
           </div>
 
@@ -261,7 +270,14 @@ export function NotificationsPage() {
                           {/* ── DESKTOP Timeline column (hidden on mobile) ── */}
                           <div className="hidden md:flex relative w-[160px] shrink-0 items-center justify-start ml-6">
                             {/* Vertical line segment (extends through margin to connect with next card) */}
-                            <div className="absolute right-[16px] top-0 bottom-[-16px] group-last/item:bottom-0 w-[2px] bg-[#10B981]" />
+                            <div className={cn(
+                              "absolute right-[16px] top-0 w-[2px] bg-[#10B981]",
+                              groupIndex === dateEntries.length - 1 && cardIndex === items.length - 1 
+                                ? "bottom-0" 
+                                : cardIndex === items.length - 1 
+                                  ? "bottom-[-40px]" 
+                                  : "bottom-[-16px]"
+                            )} />
 
                             {/* Show date marker only on first card of the group */}
                             {cardIndex === 0 && (

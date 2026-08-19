@@ -45,7 +45,7 @@ export function SettingsPage() {
   }
 
   return (
-    <div className="flex flex-col gap-8 max-w-lg">
+    <div className="w-full p-4 md:p-6 flex-1 -mt-4 bg-[#F8FAFC] border border-[#E7E9EF] rounded-2xl min-h-full font-sans flex flex-col gap-8 max-w-lg" dir="rtl">
       <section>
         <h1 className="mb-3 text-xl font-semibold">{t('settings.companyProfile')}</h1>
         <div className="flex flex-col gap-2">

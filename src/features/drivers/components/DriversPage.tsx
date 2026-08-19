@@ -24,7 +24,7 @@ export function DriversPage() {
   const [activeTab, setActiveTab] = useState('الكل');
 
   return (
-    <div className="w-full p-4 md:p-6 flex-1 bg-[#F8FAFC] min-h-screen font-sans" dir="rtl">
+    <div className="w-full p-4 md:p-6 flex-1 -mt-4 bg-[#F8FAFC] border border-[#E7E9EF] rounded-2xl min-h-full font-sans" dir="rtl">
       
       {/* Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-4">

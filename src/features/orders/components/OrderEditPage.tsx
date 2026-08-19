@@ -11,7 +11,7 @@ export function OrderEditPage() {
   const { id } = useParams<{ id: string }>();
 
   return (
-    <div className="w-full flex-1 p-4 md:p-6 font-sans bg-[#F8FAFC] min-h-screen" dir="rtl">
+    <div className="w-full flex-1 p-4 md:p-6 font-sans -mt-4 bg-[#F8FAFC] border border-[#E7E9EF] rounded-2xl min-h-full" dir="rtl">
       {/* Breadcrumb & Header */}
       <div className="flex flex-col gap-6 mb-6">
         <div className="flex items-center text-slate-500 text-sm font-medium gap-2">

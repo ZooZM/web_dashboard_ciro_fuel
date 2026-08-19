@@ -15,6 +15,9 @@ import { DriversPage } from '@/features/drivers/components/DriversPage';
 import { DriverDetailsPage } from '@/features/drivers/components/driver-details/DriverDetailsPage';
 import { ClientsPage } from '@/features/clients/components/ClientsPage';
 import { SettingsPage } from '@/features/settings/components/SettingsPage';
+import { ProfilePage } from '@/features/profile/components/ProfilePage';
+import { TermsPage } from '@/features/terms/components/TermsPage';
+import { HelpPage } from '@/features/help/components/HelpPage';
 import { CompaniesListPage } from '@/features/companies/components/CompaniesListPage';
 import { CompanyDetailPage } from '@/features/companies/components/CompanyDetailPage';
 import { OnboardCompanyPage } from '@/features/companies/components/OnboardCompany';
@@ -22,7 +25,6 @@ import { PlatformOrdersPage } from '@/features/companies/components/PlatformOrde
 import { NotificationsPage } from '@/features/notifications/components/NotificationsPage';
 
 export const router = createBrowserRouter([
-  { path: '/', element: <LoginPage /> },
   { path: '/', element: <LoginPage /> },
   { path: '/403', element: <Forbidden /> },
   {
@@ -51,6 +53,9 @@ export const router = createBrowserRouter([
           { path: '/drivers/:id', element: <DriverDetailsPage /> },
           { path: '/clients', element: <ClientsPage /> },
           { path: '/settings', element: <SettingsPage /> },
+          { path: '/profile', element: <ProfilePage /> },
+          { path: '/terms', element: <TermsPage /> },
+          { path: '/help', element: <HelpPage /> },
         ],
       },
     ],
@@ -58,4 +63,4 @@ export const router = createBrowserRouter([
   { path: '*', element: <NotFound /> },
 ]);
 
-// Trigger TS Language Server refresh
+// Trigger TS Language Server refresh - 2

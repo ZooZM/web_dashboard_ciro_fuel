@@ -19,7 +19,7 @@ export function CompanyDetailPage() {
   const isActive = company.status === CompanyStatus.ACTIVE;
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="w-full p-4 md:p-6 flex-1 -mt-4 bg-[#F8FAFC] border border-[#E7E9EF] rounded-2xl min-h-full font-sans flex flex-col gap-4" dir="rtl">
       <div className="flex items-center gap-3">
         <h1 className="text-xl font-semibold">{company.name}</h1>
         <CompanyStatusBadge status={company.status} />

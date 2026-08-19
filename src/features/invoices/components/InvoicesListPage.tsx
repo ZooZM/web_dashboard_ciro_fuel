@@ -21,7 +21,7 @@ export function InvoicesListPage() {
   const [activeFilter, setActiveFilter] = useState('الكل');
 
   return (
-    <div className="w-full p-4 md:p-6 flex-1 bg-[#F8FAFC] min-h-screen font-sans" dir="rtl">
+    <div className="w-full p-4 md:p-6 flex-1 -mt-4 bg-[#F8FAFC] border border-[#E7E9EF] rounded-2xl min-h-full font-sans" dir="rtl">
       {/* --- Header --- */}
       <div className="mb-6 flex flex-col items-start text-right">
         <h1 className="text-2xl font-black text-slate-900">الفواتير</h1>

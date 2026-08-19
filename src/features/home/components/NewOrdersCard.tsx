@@ -8,6 +8,10 @@ const NEW_ORDERS = [
   { logo: '/home/petroAman.jpg', companyName: 'شركة بترو أمان', location: 'جدة - الرحاب', time: 'اليوم، 10:90 م', quantity: '20,000', fuelType: 'بنزين 98' },
   { logo: '/home/petroAman.jpg', companyName: 'شركة بترو أمان', location: 'جدة - الرحاب', time: 'اليوم، 10:90 م', quantity: '20,000', fuelType: 'بنزين 98' },
   { logo: '/home/petroAman.jpg', companyName: 'شركة بترو أمان', location: 'جدة - الرحاب', time: 'اليوم، 10:90 م', quantity: '20,000', fuelType: 'بنزين 98' },
+  { logo: '/home/petroAman.jpg', companyName: 'شركة بترو أمان', location: 'جدة - الرحاب', time: 'اليوم، 10:90 م', quantity: '20,000', fuelType: 'بنزين 98' },
+  { logo: '/home/petroAman.jpg', companyName: 'شركة بترو أمان', location: 'جدة - الرحاب', time: 'اليوم، 10:90 م', quantity: '20,000', fuelType: 'بنزين 98' },
+  { logo: '/home/petroAman.jpg', companyName: 'شركة بترو أمان', location: 'جدة - الرحاب', time: 'اليوم، 10:90 م', quantity: '20,000', fuelType: 'بنزين 98' },
+  { logo: '/home/petroAman.jpg', companyName: 'شركة بترو أمان', location: 'جدة - الرحاب', time: 'اليوم، 10:90 م', quantity: '20,000', fuelType: 'بنزين 98' },
 ];
 
 export function NewOrdersCard() {

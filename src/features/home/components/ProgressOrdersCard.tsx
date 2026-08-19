@@ -7,6 +7,10 @@ const PROGRESS_ORDERS = [
   { id: 'ORD-2024-246', branch: 'شركة بترو أمان، جدة - الرحاب', time: 'اليوم، 10:90 م', quantity: '20,000', fuelType: 'بنزين 91', status: 'جاري التحميل', statusClass: 'bg-[#D1FAE5]/60 text-[#12A150]' },
   { id: 'ORD-2024-246', branch: 'شركة بترو أمان، جدة - الرحاب', time: 'اليوم، 10:90 م', quantity: '20,000', fuelType: 'بنزين 91', status: 'جاري التحميل', statusClass: 'bg-[#D1FAE5]/60 text-[#12A150]' },
   { id: 'ORD-2024-246', branch: 'شركة بترو أمان، جدة - الرحاب', time: 'اليوم، 10:90 م', quantity: '20,000', fuelType: 'بنزين 91', status: 'تم التسليم',   statusClass: 'bg-[#D1FAE5]/60 text-[#12A150]' },
+  { id: 'ORD-2024-246', branch: 'شركة بترو أمان، جدة - الرحاب', time: 'اليوم، 10:90 م', quantity: '20,000', fuelType: 'بنزين 91', status: 'تم التسليم',   statusClass: 'bg-[#D1FAE5]/60 text-[#12A150]' },
+  { id: 'ORD-2024-246', branch: 'شركة بترو أمان، جدة - الرحاب', time: 'اليوم، 10:90 م', quantity: '20,000', fuelType: 'بنزين 91', status: 'تم التسليم',   statusClass: 'bg-[#D1FAE5]/60 text-[#12A150]' },
+  { id: 'ORD-2024-246', branch: 'شركة بترو أمان، جدة - الرحاب', time: 'اليوم، 10:90 م', quantity: '20,000', fuelType: 'بنزين 91', status: 'تم التسليم',   statusClass: 'bg-[#D1FAE5]/60 text-[#12A150]' },
+  { id: 'ORD-2024-246', branch: 'شركة بترو أمان، جدة - الرحاب', time: 'اليوم، 10:90 م', quantity: '20,000', fuelType: 'بنزين 91', status: 'تم التسليم',   statusClass: 'bg-[#D1FAE5]/60 text-[#12A150]' },
 ];
 
 export function ProgressOrdersCard() {

@@ -12,7 +12,7 @@ export function CompaniesListPage() {
   const companies = data?.items ?? [];
 
   return (
-    <div>
+    <div className="w-full p-4 md:p-6 flex-1 -mt-4 bg-[#F8FAFC] border border-[#E7E9EF] rounded-2xl min-h-full font-sans" dir="rtl">
       <div className="mb-4 flex items-center justify-between">
         <h1 className="text-xl font-semibold">{t('companies.title')}</h1>
         <Button asChild>

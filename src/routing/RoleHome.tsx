@@ -14,12 +14,12 @@ import { cn }                 from '@/lib/utils';
 
 // ── Stat cards data ──────────────────────────────────────────────────────────
 const STAT_CARDS = [
-  { title: 'الطلبات المكتملة',   value: '38',      icon: '/home/rightCheck.svg', iconBgClass: 'bg-[#E8F5E9]' },
+  { title: 'الطلبات المكتملة',   value: '38',      icon: '/home/rightCheck.svg', iconBgClass: 'bg-[#E8F5E9]' , date: 'من الأسبوع الماضي'},
   { title: 'الطلبات قيد التنفيذ', value: '18',      icon: '/home/sandWatch.svg',  iconBgClass: 'bg-[#FFF7ED]' },
   { title: 'مستحق التحصيل',      value: '62,160',  unit: 'ر.س', icon: '/home/schedule.svg', iconBgClass: 'bg-[#FEE2E2]', valueColor: 'text-[#EF4444]' },
-  { title: 'إجمالي الطلبات',     value: '56',      icon: '/home/invoice.svg',    iconBgClass: 'bg-[#F3E8FF]' },
-  { title: 'إجمالي أجرة النقل',  value: '186,400', unit: 'ر.س', icon: '/home/truck.svg',    iconBgClass: 'bg-[#DBEAFE]' },
-  { title: 'إجمالي الإيرادات',   value: '248,560', unit: 'ر.س', icon: '/home/payment.svg',  iconBgClass: 'bg-[#E8F5E9]' },
+  { title: 'إجمالي الطلبات',     value: '56',      icon: '/home/invoice.svg',    iconBgClass: 'bg-[#F3E8FF]' , date: 'من الأسبوع الماضي'},
+  { title: 'إجمالي أجرة النقل',  value: '186,400', unit: 'ر.س', icon: '/home/truck.svg',    iconBgClass: 'bg-[#DBEAFE]' , date: 'من الأسبوع الماضي' },
+  { title: 'إجمالي الإيرادات',   value: '248,560', unit: 'ر.س', icon: '/home/payment.svg',  iconBgClass: 'bg-[#E8F5E9]' , date: 'من الأسبوع الماضي' },
 ];
 
 // ── Quick action cards data ───────────────────────────────────────────────────
@@ -61,7 +61,8 @@ export function RoleHome() {
   const { isSidebarCollapsed } = useLayoutStore();
 
   return (
-    <div className="w-full max-w-[1400px] mx-auto p-2" dir="rtl">
+    <div className="w-full p-4 md:p-6 flex-1 -mt-4 bg-[#F8FAFC] border border-[#E7E9EF] rounded-2xl min-h-full font-sans" dir="rtl">
+      <div className="w-full max-w-[1400px] mx-auto p-2">
 
       {/* ── Header ── */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
@@ -123,6 +124,7 @@ export function RoleHome() {
         ))}
       </div>
 
+    </div>
     </div>
   );
 }
