@@ -1,4 +1,4 @@
-import { Edit2, Star } from 'lucide-react';
+import { Star } from 'lucide-react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { useNavigate } from 'react-router-dom';
 

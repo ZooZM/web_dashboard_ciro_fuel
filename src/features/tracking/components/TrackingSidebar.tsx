@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
-import { Search } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const TABS = ['الكل', 'في الطريق للتحميل', 'في الطريق للتوصيل'];

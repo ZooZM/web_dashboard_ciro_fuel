@@ -1,4 +1,4 @@
-import { Layers, Plus, Minus, Navigation, MapPin } from 'lucide-react';
+import { MapPin } from 'lucide-react';
 
 export function TrackingMapCard() {
   return (

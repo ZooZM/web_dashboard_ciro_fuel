@@ -6,7 +6,6 @@ import { DriverRecentTripsCard } from './DriverRecentTripsCard';
 import { DriverTruckCard } from './DriverTruckCard';
 import { DriverMapCard } from './DriverMapCard';
 import { DriverRatingsCard } from './DriverRatingsCard';
-import { DriverEditForm } from './DriverEditForm';
 
 export function DriverDetailsPage() {
   const [isEditing, setIsEditing] = useState(false);
