@@ -5,7 +5,7 @@ import { LogOut, ChevronLeft } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useSession } from '@/stores/session.store';
 import { useLayoutStore } from '@/stores/layout.store';
-import { useLogout } from '@/features/auth/hooks/useLogout';
+import { useLogout } from '@/auth/hooks/useLogout';
 
 function NavItem({ to, icon: Icon, label, badge, active, isCollapsed }: { to: string; icon: any; label: string; badge?: number; active?: boolean; isCollapsed: boolean }) {
   return (
@@ -173,14 +173,28 @@ export function Sidebar() {
 
         {/* Navigation */}
         <nav className="flex flex-col gap-1 w-full">
-          <NavItem to="/home" icon="/sideBar/home.svg" label="الرئيسية" isCollapsed={isCollapsed} />
-          <NavItem to="/orders" icon="/sideBar/order.svg" label="الطلبات" badge={5} isCollapsed={isCollapsed} />
-          <NavItem to="/tracking" icon="/sideBar/map.svg" label="تتبع الشحنات" isCollapsed={isCollapsed} />
-          <NavItem to="/companies" icon="/sideBar/greyTruck.svg" label="شركات النقل" isCollapsed={isCollapsed} />
-          <NavItem to="/drivers" icon="/sideBar/steering.svg" label="السائقين" isCollapsed={isCollapsed} />
-          <NavItem to="/invoices" icon="/sideBar/order.svg" label="الفواتير و المدفوعات" isCollapsed={isCollapsed} />
-          <NavItem to="/reports" icon="/sideBar/charts.svg" label="التقارير" isCollapsed={isCollapsed} />
-          <NavItem to="/notifications" icon="/sideBar/notification.svg" label="الاشعارات" badge={5} isCollapsed={isCollapsed} />
+          {user?.role === 'SUPER_ADMIN' ? (
+            <>
+              <NavItem to="/admin/dashboard" icon="/sideBar/home.svg" label="لوحة القيادة" isCollapsed={isCollapsed} />
+              <NavItem to="/admin/companies" icon="/sideBar/greyTruck.svg" label="الشركات" isCollapsed={isCollapsed} />
+              <NavItem to="/admin/platform-orders" icon="/sideBar/order.svg" label="طلبات المنصة" isCollapsed={isCollapsed} />
+            </>
+          ) : user?.role === 'CLIENT' ? (
+            <>
+              <NavItem to="/petrol/dashboard" icon="/sideBar/home.svg" label="لوحة القيادة" isCollapsed={isCollapsed} />
+            </>
+          ) : (
+            <>
+              <NavItem to="/transport/dashboard" icon="/sideBar/home.svg" label="الرئيسية" isCollapsed={isCollapsed} />
+              <NavItem to="/transport/orders" icon="/sideBar/order.svg" label="الطلبات" badge={5} isCollapsed={isCollapsed} />
+              <NavItem to="/transport/tracking" icon="/sideBar/map.svg" label="تتبع الشحنات" isCollapsed={isCollapsed} />
+              <NavItem to="/transport/companies" icon="/sideBar/greyTruck.svg" label="شركات النقل" isCollapsed={isCollapsed} />
+              <NavItem to="/transport/drivers" icon="/sideBar/steering.svg" label="السائقين" isCollapsed={isCollapsed} />
+              <NavItem to="/transport/invoices" icon="/sideBar/order.svg" label="الفواتير و المدفوعات" isCollapsed={isCollapsed} />
+              <NavItem to="/transport/reports" icon="/sideBar/charts.svg" label="التقارير" isCollapsed={isCollapsed} />
+              <NavItem to="/transport/notifications" icon="/sideBar/notification.svg" label="الاشعارات" badge={5} isCollapsed={isCollapsed} />
+            </>
+          )}
         </nav>
       </div>
 

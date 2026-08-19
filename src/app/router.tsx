@@ -1,66 +1,83 @@
-import { createBrowserRouter } from 'react-router-dom';
+import { createBrowserRouter, Navigate } from 'react-router-dom';
 import { Role } from '@/constants/roles';
 import { ProtectedRoute } from '@/routing/ProtectedRoute';
 import { Forbidden } from '@/routing/Forbidden';
 import { NotFound } from '@/routing/NotFound';
-import { RoleHome } from '@/routing/RoleHome';
 import { AppShell } from '@/components/layout/AppShell';
-import { LoginPage } from '@/features/auth/components/LoginPage';
-import { OrdersListPage } from '@/features/orders/components/OrdersListPage';
-import { InvoicesListPage } from '@/features/invoices/components/InvoicesListPage';
-import { TrackingPage } from '@/features/tracking/components/TrackingPage';
-import { OrderDetailPage } from '@/features/orders/components/OrderDetailPage';
-import { OrderEditPage } from '@/features/orders/components/OrderEditPage';
-import { DriversPage } from '@/features/drivers/components/DriversPage';
-import { DriverDetailsPage } from '@/features/drivers/components/driver-details/DriverDetailsPage';
-import { ClientsPage } from '@/features/clients/components/ClientsPage';
-import { SettingsPage } from '@/features/settings/components/SettingsPage';
-import { ProfilePage } from '@/features/profile/components/ProfilePage';
-import { TermsPage } from '@/features/terms/components/TermsPage';
-import { HelpPage } from '@/features/help/components/HelpPage';
-import { CompaniesListPage } from '@/features/companies/components/CompaniesListPage';
-import { CompanyDetailPage } from '@/features/companies/components/CompanyDetailPage';
-import { OnboardCompanyPage } from '@/features/companies/components/OnboardCompany';
-import { PlatformOrdersPage } from '@/features/companies/components/PlatformOrders';
-import { NotificationsPage } from '@/features/notifications/components/NotificationsPage';
+import { LoginPage } from '@/auth/components/LoginPage';
+import { RoleSelectionPage } from '@/auth/components/RoleSelectionPage';
+
+// Transport imports
+import { TransportDashboard } from '@/transport_company/dashboard/components/TransportDashboard';
+import { OrdersListPage } from '@/transport_company/orders/components/OrdersListPage';
+import { InvoicesListPage } from '@/transport_company/invoices/components/InvoicesListPage';
+import { TrackingPage } from '@/transport_company/tracking/components/TrackingPage';
+import { OrderDetailPage } from '@/transport_company/orders/components/OrderDetailPage';
+import { OrderEditPage } from '@/transport_company/orders/components/OrderEditPage';
+import { DriversPage } from '@/transport_company/drivers/components/DriversPage';
+import { DriverDetailsPage } from '@/transport_company/drivers/components/driver-details/DriverDetailsPage';
+import { ClientsPage } from '@/transport_company/clients/components/ClientsPage';
+import { SettingsPage } from '@/transport_company/settings/components/SettingsPage';
+import { ProfilePage } from '@/transport_company/profile/components/ProfilePage';
+import { TermsPage } from '@/transport_company/terms/components/TermsPage';
+import { HelpPage } from '@/transport_company/help/components/HelpPage';
+import { CompaniesListPage } from '@/transport_company/companies/components/CompaniesListPage';
+import { CompanyDetailPage } from '@/transport_company/companies/components/CompanyDetailPage';
+import { OnboardCompanyPage } from '@/transport_company/companies/components/OnboardCompany';
+import { PlatformOrdersPage } from '@/transport_company/companies/components/PlatformOrders';
+import { NotificationsPage } from '@/transport_company/notifications/components/NotificationsPage';
 
 export const router = createBrowserRouter([
   { path: '/', element: <LoginPage /> },
+  { path: '/select-role', element: <RoleSelectionPage /> },
   { path: '/403', element: <Forbidden /> },
+  
+  // Admin Routes
   {
-    element: <AppShell />,
+    path: '/admin',
+    element: <ProtectedRoute allow={[Role.SUPER_ADMIN]}><AppShell /></ProtectedRoute>,
     children: [
-      { path: '/home', element: <RoleHome /> },
-      { path: '/notifications', element: <NotificationsPage /> },
-      {
-        element: <ProtectedRoute allow={[Role.SUPER_ADMIN]} />,
-        children: [
-          { path: '/companies', element: <CompaniesListPage /> },
-          { path: '/companies/new', element: <OnboardCompanyPage /> },
-          { path: '/companies/:id', element: <CompanyDetailPage /> },
-          { path: '/platform-orders', element: <PlatformOrdersPage /> },
-        ],
-      },
-      {
-        // element: <ProtectedRoute allow={[Role.COMPANY_ADMIN, Role.SUPER_ADMIN, Role.DRIVER]} />,
-        children: [
-          { path: '/orders', element: <OrdersListPage /> },
-          { path: '/orders/:id', element: <OrderDetailPage /> },
-          { path: '/orders/:id/edit', element: <OrderEditPage /> },
-          { path: '/tracking', element: <TrackingPage /> },
-          { path: '/invoices', element: <InvoicesListPage /> },
-          { path: '/drivers', element: <DriversPage /> },
-          { path: '/drivers/:id', element: <DriverDetailsPage /> },
-          { path: '/clients', element: <ClientsPage /> },
-          { path: '/settings', element: <SettingsPage /> },
-          { path: '/profile', element: <ProfilePage /> },
-          { path: '/terms', element: <TermsPage /> },
-          { path: '/help', element: <HelpPage /> },
-        ],
-      },
-    ],
+      { path: '', element: <Navigate to="dashboard" replace /> },
+      { path: 'dashboard', element: <div className="p-6">Admin Dashboard (Coming Soon)</div> },
+      { path: 'companies', element: <CompaniesListPage /> },
+      { path: 'companies/new', element: <OnboardCompanyPage /> },
+      { path: 'companies/:id', element: <CompanyDetailPage /> },
+      { path: 'platform-orders', element: <PlatformOrdersPage /> },
+    ]
   },
+
+  // Petrol Brand Routes
+  {
+    path: '/petrol',
+    element: <ProtectedRoute allow={[Role.CLIENT, Role.COMPANY_ADMIN]}><AppShell /></ProtectedRoute>,
+    children: [
+      { path: '', element: <Navigate to="dashboard" replace /> },
+      { path: 'dashboard', element: <div className="p-6">Petrol Brand Dashboard (Coming Soon)</div> },
+    ]
+  },
+
+  // Transportation Routes
+  {
+    path: '/transport',
+    element: <ProtectedRoute allow={[Role.COMPANY_ADMIN, Role.DRIVER, Role.SUPER_ADMIN]}><AppShell /></ProtectedRoute>,
+    children: [
+      { path: '', element: <Navigate to="dashboard" replace /> }, 
+      { path: 'dashboard', element: <TransportDashboard /> },
+      { path: 'notifications', element: <NotificationsPage /> },
+      { path: 'orders', element: <OrdersListPage /> },
+      { path: 'orders/:id', element: <OrderDetailPage /> },
+      { path: 'orders/:id/edit', element: <OrderEditPage /> },
+      { path: 'tracking', element: <TrackingPage /> },
+      { path: 'invoices', element: <InvoicesListPage /> },
+      { path: 'drivers', element: <DriversPage /> },
+      { path: 'drivers/:id', element: <DriverDetailsPage /> },
+      { path: 'clients', element: <ClientsPage /> },
+      { path: 'settings', element: <SettingsPage /> },
+      { path: 'profile', element: <ProfilePage /> },
+      { path: 'terms', element: <TermsPage /> },
+      { path: 'help', element: <HelpPage /> },
+    ]
+  },
+  
   { path: '*', element: <NotFound /> },
 ]);
-
-// Trigger TS Language Server refresh - 2

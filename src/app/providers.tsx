@@ -6,7 +6,7 @@ import '@/lib/i18n/i18n';
 import { queryClient } from '@/app/query-client';
 import { router } from '@/app/router';
 import { useLanguageStore } from '@/stores/language.store';
-import { bootstrapSession, wireSessionExpiry } from '@/features/auth/bootstrap-session';
+import { bootstrapSession, wireSessionExpiry } from '@/auth/bootstrap-session';
 import { Toaster } from '@/components/ui/toaster';
 
 wireSessionExpiry();
