@@ -2,7 +2,7 @@ import { Check, X, Plus, Minus } from 'lucide-react';
 import { useState } from 'react';
 
 export function DriverEditForm({ onCancel }: { onCancel: () => void }) {
-  const [capacity] = useState('20,000');
+  const [capacity, setCapacity] = useState('20,000');
 
   const adjustCapacity = (delta: number) => {
     const current = Number(capacity.replace(/,/g, '')) || 0;
