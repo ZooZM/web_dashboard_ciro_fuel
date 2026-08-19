@@ -4,6 +4,7 @@ import { useSession } from '@/stores/session.store';
 
 interface ProtectedRouteProps {
   allow: readonly Role[];
+  children?: React.ReactNode;
 }
 
 function FullscreenSpinner() {
@@ -20,7 +21,7 @@ function FullscreenSpinner() {
  * preserved for post-login return; authenticated-but-wrong-role goes to /403 with no
  * out-of-scope fetch ever issued.
  */
-export function ProtectedRoute({ allow }: ProtectedRouteProps) {
+export function ProtectedRoute({ allow, children }: ProtectedRouteProps) {
   const location = useLocation();
   const { status, user } = useSession();
 
@@ -29,12 +30,12 @@ export function ProtectedRoute({ allow }: ProtectedRouteProps) {
   }
 
   if (status !== 'authenticated' || !user) {
-    return <Navigate to="/login" replace state={{ from: location }} />;
+    return <Navigate to="/" replace state={{ from: location }} />;
   }
 
   if (!allow.includes(user.role)) {
     return <Navigate to="/403" replace />;
   }
 
-  return <Outlet />;
+  return children ? <>{children}</> : <Outlet />;
 }
