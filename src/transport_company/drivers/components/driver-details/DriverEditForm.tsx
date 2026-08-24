@@ -16,7 +16,7 @@ export function DriverEditForm({ onCancel }: { onCancel: () => void }) {
           <div className="flex items-center justify-start w-full pb-4 border-b border-slate-100">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center shrink-0">
-                <img src="/DriverPage/editDriver/user.svg" alt="" className="w-6 h-6 object-contain" />
+                <img src="/transportCompany/DriverPage/editDriver/user.svg" alt="" className="w-6 h-6 object-contain" />
               </div>
               <span className="text-[#162155] font-black text-lg">الصورة والبيانات الأساسية</span>
             </div>
@@ -29,10 +29,10 @@ export function DriverEditForm({ onCancel }: { onCancel: () => void }) {
             <div className="flex flex-col items-center gap-3">
               <div className="relative">
                 <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-slate-200 shadow-sm">
-                  <img src="/DriverPage/editDriver/profile.jpg" alt="Profile" className="w-full h-full object-cover" />
+                  <img src="/transportCompany/DriverPage/editDriver/profile.jpg" alt="Profile" className="w-full h-full object-cover" />
                 </div>
                 <button className="absolute bottom-0 left-0 bg-blue-50 p-1 rounded-full border border-blue-100 text-blue-600 hover:bg-blue-100 transition-colors shadow-sm">
-                   <img src="/DriverPage/editDriver/blueEdit.svg" alt="Edit" className="w-4 h-4 object-contain" />
+                   <img src="/transportCompany/DriverPage/editDriver/blueEdit.svg" alt="Edit" className="w-4 h-4 object-contain" />
                 </button>
               </div>
               <span className="text-slate-400 font-normal text-xs">بحد أقصى 2 MB - PNG أو JPG</span>
@@ -58,7 +58,7 @@ export function DriverEditForm({ onCancel }: { onCancel: () => void }) {
           <div className="flex items-center justify-start w-full pb-4 border-b border-slate-100">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center shrink-0">
-                <img src="/DriverPage/editDriver/truck.svg" alt="" className="w-6 h-6 object-contain" />
+                <img src="/transportCompany/DriverPage/editDriver/truck.svg" alt="" className="w-6 h-6 object-contain" />
               </div>
               <span className="text-[#162155] font-black text-lg">بيانات الشاحنة</span>
             </div>

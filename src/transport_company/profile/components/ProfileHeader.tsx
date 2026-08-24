@@ -36,7 +36,7 @@ export function ProfileHeader({
            {/* Right side: Profile info */}
            <div className="flex items-center gap-4 w-full md:w-auto">
              <div className="w-16 h-16 rounded-full overflow-hidden shrink-0 border border-slate-200 shadow-sm">
-                <img src="/profilePage/profile.jpg" alt="أحمد السبيعي" className="w-full h-full object-cover" />
+                <img src="/transportCompany/profilePage/profile.jpg" alt="أحمد السبيعي" className="w-full h-full object-cover" />
              </div>
              <div className="flex flex-col gap-1.5 text-right">
                 <div className="flex items-center gap-3 justify-start">
@@ -58,7 +58,7 @@ export function ProfileHeader({
                   onClick={onEditClick}
                   className="flex flex-1 md:flex-none justify-center items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-xl text-sm font-bold hover:bg-blue-700 transition-colors shadow-sm"
                 >
-                   <img src="/profilePage/edit.svg" alt="" className="w-4 h-4 object-contain" />
+                   <img src="/transportCompany/profilePage/edit.svg" alt="" className="w-4 h-4 object-contain" />
                    تعديل بيانات السائق
                 </button>
               )}

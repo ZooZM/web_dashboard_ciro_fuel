@@ -1,6 +1,7 @@
 
 
 export interface NewOrder {
+  id?: string;
   logo: string;
   companyName: string;
   location: string;
@@ -9,11 +10,15 @@ export interface NewOrder {
   fuelType: string;
 }
 
+import { Link } from 'react-router-dom';
+
 interface NewOrderRowProps {
   order: NewOrder;
 }
 
 export function NewOrderRow({ order }: NewOrderRowProps) {
+  const orderId = order.id || '1'; // Defaulting to 1 if no id is provided in mock data
+
   return (
     <div className="flex flex-col sm:flex-row sm:items-center justify-between py-4 sm:py-3 border-b border-slate-100 last:border-0 hover:bg-slate-50/70 transition-colors px-2 gap-4 sm:gap-2">
 
@@ -35,9 +40,11 @@ export function NewOrderRow({ order }: NewOrderRowProps) {
         
         {/* Button (visible here on mobile, hidden on desktop) */}
         <div className="sm:hidden shrink-0 ml-1">
-          <button className="px-3 py-1.5 rounded-xl text-[12px] font-bold bg-[#E8F5E9] text-[#12A150] border border-[#12A150]/20 hover:bg-[#d1fae5] transition-colors whitespace-nowrap">
-            مراجعة
-          </button>
+          <Link to={`/transport/orders/${orderId}`}>
+            <button className="px-3 py-1.5 rounded-xl text-[12px] font-bold bg-[#E8F5E9] text-[#12A150] border border-[#12A150]/20 hover:bg-[#d1fae5] transition-colors whitespace-nowrap">
+              مراجعة
+            </button>
+          </Link>
         </div>
       </div>
 
@@ -49,7 +56,7 @@ export function NewOrderRow({ order }: NewOrderRowProps) {
 
         <div className="flex items-center gap-3 shrink-0 whitespace-nowrap">
           <div className="flex flex-col items-center gap-0.5">
-            <img src="/home/station.svg" className="w-5 h-5" />
+            <img src="/transportCompany/home/station.svg" className="w-5 h-5" />
             <span className="text-[10px] text-[#64748b]">{order.fuelType}</span>
           </div>
           <div className="flex flex-col items-end gap-0.5">
@@ -60,9 +67,11 @@ export function NewOrderRow({ order }: NewOrderRowProps) {
 
         {/* Button (hidden on mobile, visible on desktop) */}
         <div className="hidden sm:flex shrink-0 w-[68px] justify-center mr-2">
-          <button className="px-3 py-1.5 rounded-xl text-[12px] font-bold bg-[#E8F5E9] text-[#12A150] border border-[#12A150]/20 hover:bg-[#d1fae5] transition-colors whitespace-nowrap">
-            مراجعة
-          </button>
+          <Link to={`/transport/orders/${orderId}`}>
+            <button className="px-3 py-1.5 rounded-xl text-[12px] font-bold bg-[#E8F5E9] text-[#12A150] border border-[#12A150]/20 hover:bg-[#d1fae5] transition-colors whitespace-nowrap">
+              مراجعة
+            </button>
+          </Link>
         </div>
       </div>
 

@@ -5,7 +5,7 @@ export function ProfileAccountCard() {
       <div className="flex items-center justify-between w-full pb-4 border-b border-slate-100">
         <div className="flex items-center gap-3 justify-start">
           <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center shrink-0">
-            <img src="/profilePage/user.svg" alt="" className="w-5 h-5 object-contain" />
+            <img src="/transportCompany/profilePage/user.svg" alt="" className="w-5 h-5 object-contain" />
           </div>
           <span className="text-[#162155] font-black text-lg">بيانات الحساب</span>
         </div>

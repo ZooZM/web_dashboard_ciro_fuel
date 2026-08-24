@@ -7,6 +7,7 @@ import { useSession } from '@/stores/session.store';
 import { useLayoutStore } from '@/stores/layout.store';
 import { useLogout } from '@/auth/hooks/useLogout';
 
+
 function NavItem({ to, icon: Icon, label, badge, active, isCollapsed }: { to: string; icon: any; label: string; badge?: number; active?: boolean; isCollapsed: boolean }) {
   return (
     <NavLink
@@ -15,7 +16,7 @@ function NavItem({ to, icon: Icon, label, badge, active, isCollapsed }: { to: st
       className={({ isActive }) =>
         cn(
           'flex items-center rounded-xl group relative transition-all duration-300',
-          isCollapsed ? 'justify-center p-3 mx-auto w-12 h-12' : 'px-4 py-3 w-full',
+          isCollapsed ? 'justify-center p-2.5 mx-auto w-11 h-11' : 'px-4 py-2.5 w-full',
           isActive || active
             ? 'bg-[#2563EB] text-white shadow-lg shadow-blue-500/20'
             : 'text-slate-400 hover:bg-slate-800/50 hover:text-slate-200',
@@ -111,10 +112,10 @@ export function Sidebar() {
           isMobile ? "fixed top-0 right-0 z-50" : "sticky top-0"
         )}
       >
-      <div className={cn("p-5 pb-2 flex flex-col transition-all duration-300", isCollapsed ? "px-3" : "px-5")}>
+      <div className={cn("pt-4 pb-2 flex flex-col transition-all duration-300 shrink-0", isCollapsed ? "px-3" : "px-4")}>
         
         {/* Header (Logo + Toggle) */}
-        <div className={cn("flex items-center transition-all duration-300 mb-8", isCollapsed ? "flex-col justify-center gap-4 h-auto" : "justify-between h-8")}>
+        <div className={cn("flex items-center transition-all duration-300 mb-5", isCollapsed ? "flex-col justify-center gap-4 h-auto" : "justify-between h-8")}>
           <motion.div layout="position" className="overflow-hidden flex items-center justify-center">
             <img 
               src={isCollapsed ? "/LOGO/LogoDark.svg" : "/LOGO/LogoDark.svg"} 
@@ -144,14 +145,14 @@ export function Sidebar() {
         <motion.div 
           layout="position"
           className={cn(
-            "flex items-center mb-6 rounded-xl overflow-hidden transition-all duration-300", 
+            "flex items-center mb-3 rounded-xl overflow-hidden transition-all duration-300", 
             isCollapsed 
-              ? "justify-center w-12 h-12 mx-auto" 
-              : "bg-[#1e293b]/40 p-3 border border-slate-700/50 w-full"
+              ? "justify-center w-11 h-11 mx-auto" 
+              : "bg-[#1e293b]/40 p-2.5 border border-slate-700/50 w-full"
           )}
         >
           <motion.div layout="position" className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white relative z-10">
-            <img src="/sideBar/truck.svg" alt="truck" className="h-5 w-5 text-[#2563EB]" />
+            <img src={user?.role === 'CLIENT' ? "/sideBar/petroAman.svg" : "/sideBar/truck.svg"} alt="company icon" className="h-6 w-6" />
           </motion.div>
           <AnimatePresence initial={false}>
             {!isCollapsed && (
@@ -163,16 +164,22 @@ export function Sidebar() {
                 className="overflow-hidden whitespace-nowrap flex-1"
               >
                 <div className="flex flex-col text-right pr-3">
-                  <span className="text-sm font-bold text-white">بترو أمان</span>
-                  <span className="text-[11px] text-slate-400 mt-0.5">BRN-2024-001</span>
+                  <span className="text-sm font-bold text-white">
+                    {user?.role === 'CLIENT' ? 'بترو أمان' : 'سيرو ترانسبورت'}
+                  </span>
+                  <span className="text-[11px] text-slate-400 mt-0.5">
+                    {user?.role === 'CLIENT' ? 'BRN-2024-001' : 'TRN-2024-002'}
+                  </span>
                 </div>
               </motion.div>
             )}
           </AnimatePresence>
         </motion.div>
+      </div>
 
-        {/* Navigation */}
-        <nav className="flex flex-col gap-1 w-full">
+      {/* Navigation */}
+      <div className={cn("flex-1", isCollapsed ? "px-3" : "px-4")}>
+        <nav className="flex flex-col gap-0.5 w-full">
           {user?.role === 'SUPER_ADMIN' ? (
             <>
               <NavItem to="/admin/dashboard" icon="/sideBar/home.svg" label="لوحة القيادة" isCollapsed={isCollapsed} />
@@ -181,7 +188,15 @@ export function Sidebar() {
             </>
           ) : user?.role === 'CLIENT' ? (
             <>
-              <NavItem to="/petrol/dashboard" icon="/sideBar/home.svg" label="لوحة القيادة" isCollapsed={isCollapsed} />
+              <NavItem to="/petrolCompany/dashboard" icon="/sideBar/home.svg" label="الرئيسية" isCollapsed={isCollapsed} />
+              <NavItem to="/petrolCompany/orders" icon="/sideBar/order.svg" label="الطلبات" badge={5} isCollapsed={isCollapsed} />
+              <NavItem to="/petrolCompany/tracking" icon="/sideBar/map.svg" label="تتبع الشحنات" isCollapsed={isCollapsed} />
+              <NavItem to="/petrolCompany/fuel-exchange" icon="/sideBar/fuel-exchange.svg" label="تبادل الوقود" isCollapsed={isCollapsed} />
+              <NavItem to="/petrolCompany/pricing" icon="/sideBar/fuel-pricing.svg" label="تسعير الوقود" isCollapsed={isCollapsed} />
+              <NavItem to="/petrolCompany/companies" icon="/sideBar/greyTruck.svg" label="شركات النقل" isCollapsed={isCollapsed} />
+              <NavItem to="/petrolCompany/stations" icon="/sideBar/stations.svg" label="المحطات" isCollapsed={isCollapsed} />
+              <NavItem to="/petrolCompany/invoices" icon="/sideBar/order.svg" label="الفواتير و المدفوعات" isCollapsed={isCollapsed} />
+              <NavItem to="/petrolCompany/notifications" icon="/sideBar/notification.svg" label="الاشعارات" badge={5} isCollapsed={isCollapsed} />
             </>
           ) : (
             <>
@@ -199,14 +214,14 @@ export function Sidebar() {
       </div>
 
       {/* Bottom User Profile */}
-      <div className={cn("mt-auto pt-2 flex flex-col gap-3 w-full transition-all duration-300", isCollapsed ? "p-3 pb-5" : "p-5 pb-5")}>
+      <div className={cn("mt-auto pt-2 flex flex-col gap-2 w-full transition-all duration-300 shrink-0", isCollapsed ? "p-3 pb-4" : "p-4 pb-4")}>
         <motion.div 
           layout="position"
           className={cn(
             "flex items-center rounded-xl overflow-hidden transition-all duration-300",
             isCollapsed 
-              ? "justify-center mx-auto w-12 h-12" 
-              : "bg-[#1e293b]/40 p-3 border border-slate-700/50 w-full"
+              ? "justify-center mx-auto w-11 h-11" 
+              : "bg-[#1e293b]/40 p-2.5 border border-slate-700/50 w-full"
           )}
         >
           <motion.img 
@@ -240,14 +255,11 @@ export function Sidebar() {
           layout="position"
           onClick={() => logout()}
           className={cn(
-            "flex items-center justify-center rounded-xl border border-slate-700/50 bg-transparent text-red-500 hover:bg-slate-800/50 overflow-hidden transition-all duration-300 mb-",
-            isCollapsed ? "mx-auto w-12 h-12 p-0" : "py-3 w-full text-sm font-bold"
+            "flex items-center rounded-xl border border-slate-700/50 bg-transparent hover:bg-slate-800/50 overflow-hidden transition-all duration-300",
+            isCollapsed ? "justify-center mx-auto w-11 h-11 p-0" : "px-3 py-2.5 w-full justify-between"
           )}
           title="تسجيل الخروج"
         >
-          <motion.div layout="position" className="relative z-10">
-            <LogOut className={cn("-scale-x-100 shrink-0 transition-all duration-300", isCollapsed ? "h-5 w-5" : "h-4 w-4")} />
-          </motion.div>
           <AnimatePresence initial={false}>
             {!isCollapsed && (
               <motion.div
@@ -257,10 +269,13 @@ export function Sidebar() {
                 transition={{ duration: 0.2 }}
                 className="overflow-hidden whitespace-nowrap"
               >
-                <span className="block pr-2">تسجيل الخروج</span>
+                <span className="block text-sm font-bold text-red-500 text-right pr-2">تسجيل الخروج</span>
               </motion.div>
             )}
           </AnimatePresence>
+          <motion.div layout="position" className="relative z-10 pl-1">
+            <LogOut className={cn("-scale-x-100 shrink-0 transition-all duration-300 text-red-500", isCollapsed ? "h-5 w-5" : "h-5 w-5")} />
+          </motion.div>
         </motion.button>
       </div>
       </motion.aside>

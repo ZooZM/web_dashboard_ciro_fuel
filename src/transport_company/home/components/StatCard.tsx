@@ -25,12 +25,12 @@ export function StatCard({
 }: StatCardProps) {
   return (
     <div className="bg-white border border-slate-200 rounded-2xl p-4 flex flex-col min-h-[100px] h-auto shadow-sm hover:shadow-md transition-shadow">
-
+      
       {/* Top row: Icon left, Title right */}
       <div className="flex items-start justify-between ">
         <div className={cn('w-9 h-9 shrink-0 flex items-center justify-center rounded-full', iconBgClass)}>
           <img src={icon} alt="" className="w-7 h-7 object-contain" />
-        </div>
+      </div>
         {/* Value - centered */}
 
         <div className='flex flex-col'>
@@ -38,23 +38,25 @@ export function StatCard({
           <div className=" items-baseline justify-center gap-1 flex-1" dir="rtl">
             <span className={cn('text-[22px] font-black leading-tight', valueColor)}>{value}</span>
             {unit && <span className="text-[11px] font-bold text-[#64748b]">{unit}</span>}
-          </div>
+      </div>
 
           {/* Bottom: date + trend */}
           <div className="flex flex-col items-center justify-start w-full gap-0.5">
-            {date && (
+      {date && (
               <span className="text-[10px] text-[#94a3b8]">{date}</span>
-            )}
-            <div className={cn('flex items-center justify-start w-full gap-1 text-[11px] font-bold', trendUp ? 'text-[#12A150]' : 'text-[#EF4444]')}>
-              <img src={trendUp ? '/home/chevronTop.svg' : '/home/chevronDown.svg'} className="w-3 h-3" alt="Trend" />
-              <span dir="ltr">{trend}</span>
-            </div>
-          </div>
-        </div>
+      )}
+
+      {/* Trend */}
+      <div dir="ltr" className={cn('flex items-center justify-center gap-1.5 text-[15px] font-bold mt-0.5', trendUp ? 'text-[#12A150]' : 'text-[#EF4444]')}>
+        <span>{trend}</span>
+        <svg viewBox="0 0 24 24" fill="currentColor" className={cn("w-4 h-4", trendUp ? "rotate-180" : "")}>
+          <path d="M7 10l5 5 5-5z" />
+        </svg>
       </div>
 
-
-
+    </div>
+    </div>
+    </div>
     </div>
   );
 }

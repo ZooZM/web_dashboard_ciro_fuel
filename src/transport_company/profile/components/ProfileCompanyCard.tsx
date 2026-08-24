@@ -5,7 +5,7 @@ export function ProfileCompanyCard() {
       <div className="flex items-center justify-start w-full pb-4 border-b border-slate-100">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center shrink-0">
-            <img src="/profilePage/station.svg" alt="" className="w-5 h-5 object-contain" />
+            <img src="/transportCompany/profilePage/station.svg" alt="" className="w-5 h-5 object-contain" />
           </div>
           <span className="text-[#162155] font-black text-lg">بيانات الشركة</span>
         </div>
@@ -14,7 +14,7 @@ export function ProfileCompanyCard() {
       {/* Body */}
       <div className="flex flex-col items-center justify-center flex-1 gap-2">
         <div className="w-16 h-16 rounded-full border border-slate-200 overflow-hidden flex items-center justify-center mb-2 shadow-sm p-1">
-          <img src="/profilePage/petroAman.jpg" alt="Company Logo" className="w-full h-full object-contain rounded-full" />
+          <img src="/transportCompany/profilePage/petroAman.jpg" alt="Company Logo" className="w-full h-full object-contain rounded-full" />
         </div>
         <span className="text-[#162155] font-black text-base">شركة النقل المتحدة</span>
         <span className="text-slate-400 font-bold text-xs">TRN-2024-001</span>

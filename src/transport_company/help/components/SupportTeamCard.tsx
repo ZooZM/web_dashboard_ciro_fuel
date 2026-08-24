@@ -7,7 +7,7 @@ export function SupportTeamCard() {
       {/* Header */}
       <div className="flex items-center ">
         <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center">
-          <img src="/HelpPage/support.svg" className="w-5 h-5 object-contain" alt="" />
+          <img src="/transportCompany/HelpPage/support.svg" className="w-5 h-5 object-contain" alt="" />
         </div>
         <span className="text-[#162155] font-black text-sm">فريق الدعم</span>
       </div>

@@ -10,7 +10,7 @@ export function TrackingDriverCard() {
         {/* Driver Name & Avatar */}
         <div className="flex items-center gap-3">
           <div className="w-12 h-12 rounded-full overflow-hidden shrink-0 border border-slate-200">
-            <img src="/trackingPage/profile.jpg" alt="محمد إبراهيم" className="w-full h-full object-cover" />
+            <img src="/transportCompany/trackingPage/profile.jpg" alt="محمد إبراهيم" className="w-full h-full object-cover" />
           </div>
           <div className="flex flex-col gap-1">
             <span className="text-[#162155] font-black text-sm">محمد إبراهيم</span>
@@ -37,7 +37,7 @@ export function TrackingDriverCard() {
       {/* Left Card: Truck Info */}
       <div className="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm flex items-center gap-4 flex-1">
           <div className="w-12 h-12 rounded-2xl bg-[#E8F5E9] flex items-center justify-center shrink-0">
-          <img src="/trackingPage/truck.svg" alt="" className="w-6 h-6 object-contain" />
+          <img src="/transportCompany/trackingPage/truck.svg" alt="" className="w-6 h-6 object-contain" />
         </div>
         <div className="flex flex-col gap-1 text-right">
           <span className="text-slate-500 font-bold text-sm mr-2">أ ب ت - 1234</span>

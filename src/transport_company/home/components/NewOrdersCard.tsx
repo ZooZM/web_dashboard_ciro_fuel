@@ -2,16 +2,16 @@ import { NewOrderRow } from './NewOrderRow';
 
 // ---- Mock Data (easy to replace with real API data) ----
 const NEW_ORDERS = [
-  { logo: '/home/petroAman.jpg', companyName: 'شركة بترو أمان', location: 'جدة - الرحاب', time: 'اليوم، 10:90 م', quantity: '20,000', fuelType: 'بنزين 98' },
-  { logo: '/home/petroAman.jpg', companyName: 'شركة بترو أمان', location: 'جدة - الرحاب', time: 'اليوم، 10:90 م', quantity: '20,000', fuelType: 'بنزين 98' },
-  { logo: '/home/petroAman.jpg', companyName: 'شركة بترو أمان', location: 'جدة - الرحاب', time: 'اليوم، 10:90 م', quantity: '20,000', fuelType: 'بنزين 98' },
-  { logo: '/home/petroAman.jpg', companyName: 'شركة بترو أمان', location: 'جدة - الرحاب', time: 'اليوم، 10:90 م', quantity: '20,000', fuelType: 'بنزين 98' },
-  { logo: '/home/petroAman.jpg', companyName: 'شركة بترو أمان', location: 'جدة - الرحاب', time: 'اليوم، 10:90 م', quantity: '20,000', fuelType: 'بنزين 98' },
-  { logo: '/home/petroAman.jpg', companyName: 'شركة بترو أمان', location: 'جدة - الرحاب', time: 'اليوم، 10:90 م', quantity: '20,000', fuelType: 'بنزين 98' },
-  { logo: '/home/petroAman.jpg', companyName: 'شركة بترو أمان', location: 'جدة - الرحاب', time: 'اليوم، 10:90 م', quantity: '20,000', fuelType: 'بنزين 98' },
-  { logo: '/home/petroAman.jpg', companyName: 'شركة بترو أمان', location: 'جدة - الرحاب', time: 'اليوم، 10:90 م', quantity: '20,000', fuelType: 'بنزين 98' },
-  { logo: '/home/petroAman.jpg', companyName: 'شركة بترو أمان', location: 'جدة - الرحاب', time: 'اليوم، 10:90 م', quantity: '20,000', fuelType: 'بنزين 98' },
-  { logo: '/home/petroAman.jpg', companyName: 'شركة بترو أمان', location: 'جدة - الرحاب', time: 'اليوم، 10:90 م', quantity: '20,000', fuelType: 'بنزين 98' },
+  { logo: '/transportCompany/home/petroAman.jpg', companyName: 'شركة بترو أمان', location: 'جدة - الرحاب', time: 'اليوم، 10:90 م', quantity: '20,000', fuelType: 'بنزين 98' },
+  { logo: '/transportCompany/home/petroAman.jpg', companyName: 'شركة بترو أمان', location: 'جدة - الرحاب', time: 'اليوم، 10:90 م', quantity: '20,000', fuelType: 'بنزين 98' },
+  { logo: '/transportCompany/home/petroAman.jpg', companyName: 'شركة بترو أمان', location: 'جدة - الرحاب', time: 'اليوم، 10:90 م', quantity: '20,000', fuelType: 'بنزين 98' },
+  { logo: '/transportCompany/home/petroAman.jpg', companyName: 'شركة بترو أمان', location: 'جدة - الرحاب', time: 'اليوم، 10:90 م', quantity: '20,000', fuelType: 'بنزين 98' },
+  { logo: '/transportCompany/home/petroAman.jpg', companyName: 'شركة بترو أمان', location: 'جدة - الرحاب', time: 'اليوم، 10:90 م', quantity: '20,000', fuelType: 'بنزين 98' },
+  { logo: '/transportCompany/home/petroAman.jpg', companyName: 'شركة بترو أمان', location: 'جدة - الرحاب', time: 'اليوم، 10:90 م', quantity: '20,000', fuelType: 'بنزين 98' },
+  { logo: '/transportCompany/home/petroAman.jpg', companyName: 'شركة بترو أمان', location: 'جدة - الرحاب', time: 'اليوم، 10:90 م', quantity: '20,000', fuelType: 'بنزين 98' },
+  { logo: '/transportCompany/home/petroAman.jpg', companyName: 'شركة بترو أمان', location: 'جدة - الرحاب', time: 'اليوم، 10:90 م', quantity: '20,000', fuelType: 'بنزين 98' },
+  { logo: '/transportCompany/home/petroAman.jpg', companyName: 'شركة بترو أمان', location: 'جدة - الرحاب', time: 'اليوم، 10:90 م', quantity: '20,000', fuelType: 'بنزين 98' },
+  { logo: '/transportCompany/home/petroAman.jpg', companyName: 'شركة بترو أمان', location: 'جدة - الرحاب', time: 'اليوم، 10:90 م', quantity: '20,000', fuelType: 'بنزين 98' },
 ];
 
 export function NewOrdersCard() {

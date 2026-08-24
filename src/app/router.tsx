@@ -5,10 +5,13 @@ import { Forbidden } from '@/routing/Forbidden';
 import { NotFound } from '@/routing/NotFound';
 import { AppShell } from '@/components/layout/AppShell';
 import { LoginPage } from '@/auth/components/LoginPage';
+import { VerifyPage } from '@/auth/components/VerifyPage';
 import { RoleSelectionPage } from '@/auth/components/RoleSelectionPage';
 
 // Transport imports
 import { TransportDashboard } from '@/transport_company/dashboard/components/TransportDashboard';
+// Petrol imports
+import { PetrolDashboard } from '@/petrol_company/dashboard/components/PetrolDashboard';
 import { OrdersListPage } from '@/transport_company/orders/components/OrdersListPage';
 import { InvoicesListPage } from '@/transport_company/invoices/components/InvoicesListPage';
 import { TrackingPage } from '@/transport_company/tracking/components/TrackingPage';
@@ -29,6 +32,7 @@ import { NotificationsPage } from '@/transport_company/notifications/components/
 
 export const router = createBrowserRouter([
   { path: '/', element: <LoginPage /> },
+  { path: '/verify', element: <VerifyPage /> },
   { path: '/select-role', element: <RoleSelectionPage /> },
   { path: '/403', element: <Forbidden /> },
   
@@ -52,15 +56,22 @@ export const router = createBrowserRouter([
 
   // Petrol Brand Routes
   {
-    path: '/petrol',
+    path: '/petrolCompany',
     element: <ProtectedRoute allow={[Role.CLIENT, Role.COMPANY_ADMIN]}><AppShell /></ProtectedRoute>,
     children: [
       { path: '', element: <Navigate to="dashboard" replace /> },
-      { path: 'dashboard', element: <div className="p-6">Petrol Brand Dashboard (Coming Soon)</div> },
+      { path: 'dashboard', element: <PetrolDashboard /> },
+      { path: 'orders', element: <div className="p-6">Orders (Coming Soon)</div> },
+      { path: 'tracking', element: <div className="p-6">Tracking (Coming Soon)</div> },
+      { path: 'fuel-exchange', element: <div className="p-6">Fuel Exchange (Coming Soon)</div> },
+      { path: 'companies', element: <div className="p-6">Transport Companies (Coming Soon)</div> },
+      { path: 'stations', element: <div className="p-6">Stations (Coming Soon)</div> },
+      { path: 'invoices', element: <div className="p-6">Invoices & Payments (Coming Soon)</div> },
+      { path: 'reports', element: <div className="p-6">Reports (Coming Soon)</div> },
       { path: 'profile', element: <div className="p-6">Profile (Coming Soon)</div> },
       { path: 'help', element: <div className="p-6">Help & Support (Coming Soon)</div> },
       { path: 'terms', element: <div className="p-6">Terms & Conditions (Coming Soon)</div> },
-      { path: 'notifications', element: <div className="p-6">Notifications (Coming Soon)</div> },
+      { path: 'notifications', element: <NotificationsPage /> },
     ]
   },
 

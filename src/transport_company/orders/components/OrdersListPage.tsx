@@ -5,10 +5,10 @@ import { DesktopOrdersTable } from './DesktopOrdersTable';
 import { MobileOrdersList } from './MobileOrdersList';
 // --- Static Data ---
 const STAT_CARDS = [
-  { title: 'إجمالي الطلبات',     value: '56', icon: '/home/invoice.svg',    iconBgClass: 'bg-[#F3E8FF]', valueColor: 'text-[#A855F7]' },
-  { title: 'الطلبات المكتملة',   value: '38', icon: '/home/rightCheck.svg', iconBgClass: 'bg-[#E8F5E9]', valueColor: 'text-[#22C55E]' },
-  { title: 'الطلبات قيد التنفيذ', value: '16', icon: '/home/sandWatch.svg',  iconBgClass: 'bg-[#FFF7ED]', valueColor: 'text-[#F97316]' },
-  { title: 'مرفوضة',            value: '2',  icon: '/home/schedule.svg',   iconBgClass: 'bg-[#FEE2E2]', valueColor: 'text-[#EF4444]' },
+  { title: 'إجمالي الطلبات',     value: '56', icon: '/transportCompany/home/invoice.svg',    iconBgClass: 'bg-[#F3E8FF]', valueColor: 'text-[#A855F7]' },
+  { title: 'الطلبات المكتملة',   value: '38', icon: '/transportCompany/home/rightCheck.svg', iconBgClass: 'bg-[#E8F5E9]', valueColor: 'text-[#22C55E]' },
+  { title: 'الطلبات قيد التنفيذ', value: '16', icon: '/transportCompany/home/sandWatch.svg',  iconBgClass: 'bg-[#FFF7ED]', valueColor: 'text-[#F97316]' },
+  { title: 'مرفوضة',            value: '2',  icon: '/transportCompany/home/schedule.svg',   iconBgClass: 'bg-[#FEE2E2]', valueColor: 'text-[#EF4444]' },
 ];
 const FILTERS = ['الكل', 'جديد', 'قيد التنفيذ', 'مكتملة', 'مرفوضة'];
 
@@ -86,13 +86,13 @@ export function OrdersListPage() {
 
             {/* Arrange */}
             <button className="flex-1 md:flex-none flex justify-center items-center gap-2 text-slate-700 px-4 py-2 rounded-xl text-sm font-bold hover:bg-slate-50 transition-colors shrink-0">
-              <img src="/orderPage/arrange.svg" alt="" className="w-4 h-4 hover:opacity-70" />
+              <img src="/transportCompany/orderPage/arrange.svg" alt="" className="w-4 h-4 hover:opacity-70" />
               ترتيب
             </button>
 
             {/* Filter */}
             <button className="flex-1 md:flex-none flex justify-center items-center gap-2 text-slate-700 px-4 py-2 rounded-xl text-sm font-bold hover:bg-slate-50 transition-colors shrink-0">
-              <img src="/orderPage/filter.svg" alt="" className="w-4 h-4 hover:opacity-70" />
+              <img src="/transportCompany/orderPage/filter.svg" alt="" className="w-4 h-4 hover:opacity-70" />
               تصفية
             </button>
 
@@ -103,13 +103,13 @@ export function OrdersListPage() {
                 placeholder="ابحث بكود الطلب أو الشركة..." 
                 className="w-full pr-8 pl-4 py-2 border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-500 placeholder:text-slate-400"
               />
-              <img src="/orderPage/search.svg" alt="" className="w-4 h-4 absolute right-6 top-1/2 -translate-y-1/2 opacity-50" />
+              <img src="/transportCompany/orderPage/search.svg" alt="" className="w-4 h-4 absolute right-6 top-1/2 -translate-y-1/2 opacity-50" />
             </div>
           </div>
 
           {/* Left Side: Export */}
           <button className="w-full md:w-auto flex justify-center items-center gap-2 bg-[#F0FDF4] border border-[#BBF7D0] text-[#16A34A] px-4 py-2 rounded-xl text-sm font-bold hover:bg-[#DCFCE7] transition-colors shrink-0">
-            <img src="/orderPage/download.svg" alt="" className="w-4 h-4" />
+            <img src="/transportCompany/orderPage/download.svg" alt="" className="w-4 h-4" />
             تصدير
           </button>
 

@@ -82,7 +82,7 @@ export function DesktopInvoicesTable({ invoices }: { invoices: any[] }) {
               {/* تصدير */}
               <TableCell className="align-middle text-center py-4 pl-6 pr-2">
                 <button className="p-1 hover:bg-slate-100 rounded-md transition-colors">
-                  <img src="/invoicePage/blueDownload.svg" alt="تصدير" className="w-5 h-5" />
+                  <img src="/transportCompany/invoicePage/blueDownload.svg" alt="تصدير" className="w-5 h-5" />
                 </button>
               </TableCell>
             </TableRow>

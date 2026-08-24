@@ -10,7 +10,7 @@ const FILTERS = ['الكل', 'نشطين', 'غير نشطين'];
 const MOCK_DRIVERS = Array(8).fill({
   id: 'DRV-2026-123',
   name: 'محمد إبراهيم',
-  avatar: '/trackingPage/profile.jpg',
+  avatar: '/transportCompany/trackingPage/profile.jpg',
   phone: '0555xxxxxx',
   truck: 'أ ب ت - 1234',
   capacity: '20,000',
@@ -34,7 +34,7 @@ export function DriversPage() {
         </div>
         
         <button className="flex items-center gap-2 bg-blue-600 text-white px-5 py-2.5 rounded-xl text-sm font-bold hover:bg-blue-700 transition-colors shadow-sm">
-          <img src="/DriverPage/plus.svg" alt="Add" className="w-4 h-4" />
+          <img src="/transportCompany/DriverPage/plus.svg" alt="Add" className="w-4 h-4" />
           إضافة سائق
         </button>
       </div>
@@ -83,13 +83,13 @@ export function DriversPage() {
 
             {/* Arrange */}
             <button className="flex-1 md:flex-none flex justify-center items-center gap-2 text-slate-700 px-4 py-2 rounded-xl text-sm font-bold hover:bg-slate-50 transition-colors shrink-0">
-              <img src="/orderPage/arrange.svg" alt="" className="w-4 h-4 hover:opacity-70" />
+              <img src="/transportCompany/orderPage/arrange.svg" alt="" className="w-4 h-4 hover:opacity-70" />
               ترتيب
             </button>
 
             {/* Filter */}
             <button className="flex-1 md:flex-none flex justify-center items-center gap-2 text-slate-700 px-4 py-2 rounded-xl text-sm font-bold hover:bg-slate-50 transition-colors shrink-0">
-              <img src="/orderPage/filter.svg" alt="" className="w-4 h-4 hover:opacity-70" />
+              <img src="/transportCompany/orderPage/filter.svg" alt="" className="w-4 h-4 hover:opacity-70" />
               تصفية
             </button>
 
@@ -100,13 +100,13 @@ export function DriversPage() {
                 placeholder="ابحث بكود السائق أو الشاحنة..." 
                 className="w-full pr-8 pl-4 py-2 border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-500 placeholder:text-slate-400"
               />
-              <img src="/orderPage/search.svg" alt="" className="w-4 h-4 absolute right-6 top-1/2 -translate-y-1/2 opacity-50" />
+              <img src="/transportCompany/orderPage/search.svg" alt="" className="w-4 h-4 absolute right-6 top-1/2 -translate-y-1/2 opacity-50" />
             </div>
           </div>
 
           {/* Left Side: Export */}
           <button className="w-full md:w-auto flex justify-center items-center gap-2 bg-[#F0FDF4] border border-[#BBF7D0] text-[#16A34A] px-4 py-2 rounded-xl text-sm font-bold hover:bg-[#DCFCE7] transition-colors shrink-0">
-            <img src="/orderPage/download.svg" alt="" className="w-4 h-4" />
+            <img src="/transportCompany/orderPage/download.svg" alt="" className="w-4 h-4" />
             تصدير
           </button>
 

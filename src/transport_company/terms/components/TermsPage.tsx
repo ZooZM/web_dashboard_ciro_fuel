@@ -77,7 +77,7 @@ export function TermsPage() {
               <p className="text-slate-500 font-bold text-sm">أفهم حقوقك و واجباتك بحرص.</p>
            </div>
            <button className="flex items-center gap-2 px-4 py-2 mt-4 md:mt-0 rounded-lg border border-emerald-200 text-emerald-600 bg-emerald-50 hover:bg-emerald-100 transition-colors font-bold text-sm shadow-sm shrink-0">
-              <img src="/profilePage/support.svg" alt="" className="w-4 h-4 object-contain" />
+              <img src="/transportCompany/profilePage/support.svg" alt="" className="w-4 h-4 object-contain" />
               تواصل مع الدعم
            </button>
         </div>

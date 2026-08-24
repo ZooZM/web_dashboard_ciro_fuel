@@ -28,7 +28,7 @@ export function TrackingOrderDetails() {
         {/* From */}
         <div className="flex items-start gap-4 mb-4 z-10">
           <div className="w-8 h-8 rounded-full  flex items-center justify-center shrink-0 bg-white">
-            <img src="/trackingPage/pin.svg" alt="من" className="w-full h-full object-contain" />
+            <img src="/transportCompany/trackingPage/pin.svg" alt="من" className="w-full h-full object-contain" />
           </div>
           <div className="flex flex-col gap-1 pt-1">
             <div className="flex items-center gap-2">
@@ -47,7 +47,7 @@ export function TrackingOrderDetails() {
             
             {/* Transport Fare */}
             <div className="flex-1 flex items-center justify-center gap-3 py-3 px-2">
-               <img src="/trackingPage/dollarSign.svg" alt="" className="w-6 h-6 object-contain" />
+               <img src="/transportCompany/trackingPage/dollarSign.svg" alt="" className="w-6 h-6 object-contain" />
                <div className="flex flex-col gap-0.5 text-right">
                  <span className="text-slate-400 text-[10px] font-bold">أجرة النقل</span>
                  <span className="text-slate-800 font-black text-sm">650 <span className="text-xs font-normal">ر.س</span></span>
@@ -56,7 +56,7 @@ export function TrackingOrderDetails() {
 
             {/* Delivery Time */}
             <div className="flex-1 flex items-center justify-center gap-3 py-3 px-2">
-               <img src="/trackingPage/hour.svg" alt="" className="w-6 h-6 object-contain" />
+               <img src="/transportCompany/trackingPage/hour.svg" alt="" className="w-6 h-6 object-contain" />
                <div className="flex flex-col gap-0.5 text-right">
                  <span className="text-slate-400 text-[10px] font-bold">موعد التسليم</span>
                  <span className="text-slate-800 font-black text-sm" dir="ltr">04:30 م</span>
@@ -65,7 +65,7 @@ export function TrackingOrderDetails() {
 
             {/* Quantity */}
             <div className="flex-1 flex items-center justify-center gap-3 py-3 px-2">
-               <img src="/trackingPage/gunStatin.svg" alt="" className="w-6 h-6 object-contain" />
+               <img src="/transportCompany/trackingPage/gunStatin.svg" alt="" className="w-6 h-6 object-contain" />
                <div className="flex flex-col gap-0.5 text-right">
                  <span className="text-slate-400 text-[10px] font-bold">الكمية</span>
                  <span className="text-[#16A34A] font-black text-sm">20,000 <span className="text-xs font-normal text-slate-800">لتر</span></span>
@@ -74,7 +74,7 @@ export function TrackingOrderDetails() {
 
             {/* Fuel */}
             <div className="flex-1 flex items-center justify-center gap-3 py-3 px-2">
-               <img src="/trackingPage/gasoline95.svg" alt="" className="w-6 h-6 object-contain" />
+               <img src="/transportCompany/trackingPage/gasoline95.svg" alt="" className="w-6 h-6 object-contain" />
                <div className="flex flex-col gap-0.5 text-right">
                  <span className="text-slate-400 text-[10px] font-bold">الوقود</span>
                  <span className="text-[#162155] font-black text-sm">بنزين 95</span>
@@ -87,7 +87,7 @@ export function TrackingOrderDetails() {
         {/* To */}
         <div className="flex items-start gap-4 z-10">
           <div className="w-8 h-8 rounded-lg  flex items-center justify-center shrink-0 bg-white">
-            <img src="/trackingPage/station.svg" alt="إلى" className="w-full h-full object-contain" />
+            <img src="/transportCompany/trackingPage/station.svg" alt="إلى" className="w-full h-full object-contain" />
           </div>
           <div className="flex flex-col gap-1 pt-1">
              <div className="flex items-center gap-2">

@@ -17,7 +17,7 @@ export function OrderProblemSection() {
         className="relative w-full flex items-center p-6 bg-emerald-100/50 transition-colors"
       >
         <div className="flex items-center gap-4 shrink-0">
-          <img src="/HelpPage/gunStation.svg" className="w-8 h-8 object-contain" alt="" />
+          <img src="/transportCompany/HelpPage/gunStation.svg" className="w-8 h-8 object-contain" alt="" />
         </div>
         <div className="flex items-center justify-start flex-1 gap-4 mr-4 text-right">
           <div className="flex flex-col gap-1">
@@ -85,11 +85,11 @@ export function OrderProblemSection() {
 
           <div className="flex items-center justify-between mt-2">
             <div className="flex items-center gap-2 text-slate-500">
-              <img src="/HelpPage/hour.svg" alt="" className="w-4 h-4" />
+              <img src="/transportCompany/HelpPage/hour.svg" alt="" className="w-4 h-4" />
               <span className="font-bold text-xs">سيتم الرد خلال 4 دقائق تقريباً</span>
             </div>
             <button className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl px-6 py-3 transition-colors font-bold text-sm">
-              <img src="/HelpPage/share.svg" alt="" className="w-4 h-4" />
+              <img src="/transportCompany/HelpPage/share.svg" alt="" className="w-4 h-4" />
               إرسال البلاغ
             </button>
           </div>

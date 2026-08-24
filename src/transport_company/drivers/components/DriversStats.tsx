@@ -5,7 +5,7 @@ export function DriversStats() {
       title: 'نشطون',
       value: '20',
       valueColor: 'text-[#16A34A]',
-      icon: '/DriverPage/rightCheck.svg',
+      icon: '/transportCompany/DriverPage/rightCheck.svg',
       iconBg: 'border-[#16A34A] bg-[#DCFCE7]/30',
     },
     {
@@ -13,7 +13,7 @@ export function DriversStats() {
       title: 'غير نشطين',
       value: '1',
       valueColor: 'text-slate-800',
-      icon: '/DriverPage/!.svg',
+      icon: '/transportCompany/DriverPage/!.svg',
       iconBg: 'border-slate-300 bg-slate-50',
     },
     {
@@ -21,7 +21,7 @@ export function DriversStats() {
       title: 'إجمالي السائقين',
       value: '28',
       valueColor: 'text-[#9333EA]',
-      icon: '/DriverPage/steering.svg',
+      icon: '/transportCompany/DriverPage/steering.svg',
       iconBg: 'border-[#9333EA] bg-[#F3E8FF]/50',
     },
     {
@@ -29,7 +29,7 @@ export function DriversStats() {
       title: 'متاحون',
       value: '5',
       valueColor: 'text-blue-600',
-      icon: '/DriverPage/hour.svg',
+      icon: '/transportCompany/DriverPage/hour.svg',
       iconBg: 'border-blue-200 bg-blue-50',
     },
     {
@@ -37,7 +37,7 @@ export function DriversStats() {
       title: 'في مهمة',
       value: '2',
       valueColor: 'text-red-500',
-      icon: '/DriverPage/sandHour.svg',
+      icon: '/transportCompany/DriverPage/sandHour.svg',
       iconBg: 'border-red-200 bg-red-50',
     },
   ];

@@ -7,7 +7,7 @@ export function AssignedDriverCard() {
       {/* 1. Header (Title) */}
       <div className="flex items-center gap-3">
         <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center shrink-0">
-          <img src="/orderPage/orderDetails/driver.svg" alt="" className="w-5 h-5 text-blue-600" />
+          <img src="/transportCompany/orderPage/orderDetails/driver.svg" alt="" className="w-5 h-5 text-blue-600" />
         </div>
         <h2 className="text-xl font-black text-[#162155]">السائق المسند</h2>
       </div>
@@ -28,7 +28,7 @@ export function AssignedDriverCard() {
         </div>
 
         <button className="w-10 h-10 flex items-center justify-center bg-white border border-slate-200 rounded-xl hover:bg-slate-50 shadow-sm shrink-0">
-          <img src="/orderPage/orderDetails/link.svg" alt="" className="w-5 h-5" />
+          <img src="/transportCompany/orderPage/orderDetails/link.svg" alt="" className="w-5 h-5" />
         </button>
       </div>
 

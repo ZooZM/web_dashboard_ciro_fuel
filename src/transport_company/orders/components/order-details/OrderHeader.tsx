@@ -23,19 +23,19 @@ export function OrderHeader() {
         </div>
         
         <div className="w-full lg:w-[350px] shrink-0 flex items-center gap-3">
-          <button className="flex-1 flex justify-center items-center gap-1.5 bg-[#FEE2E2] text-red-600 py-2.5 rounded-xl text-sm font-bold hover:bg-red-200 transition-colors" onClick={()=>window.history.back}>
+          <button className="flex-1 flex justify-center items-center gap-1.5 bg-[#FEE2E2] text-red-600 py-2.5 rounded-xl text-sm font-bold hover:bg-red-200 transition-colors" onClick={() => window.history.back()}>
             <X className="w-4 h-4 shrink-0" />
             رفض
           </button>
           <button 
-            onClick={() => navigate(`/orders/${id}/edit`)}
+            onClick={() => navigate(`/transport/orders/${id}/edit`)}
             className="flex-1 flex justify-center items-center gap-1.5 bg-white border border-slate-200 text-blue-600 py-2.5 rounded-xl text-sm font-bold hover:bg-slate-50 transition-colors shadow-sm"
           >
-            <img src="/orderPage/orderDetails/edit.svg" alt="" className="w-4 h-4 shrink-0" />
+            <img src="/transportCompany/orderPage/orderDetails/edit.svg" alt="" className="w-4 h-4 shrink-0" />
             تعديل
           </button>
           <button className="flex-[1.8] flex justify-center items-center gap-1.5 bg-blue-600 text-white py-2.5 rounded-xl text-sm font-bold hover:bg-blue-700 transition-colors shadow-sm px-2">
-            <img src="/orderPage/orderDetails/whiteRightCheck.svg" alt="" className="w-5 h-5 shrink-0" />
+            <img src="/transportCompany/orderPage/orderDetails/whiteRightCheck.svg" alt="" className="w-5 h-5 shrink-0" />
             <span className="">قبول و إسناد سائق</span>
           </button>
         </div>

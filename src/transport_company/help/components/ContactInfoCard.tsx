@@ -5,7 +5,7 @@ export function ContactInfoCard() {
       {/* Header */}
       <div className="flex items-center justify-start gap-2">
         <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center">
-          <img src="/HelpPage/comment.svg" className="w-5 h-5 object-contain" alt="" />
+          <img src="/transportCompany/HelpPage/comment.svg" className="w-5 h-5 object-contain" alt="" />
         </div>
         <span className="text-[#162155] font-black text-sm">معلومات التواصل</span>
       </div>

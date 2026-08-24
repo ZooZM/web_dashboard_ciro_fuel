@@ -26,7 +26,7 @@ export function DesktopOrdersTable({ orders }: { orders: any[] }) {
           {orders.map((order) => (
             <TableRow 
               key={order.id} 
-              onClick={() => navigate(`/orders/${order.id}`)}
+              onClick={() => navigate(`/transport/orders/${order.id}`)}
               className="hover:bg-slate-50 border-b border-slate-100 last:border-0 cursor-pointer transition-colors"
             >
               {/* رقم الطلب */}
@@ -66,7 +66,7 @@ export function DesktopOrdersTable({ orders }: { orders: any[] }) {
               <TableCell className="align-middle text-center py-3 px-2">
                 <div className="flex flex-col items-center">
                   <span className="text-slate-800 font-bold text-[11px] text-center max-w-[120px] leading-tight">{order.locationFrom}</span>
-                  <img src="/orderPage/arrowDown.svg" alt="" className="w-3 h-3 my-0.5 opacity-60" />
+                  <img src="/transportCompany/orderPage/arrowDown.svg" alt="" className="w-3 h-3 my-0.5 opacity-60" />
                   <span className="text-slate-400 text-[10px] text-center max-w-[120px] leading-tight">{order.locationTo}</span>
                 </div>
               </TableCell>

@@ -6,12 +6,12 @@ import { motion } from 'framer-motion';
 const TABS = ['الكل', 'في الطريق للتحميل', 'في الطريق للتوصيل'];
 
 const MOCK_ORDERS = [
-  { id: '1', orderNum: 'ORD-2024-246', company: 'شركة بترو أمان، جدة - الرحاب', status: 'في الطريق للتوصيل', quantity: '20,000', fuel: 'بنزين 98', icon: '/trackingPage/gasoline98.svg', isSelected: false },
-  { id: '2', orderNum: 'ORD-2024-246', company: 'شركة بترو أمان، جدة - الرحاب', status: 'في الطريق للتحميل', quantity: '20,000', fuel: 'بنزين 98', icon: '/trackingPage/gasoline98.svg', isSelected: false },
-  { id: '3', orderNum: 'ORD-2024-246', company: 'شركة بترو أمان، جدة - الرحاب', status: 'في الطريق للتوصيل', quantity: '20,000', fuel: 'بنزين 98', icon: '/trackingPage/gasoline98.svg', isSelected: true },
-  { id: '4', orderNum: 'ORD-2024-246', company: 'شركة بترو أمان، جدة - الرحاب', status: 'في الطريق للتوصيل', quantity: '20,000', fuel: 'بنزين 98', icon: '/trackingPage/gasoline98.svg', isSelected: false },
-  { id: '5', orderNum: 'ORD-2024-246', company: 'شركة بترو أمان، جدة - الرحاب', status: 'في الطريق للتحميل', quantity: '20,000', fuel: 'بنزين 98', icon: '/trackingPage/gasoline98.svg', isSelected: false },
-  { id: '6', orderNum: 'ORD-2024-246', company: 'شركة بترو أمان، جدة - الرحاب', status: 'في الطريق للتوصيل', quantity: '20,000', fuel: 'بنزين 98', icon: '/trackingPage/gasoline98.svg', isSelected: false },
+  { id: '1', orderNum: 'ORD-2024-246', company: 'شركة بترو أمان، جدة - الرحاب', status: 'في الطريق للتوصيل', quantity: '20,000', fuel: 'بنزين 98', icon: '/transportCompany/trackingPage/gasoline98.svg', isSelected: false },
+  { id: '2', orderNum: 'ORD-2024-246', company: 'شركة بترو أمان، جدة - الرحاب', status: 'في الطريق للتحميل', quantity: '20,000', fuel: 'بنزين 98', icon: '/transportCompany/trackingPage/gasoline98.svg', isSelected: false },
+  { id: '3', orderNum: 'ORD-2024-246', company: 'شركة بترو أمان، جدة - الرحاب', status: 'في الطريق للتوصيل', quantity: '20,000', fuel: 'بنزين 98', icon: '/transportCompany/trackingPage/gasoline98.svg', isSelected: true },
+  { id: '4', orderNum: 'ORD-2024-246', company: 'شركة بترو أمان، جدة - الرحاب', status: 'في الطريق للتوصيل', quantity: '20,000', fuel: 'بنزين 98', icon: '/transportCompany/trackingPage/gasoline98.svg', isSelected: false },
+  { id: '5', orderNum: 'ORD-2024-246', company: 'شركة بترو أمان، جدة - الرحاب', status: 'في الطريق للتحميل', quantity: '20,000', fuel: 'بنزين 98', icon: '/transportCompany/trackingPage/gasoline98.svg', isSelected: false },
+  { id: '6', orderNum: 'ORD-2024-246', company: 'شركة بترو أمان، جدة - الرحاب', status: 'في الطريق للتوصيل', quantity: '20,000', fuel: 'بنزين 98', icon: '/transportCompany/trackingPage/gasoline98.svg', isSelected: false },
 ];
 
 export function TrackingSidebar() {
@@ -28,7 +28,7 @@ export function TrackingSidebar() {
             placeholder="ابحث بكود الطلب أو الشركة..." 
             className="w-full pr-10 pl-4 py-2.5 border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-500 placeholder:text-slate-400"
           />
-          <img src="/trackingPage/search.svg" alt="search" className="w-4 h-4 text-slate-400 absolute right-4 top-1/2 -translate-y-1/2" />
+          <img src="/transportCompany/trackingPage/search.svg" alt="search" className="w-4 h-4 text-slate-400 absolute right-4 top-1/2 -translate-y-1/2" />
         </div>
       </div>
 

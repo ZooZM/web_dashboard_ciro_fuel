@@ -50,7 +50,7 @@ export function RoleSelectionPage() {
             </button>
 
             <button 
-              onClick={() => handleSelectRole('CLIENT', '/petrol', 'علامة تجارية')}
+              onClick={() => handleSelectRole('CLIENT', '/petrolCompany', 'علامة تجارية')}
               className="flex items-center gap-4 bg-white hover:bg-slate-50 border border-slate-200 p-4 rounded-2xl transition-all shadow-sm hover:shadow-md"
             >
               <div className="w-12 h-12 bg-green-100 text-green-600 rounded-xl flex items-center justify-center shrink-0">

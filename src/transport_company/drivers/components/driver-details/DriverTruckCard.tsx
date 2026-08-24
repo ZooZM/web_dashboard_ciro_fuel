@@ -5,7 +5,7 @@ export function DriverTruckCard() {
       <div className="flex items-center  w-full border-b border-slate-100 pb-4">
         <div className="flex items-center gap-3">
           <div className="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center shrink-0">
-            <img src="/DriverPage/editDriver/truck.svg" alt="" className="w-6 h-6 object-contain" />
+            <img src="/transportCompany/DriverPage/editDriver/truck.svg" alt="" className="w-6 h-6 object-contain" />
           </div>
           <span className="text-[#162155] font-black text-lg">الشاحنة الحالية</span>
         </div>

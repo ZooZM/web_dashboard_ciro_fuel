@@ -47,7 +47,7 @@ export function InvoicesSection() {
         </div>
         <div className="flex items-center gap-2 bg-slate-100/80 rounded-lg px-2.5 py-1.5 cursor-pointer hover:bg-slate-200 transition-colors">
           <span className="text-[11px] font-bold text-blue-600">آخر سنة</span>
-          <img src="/home/chevronDown.svg" className="w-3 h-3 opacity-80" style={{ filter: 'brightness(0) saturate(100%) invert(32%) sepia(87%) saturate(2250%) hue-rotate(209deg) brightness(97%) contrast(93%)' }} />
+          <img src="/transportCompany/home/chevronDown.svg" className="w-3 h-3 opacity-80" style={{ filter: 'brightness(0) saturate(100%) invert(32%) sepia(87%) saturate(2250%) hue-rotate(209deg) brightness(97%) contrast(93%)' }} />
         </div>
       </div>
 
@@ -94,7 +94,7 @@ export function InvoicesSection() {
       {/* Footer Button */}
       <button className="w-full mt-6 py-3 bg-white border border-slate-200 rounded-xl flex items-center justify-center gap-2 text-xs font-bold text-blue-600 hover:bg-slate-50 transition-colors">
         <span className="text-[11px]">إدارة الفواتير</span>
-        <img src="/home/invoice.svg" className="w-4 h-4" style={{ filter: 'brightness(0) saturate(100%) invert(32%) sepia(87%) saturate(2250%) hue-rotate(209deg) brightness(97%) contrast(93%)' }} />
+        <img src="/transportCompany/home/invoice.svg" className="w-4 h-4" style={{ filter: 'brightness(0) saturate(100%) invert(32%) sepia(87%) saturate(2250%) hue-rotate(209deg) brightness(97%) contrast(93%)' }} />
       </button>
 
     </div>

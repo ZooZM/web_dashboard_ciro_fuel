@@ -42,13 +42,13 @@ export function UrgentNotificationCard() {
             </div>
           </div>
           <button className="flex items-center justify-center gap-2 text-red-600 bg-transparent border border-red-200 px-5 py-2.5 rounded-xl text-sm font-bold hover:bg-red-50 shadow-sm shrink-0">
-            <img src="/orderPage/orderDetails/share.svg" alt="" className="w-4 h-4" />
+            <img src="/transportCompany/orderPage/orderDetails/share.svg" alt="" className="w-4 h-4" />
             مشاركة الموقع
           </button>
       </div>
 
       <button className="w-full mt-4 flex items-center justify-center gap-2 text-red-600 bg-red-50/80 border border-red-200 px-4 py-3 rounded-xl text-sm font-bold hover:bg-red-100 transition-colors">
-          <img src="/orderPage/orderDetails/redRightCheck.svg" alt="" className="w-4 h-4 " />
+          <img src="/transportCompany/orderPage/orderDetails/redRightCheck.svg" alt="" className="w-4 h-4 " />
           تم التعامل مع الأمر
       </button>
     </div>

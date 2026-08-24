@@ -10,7 +10,7 @@ export function MapTrackingCard() {
 
       {/* Map Image */}
       <div className="relative flex-1 rounded-2xl overflow-hidden border border-slate-200 bg-slate-50 shadow-inner">
-        <img src="/home/map.png" alt="Map" className="w-full h-full object-cover" />
+        <img src="/transportCompany/home/map.png" alt="Map" className="w-full h-full object-cover" />
       </div>
 
       {/* Legend */}

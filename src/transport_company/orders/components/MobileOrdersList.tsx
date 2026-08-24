@@ -9,7 +9,7 @@ export function MobileOrdersList({ orders }: { orders: any[] }) {
       {orders.map((order) => (
         <div 
           key={`mobile-${order.id}`} 
-          onClick={() => navigate(`/orders/${order.id}`)}
+          onClick={() => navigate(`/transport/orders/${order.id}`)}
           className="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm flex flex-col gap-4 cursor-pointer hover:border-blue-300 transition-colors"
         >
           {/* Header: Order Num & Status */}

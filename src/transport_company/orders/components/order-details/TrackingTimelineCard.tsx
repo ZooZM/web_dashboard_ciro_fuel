@@ -6,7 +6,7 @@ export function TrackingTimelineCard() {
       <div className="flex items-center justify-between mb-10">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center">
-              <img src="/orderPage/orderDetails/truck.svg" alt="" className="w-5 h-5" />
+              <img src="/transportCompany/orderPage/orderDetails/truck.svg" alt="" className="w-5 h-5" />
             </div>
             <h2 className="text-xl font-black text-slate-900">حالة الطلب وتتبع التنفيذ</h2>
           </div>
@@ -22,9 +22,9 @@ export function TrackingTimelineCard() {
 
             {/* Steps */}
             {[
-              { label: 'مراجعة', active: true, done: true, icon: '/orderPage/orderDetails/rightCheck.svg', border: 'border-green-500' ,color:'bg-green-100' },
-              { label: 'إسناد', active: true, done: true, icon: '/orderPage/orderDetails/steering.svg', border: 'border-green-500' ,color:'bg-green-100' },
-              { label: 'الدفع', active: true, done: false, icon: '/orderPage/orderDetails/payment.svg', border: 'border-blue-500'  ,color:'bg-green-100'},
+              { label: 'مراجعة', active: true, done: true, icon: '/transportCompany/orderPage/orderDetails/rightCheck.svg', border: 'border-green-500' ,color:'bg-green-100' },
+              { label: 'إسناد', active: true, done: true, icon: '/transportCompany/orderPage/orderDetails/steering.svg', border: 'border-green-500' ,color:'bg-green-100' },
+              { label: 'الدفع', active: true, done: false, icon: '/transportCompany/orderPage/orderDetails/payment.svg', border: 'border-blue-500'  ,color:'bg-green-100'},
               { label: 'في الطريق للتحميل', active: false },
               { label: 'تم التحميل', active: false },
               { label: 'في الطريق للتوصيل', active: false },

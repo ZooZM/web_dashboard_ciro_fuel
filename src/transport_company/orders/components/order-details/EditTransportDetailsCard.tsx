@@ -6,7 +6,7 @@ export function EditTransportDetailsCard() {
       <div className="flex items-center justify-between border-b border-slate-100 pb-4">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center shrink-0">
-            <img src="/orderPage/orderDetails/edit.svg" alt="" className="w-5 h-5 text-blue-600" />
+            <img src="/transportCompany/orderPage/orderDetails/edit.svg" alt="" className="w-5 h-5 text-blue-600" />
           </div>
           <h2 className="text-xl font-black text-[#162155]">تعديل تفاصيل النقل</h2>
         </div>
@@ -17,7 +17,7 @@ export function EditTransportDetailsCard() {
           <label className="text-sm font-bold text-slate-500">أجرة النقل</label>
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-              <img src="/orderPage/editOrder/dollarSign.svg" alt="" className="w-5 h-5 " />
+              <img src="/transportCompany/orderPage/editOrder/dollarSign.svg" alt="" className="w-5 h-5 " />
             </div>
             <input
               type="text"
@@ -33,7 +33,7 @@ export function EditTransportDetailsCard() {
           <label className="text-sm font-bold text-slate-500">موعد التسليم المطلوب</label>
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-              <img src="/orderPage/editOrder/date.svg" alt="" className="w-5 h-5 " />
+              <img src="/transportCompany/orderPage/editOrder/date.svg" alt="" className="w-5 h-5 " />
             </div>
             <div className="w-full bg-white border border-slate-200 rounded-xl py-2 px-4 flex flex-col items-start justify-center cursor-pointer hover:bg-slate-50 transition-colors">
               <span className="text-[#162155] font-bold text-sm">تحديد موعد التسليم</span>

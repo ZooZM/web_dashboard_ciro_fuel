@@ -4,28 +4,28 @@ export function DriverStatsRow() {
       id: 1,
       title: 'إجمالي الرحلات',
       value: '482',
-      icon: '/DriverPage/editDriver/truck.svg',
+      icon: '/transportCompany/DriverPage/editDriver/truck.svg',
       iconBg: 'bg-blue-50 border-blue-100'
     },
     {
       id: 2,
       title: 'رحلات هذا الشهر',
       value: '38',
-      icon: '/DriverPage/editDriver/invoice.svg',
+      icon: '/transportCompany/DriverPage/editDriver/invoice.svg',
       iconBg: 'bg-orange-50 border-orange-100'
     },
     {
       id: 3,
       title: 'معدل الالتزام بالمواعيد',
       value: '96%',
-      icon: '/DriverPage/editDriver/chart.svg',
+      icon: '/transportCompany/DriverPage/editDriver/chart.svg',
       iconBg: 'bg-green-50 border-green-100'
     },
     {
       id: 4,
       title: 'سنوات الخبرة',
       value: '5',
-      icon: '/DriverPage/editDriver/date.svg',
+      icon: '/transportCompany/DriverPage/editDriver/date.svg',
       iconBg: 'bg-red-50 border-red-100'
     }
   ];

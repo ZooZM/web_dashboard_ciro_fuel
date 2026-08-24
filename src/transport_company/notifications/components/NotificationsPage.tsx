@@ -28,7 +28,7 @@ const notifications: Notification[] = [
     description: 'لديك فاتورة مستحقة الدفع بقيمة 12,450 ريال. يرجى السداد قبل نهاية الشهر.',
     time: '06:26 م',
     elapsed: 'قبل 5 دقائق',
-    icon: '/notification/invoice.svg',
+    icon: '/transportCompany/notification/invoice.svg',
     date: 'الثلاثاء 10 أغسطس 2026',
     isRead: false,
   },
@@ -40,7 +40,7 @@ const notifications: Notification[] = [
     description: 'يمكنك الآن مواصلة تتبع شحناتك لحظة بلحظة. نرجو ان تقوم بإبلاغ الدعم في حال وجود أي أعطال أو مشاكل.',
     time: '06:26 م',
     elapsed: 'قبل 5 دقائق',
-    icon: '/notification/about.svg',
+    icon: '/transportCompany/notification/about.svg',
     date: 'الثلاثاء 10 أغسطس 2026',
     isRead: false,
   },
@@ -52,7 +52,7 @@ const notifications: Notification[] = [
     description: 'تم قبول طلب الوقود ORD-2024-256 وجاري تحضير الشحنة الآن.',
     time: '06:26 م',
     elapsed: 'قبل 5 دقائق',
-    icon: '/notification/notification.svg',
+    icon: '/transportCompany/notification/notification.svg',
     date: 'الثلاثاء 10 أغسطس 2026',
     isRead: false,
   },
@@ -64,7 +64,7 @@ const notifications: Notification[] = [
     description: 'لديك فاتورة مستحقة الدفع بقيمة 12,450 ريال. يرجى السداد قبل نهاية الشهر.',
     time: '06:26 م',
     elapsed: 'قبل 5 دقائق',
-    icon: '/notification/invoice.svg',
+    icon: '/transportCompany/notification/invoice.svg',
     date: 'الثلاثاء 10 أغسطس 2026',
     isRead: false,
   },
@@ -76,7 +76,7 @@ const notifications: Notification[] = [
     description: 'تم قبول طلب الوقود ORD-2024-256 وجاري تحضير الشحنة الآن.',
     time: '06:26 م',
     elapsed: 'قبل 5 دقائق',
-    icon: '/notification/notification.svg',
+    icon: '/transportCompany/notification/notification.svg',
     date: 'الاثنين 09 أغسطس 2026',
     isRead: false,
   },
@@ -87,7 +87,7 @@ const notifications: Notification[] = [
     description: 'تم تحديث التطبيق إلى الإصدار الجديد مع تحسينات في الأداء والاستقرار.',
     time: '06:26 م',
     elapsed: 'قبل 5 دقائق',
-    icon: '/notification/setting.svg',
+    icon: '/transportCompany/notification/setting.svg',
     date: 'الاثنين 09 أغسطس 2026',
     isRead: false,
   },
@@ -99,7 +99,7 @@ const notifications: Notification[] = [
     description: 'توقف السائق محمد إبراهيم عن الحركة لأكثر من 10 دقائق أثناء تنفيذ طلب نقل الوقود.',
     time: '06:26 م',
     elapsed: 'قبل 5 دقائق',
-    icon: '/notification/about.svg',
+    icon: '/transportCompany/notification/about.svg',
     date: 'الاثنين 09 أغسطس 2026',
     isRead: false,
   },
@@ -111,7 +111,7 @@ const notifications: Notification[] = [
     description: 'تم قبول طلب الوقود ORD-2024-256 وجاري تحضير الشحنة الآن.',
     time: '06:26 م',
     elapsed: 'قبل 5 دقائق',
-    icon: '/notification/notification.svg',
+    icon: '/transportCompany/notification/notification.svg',
     date: 'الاثنين 09 أغسطس 2026',
     isRead: false,
   },
@@ -167,7 +167,7 @@ export function NotificationsPage() {
       <div className="pb-4 shrink-0 flex justify-start">
         <div className="inline-flex items-center gap-2 px-5 py-2.5text-[13.5px] text-slate-600 cursor-pointer">
           <div className="bg-white border border-slate-100 rounded-xl shadow-sm w-8 h-8 flex font-bold items-center justify-center" onClick={()=>window.history.back()}>
-            <img src="/notification/chevronRight.svg" className="w-4 h-4" alt="" />
+            <img src="/transportCompany/notification/chevronRight.svg" className="w-4 h-4" alt="" />
           </div>
           <span className="text-[20px] text-slate-900">الإشعارات</span>
         </div>
@@ -190,9 +190,9 @@ export function NotificationsPage() {
               className="flex bg-white items-center gap-2.5 px-2.5 py-2.5 bg-white border border-slate-200 rounded-xl text-[13px] font-medium text-slate-500 hover:bg-slate-50 transition-colors"
               >
               {isMuted ? (
-                <img src="/notification/disabledNotification.svg" className="w-[20px] h-[20px] opacity-50" alt="" />
+                <img src="/transportCompany/notification/disabledNotification.svg" className="w-[20px] h-[20px] opacity-50" alt="" />
               ) : (
-                <img src="/notification/notification.svg" className="w-[20px] h-[20px] " alt="" />
+                <img src="/transportCompany/notification/notification.svg" className="w-[20px] h-[20px] " alt="" />
               )}
             </button>
               </div>
@@ -235,7 +235,7 @@ export function NotificationsPage() {
           <div className="px-8 pb-6 flex justify-end">
             <button className="flex items-center gap-2 text-[13px] text-[#2563EB] hover:text-blue-700 font-medium transition-colors">
               تحديد الكل / المحدد كمقروء
-              <img src="/notification/seen.svg" className="w-[18px] h-[18px]" alt="" />
+              <img src="/transportCompany/notification/seen.svg" className="w-[18px] h-[18px]" alt="" />
             </button>
           </div>
 
@@ -248,7 +248,7 @@ export function NotificationsPage() {
                   {/* MOBILE Date Header (hidden on desktop) */}
                   <div className="md:hidden flex items-center gap-3 relative z-10 mb-4 mr-1 sm:mr-0">
                     <div className="w-[34px] h-[34px] rounded-full border-[2px] border-[#10B981] bg-[#E4F7EC] flex items-center justify-center shrink-0">
-                      <img src="/notification/date.svg" className="w-4 h-4" alt="" />
+                      <img src="/transportCompany/notification/date.svg" className="w-4 h-4" alt="" />
                     </div>
                     <div className="flex items-center gap-1.5">
                       <span className="text-[14px] font-bold text-[#10B981] leading-tight whitespace-nowrap">
@@ -283,7 +283,7 @@ export function NotificationsPage() {
                             {cardIndex === 0 && (
                               <div className="flex items-center gap-3 relative z-10">
                                 <div className="w-[34px] h-[34px] rounded-full border-[2px] border-[#10B981] bg-[#E4F7EC] flex items-center justify-center shrink-0">
-                                  <img src="/notification/date.svg" className="w-4 h-4" alt="" />
+                                  <img src="/transportCompany/notification/date.svg" className="w-4 h-4" alt="" />
                                 </div>
                                 <div className="flex flex-col items-start pr-2">
                                   <span className="text-[12px] font-bold text-[#10B981] leading-tight whitespace-nowrap">
@@ -347,7 +347,7 @@ export function NotificationsPage() {
                               <div className={cn("w-8 h-8 sm:w-9 sm:h-9 rounded-[10px] flex items-center justify-center", styles.iconBg)}>
                                 <img src={notif.icon} className="w-4 h-4 sm:w-[18px] sm:h-[18px] brightness-0 invert" alt="" />
                               </div>
-                              <img src="/notification/chevronRight.svg" className="w-4 h-4 opacity-30 rotate-180 hidden sm:block" alt="" />
+                              <img src="/transportCompany/notification/chevronRight.svg" className="w-4 h-4 opacity-30 rotate-180 hidden sm:block" alt="" />
                             </div>
                           </div>
 

@@ -53,7 +53,7 @@ export function MobileInvoicesList({ invoices }: { invoices: any[] }) {
           {/* Footer Actions */}
           <div className="flex items-center justify-end pt-3 border-t border-slate-100 mt-1">
             <button className="flex items-center gap-2 bg-blue-50 text-blue-600 px-4 py-2 rounded-xl text-xs font-bold hover:bg-blue-100 transition-colors">
-              <img src="/invoicePage/blueDownload.svg" alt="تصدير" className="w-4 h-4" />
+              <img src="/transportCompany/invoicePage/blueDownload.svg" alt="تصدير" className="w-4 h-4" />
               تصدير
             </button>
           </div>

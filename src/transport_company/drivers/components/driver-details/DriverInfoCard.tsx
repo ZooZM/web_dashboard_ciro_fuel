@@ -5,7 +5,7 @@ export function DriverInfoCard() {
       <div className="flex items-center justify-between border-b border-slate-100 pb-4">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center shrink-0">
-            <img src="/DriverPage/editDriver/user.svg" alt="" className="w-6 h-6 object-contain" />
+            <img src="/transportCompany/DriverPage/editDriver/user.svg" alt="" className="w-6 h-6 object-contain" />
           </div>
           <span className="text-[#162155] font-bold text-base">بيانات السائق</span>
         </div>

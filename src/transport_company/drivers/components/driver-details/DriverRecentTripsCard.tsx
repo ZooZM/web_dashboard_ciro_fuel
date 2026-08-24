@@ -13,7 +13,7 @@ export function DriverRecentTripsCard() {
       <div className="flex items-center w-full">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center shrink-0">
-            <img src="/DriverPage/editDriver/order.svg" alt="" className="w-6 h-6 object-contain" />
+            <img src="/transportCompany/DriverPage/editDriver/order.svg" alt="" className="w-6 h-6 object-contain" />
           </div>
           <span className="text-[#162155] font-bold text-base">سجل الرحلات الأخيرة</span>
         </div>

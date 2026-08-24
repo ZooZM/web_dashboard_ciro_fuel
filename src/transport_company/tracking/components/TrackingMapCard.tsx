@@ -5,28 +5,28 @@ export function TrackingMapCard() {
     <div className="relative w-full h-[400px] md:h-[500px] rounded-2xl overflow-hidden border border-slate-200 shadow-sm shrink-0">
       
       {/* Background Map Image */}
-      <img src="/trackingPage/map.png" alt="Map" className="absolute inset-0 w-full h-full object-cover" />
+      <img src="/transportCompany/trackingPage/map.png" alt="Map" className="absolute inset-0 w-full h-full object-cover" />
 
       {/* Top Left Control */}
       <div className="absolute top-4 left-4">
         <button className="w-10 h-10 bg-white rounded-xl shadow-md flex items-center justify-center text-blue-600 hover:bg-slate-50 transition-colors">
-          <img src="/trackingPage/location.svg" alt="" className="w-5 h-5" />
+          <img src="/transportCompany/trackingPage/location.svg" alt="" className="w-5 h-5" />
         </button>
       </div>
 
       {/* Bottom Left Controls */}
       <div className="absolute left-4 bottom-4 flex flex-col gap-2">
         <button className="w-10 h-10 bg-white rounded-xl shadow-md flex items-center justify-center text-blue-600 hover:bg-slate-50 transition-colors">
-          <img src="/trackingPage/reload.svg" alt="" className="w-5 h-5" />
+          <img src="/transportCompany/trackingPage/reload.svg" alt="" className="w-5 h-5" />
         </button>
         <button className="w-10 h-10 bg-white rounded-xl shadow-md flex items-center justify-center text-blue-600 hover:bg-slate-50 transition-colors">
-          <img src="/trackingPage/zoomIn.svg" alt="" className="w-5 h-5" />
+          <img src="/transportCompany/trackingPage/zoomIn.svg" alt="" className="w-5 h-5" />
         </button>
         <button className="w-10 h-10 bg-white rounded-xl shadow-md flex items-center justify-center text-blue-600 hover:bg-slate-50 transition-colors">
-          <img src="/trackingPage/zoomOut.svg" alt="" className="w-5 h-5" />
+          <img src="/transportCompany/trackingPage/zoomOut.svg" alt="" className="w-5 h-5" />
         </button>
         <button className="w-10 h-10 bg-white rounded-xl shadow-md flex items-center justify-center text-blue-600 hover:bg-slate-50 transition-colors">
-          <img src="/trackingPage/share.svg" alt="" className="w-5 h-5" />
+          <img src="/transportCompany/trackingPage/share.svg" alt="" className="w-5 h-5" />
         </button>
       </div>
 
@@ -58,7 +58,7 @@ export function TrackingMapCard() {
             />
           </svg>
           <div className=" w-10 h-10 rounded-full flex items-center justify-center relative z-10">
-             <img src="/trackingPage/hollowTruck.svg" alt="" className="w-6 h-6 object-contain" />
+             <img src="/transportCompany/trackingPage/hollowTruck.svg" alt="" className="w-6 h-6 object-contain" />
           </div>
         </div>
 

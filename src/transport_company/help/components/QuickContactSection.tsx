@@ -7,7 +7,7 @@ export function QuickContactSection() {
       {/* Header */}
       <div className="flex items-center  w-full gap-2">
         <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center">
-          <img src="/HelpPage/comment.svg" className="w-5 h-5 object-contain" alt="" />
+          <img src="/transportCompany/HelpPage/comment.svg" className="w-5 h-5 object-contain" alt="" />
         </div>
         <h3 className="text-[#162155] font-black text-lg">تواصل معنا فوراً</h3>
       </div>
@@ -16,7 +16,7 @@ export function QuickContactSection() {
       <div className="bg-[#EEF2FF] rounded-2xl p-4 sm:p-6 flex items-center gap-4 mt-2">
         
         <div className="flex items-center justify-center w-12 h-12 rounded-full bg-white shadow-sm shrink-0">
-          <img src="/HelpPage/phone.svg" className="w-5 h-5 object-contain text-blue-600" alt="" />
+          <img src="/transportCompany/HelpPage/phone.svg" className="w-5 h-5 object-contain text-blue-600" alt="" />
         </div>
 
         <div className="flex flex-col text-right gap-1 flex-1">
