@@ -8,17 +8,12 @@ import { DriverMapCard } from './DriverMapCard';
 import { DriverRatingsCard } from './DriverRatingsCard';
 
 export function DriverDetailsPage() {
-  const [isEditing, setIsEditing] = useState(false);
   return (
     <div className="w-full p-4 md:p-6 flex-1 -mt-4 bg-[#F8FAFC] border border-[#E7E9EF] rounded-2xl min-h-full font-sans" dir="rtl">
       <div className="flex flex-col gap-6 max-w-7xl mx-auto">
         
         {/* Header */}
-        <DriverDetailsHeader 
-          isEditing={isEditing} 
-          onEditClick={() => setIsEditing(true)}
-          onCancelEdit={() => setIsEditing(false)}
-        />
+        <DriverDetailsHeader />
 
         {/* Stats Row */}
         <DriverStatsRow />

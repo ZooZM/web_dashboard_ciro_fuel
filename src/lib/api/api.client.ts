@@ -65,6 +65,14 @@ apiClient.interceptors.response.use(
     const status = axiosError.response?.status;
     const original = axiosError.config;
 
+    const currentToken = tokenStore.get();
+    
+    // If we're using the dummy token, don't try to refresh or log out. 
+    // Just fail the request so the UI can handle the error.
+    if (currentToken === 'dummy-token') {
+      return Promise.reject(toApiError(error));
+    }
+
     // 403/404 are access-boundary responses, never an auth failure — no refresh (FR-010).
     if (status !== 401 || !original || original._retry) {
       return Promise.reject(toApiError(error));

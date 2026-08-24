@@ -17,13 +17,13 @@ export function DesktopDriversTable({ drivers }: { drivers: any[] }) {
             <TableHead className="font-bold text-slate-700 text-[12px] text-center py-3 px-2">رحلات الشهر</TableHead>
             <TableHead className="font-bold text-slate-700 text-[12px] text-center py-3 px-2">آخر شحنة</TableHead>
             <TableHead className="font-bold text-slate-700 text-[12px] text-center py-3 px-2">الحالة</TableHead>
-            <TableHead className="font-bold text-slate-700 text-[12px] text-center py-3 pl-4 pr-2">إجراءات</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {drivers.map((driver, idx) => (
             <TableRow 
               key={idx}
+              onClick={() => navigate(`/transport/drivers/${driver.id}`)}
               className="hover:bg-slate-50 border-b border-slate-100 last:border-0 cursor-pointer transition-colors"
             >
               {/* Driver */}
@@ -79,15 +79,7 @@ export function DesktopDriversTable({ drivers }: { drivers: any[] }) {
                 </div>
               </TableCell>
 
-              {/* Actions */}
-              <TableCell className="align-middle text-center py-3 pl-4 pr-2">
-                <button 
-                  onClick={(e) => { e.stopPropagation(); navigate(`/drivers/1`); }}
-                  className="w-8 h-8 rounded-xl border border-blue-100 flex items-center justify-center text-blue-600 hover:bg-blue-50 transition-colors mx-auto"
-                >
-                  <img src="DriverPage/pen.svg" alt="تعديل بيانات السائق" className="w-4 h-4 object-contain" />
-                </button>
-              </TableCell>
+    
             </TableRow>
           ))}
         </TableBody>

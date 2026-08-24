@@ -1,17 +1,10 @@
+import { useState } from 'react';
 import { ChevronRight, Star } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { DriverEditForm } from './DriverEditForm';
 
-export function DriverDetailsHeader({ 
-  isEditing, 
-  onEditClick,
-  onCancelEdit
-}: { 
-  isEditing: boolean; 
-  onEditClick: () => void; 
-  onCancelEdit: () => void;
-}) {
+export function DriverDetailsHeader() {
   const navigate = useNavigate();
+  const [isActive, setIsActive] = useState(true);
 
   return (
     <div className="flex flex-col gap-4 w-full">
@@ -19,12 +12,12 @@ export function DriverDetailsHeader({
       <div className="flex items-center justify-start w-full">
         <div className="flex items-center gap-3">
           <button 
-            onClick={() => navigate('/drivers')}
+            onClick={() => navigate('/transport/drivers')}
             className="bg-white border border-slate-200 rounded-lg p-2 hover:bg-slate-50 transition-colors shadow-sm"
           >
             <ChevronRight className="w-5 h-5 text-slate-400" />
           </button>
-          <span className="text-slate-500 font-bold text-sm cursor-pointer" onClick={() => navigate('/drivers')}>السائقين / <span className="text-slate-800">محمد إبراهيم</span></span>
+          <span className="text-slate-500 font-bold text-sm cursor-pointer" onClick={() => navigate('/transport/drivers')}>السائقين / <span className="text-slate-800">محمد إبراهيم</span></span>
         </div>
       </div>
       
@@ -39,9 +32,9 @@ export function DriverDetailsHeader({
                 <img src="/transportCompany/DriverPage/editDriver/profile.jpg" alt="محمد إبراهيم" className="w-full h-full object-cover" />
              </div>
              <div className="flex flex-col gap-1.5 text-right">
-                <div className="flex items-center gap-3 justify-start">
+                 <div className="flex items-center gap-3 justify-start">
                    <span className="text-[#162155] font-black text-xl">محمد إبراهيم</span>
-                   <span className="bg-[#DCFCE7] text-[#16A34A] px-3 py-0.5 rounded-full text-xs font-bold">نشط</span>
+                   <span className={`px-3 py-0.5 rounded-full text-xs font-bold ${isActive ? 'bg-[#DCFCE7] text-[#16A34A]' : 'bg-red-100 text-red-600'}`}>{isActive ? 'نشط' : 'موقوف'}</span>
                 </div>
                 <div className="flex items-center gap-2 justify-end text-slate-400 text-xs font-bold" dir="rtl">
                    <div className="flex items-center gap-1">
@@ -59,28 +52,24 @@ export function DriverDetailsHeader({
            
            {/* Left side: Buttons */}
            <div className="flex items-center gap-3 w-full md:w-auto justify-end md:justify-start">
-              <button className="flex flex-1 md:flex-none justify-center items-center gap-2 bg-[#FEF2F2] text-red-500 px-6 py-3 rounded-xl text-sm font-bold hover:bg-red-100 transition-colors border border-red-100">
-                 <img src="/transportCompany/DriverPage/editDriver/pause.svg" alt="" className="w-4 h-4 object-contain" />
-                 إيقاف السائق
+              <button 
+                onClick={() => setIsActive(!isActive)}
+                className={`flex flex-1 md:flex-none justify-center items-center gap-2 px-6 py-3 rounded-xl text-sm font-bold transition-colors border ${isActive ? 'bg-[#FEF2F2] text-red-500 hover:bg-red-100 border-red-100' : 'bg-emerald-50 text-emerald-600 hover:bg-emerald-100 border-emerald-100'}`}
+              >
+                 {isActive ? (
+                   <>
+                     <img src="/transportCompany/DriverPage/editDriver/pause.svg" alt="" className="w-4 h-4 object-contain" />
+                     إيقاف السائق
+                   </>
+                 ) : (
+                   <>
+                     تفعيل السائق
+                   </>
+                 )}
               </button>
-              {!isEditing && (
-                <button 
-                  onClick={onEditClick}
-                  className="flex flex-1 md:flex-none justify-center items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-xl text-sm font-bold hover:bg-blue-700 transition-colors shadow-sm"
-                >
-                   <img src="/transportCompany/DriverPage/editDriver/edit.svg" alt="" className="w-4 h-4 object-contain" />
-                   تعديل بيانات السائق
-                </button>
-              )}
            </div>
         </div>
 
-        {/* Edit Form Area */}
-        {isEditing && (
-          <div className="w-full mt-4 pt-4 border-t border-slate-100">
-             <DriverEditForm onCancel={onCancelEdit} />
-          </div>
-        )}
       </div>
     </div>
   );

@@ -1,16 +1,17 @@
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
+import { FuelIcon } from './FuelIcon';
 
 const TABS = ['الكل', 'في الطريق للتحميل', 'في الطريق للتوصيل'];
 
 const MOCK_ORDERS = [
-  { id: '1', orderNum: 'ORD-2024-246', company: 'شركة بترو أمان، جدة - الرحاب', status: 'في الطريق للتوصيل', quantity: '20,000', fuel: 'بنزين 98', icon: '/transportCompany/trackingPage/gasoline98.svg', isSelected: false },
-  { id: '2', orderNum: 'ORD-2024-246', company: 'شركة بترو أمان، جدة - الرحاب', status: 'في الطريق للتحميل', quantity: '20,000', fuel: 'بنزين 98', icon: '/transportCompany/trackingPage/gasoline98.svg', isSelected: false },
-  { id: '3', orderNum: 'ORD-2024-246', company: 'شركة بترو أمان، جدة - الرحاب', status: 'في الطريق للتوصيل', quantity: '20,000', fuel: 'بنزين 98', icon: '/transportCompany/trackingPage/gasoline98.svg', isSelected: true },
-  { id: '4', orderNum: 'ORD-2024-246', company: 'شركة بترو أمان، جدة - الرحاب', status: 'في الطريق للتوصيل', quantity: '20,000', fuel: 'بنزين 98', icon: '/transportCompany/trackingPage/gasoline98.svg', isSelected: false },
-  { id: '5', orderNum: 'ORD-2024-246', company: 'شركة بترو أمان، جدة - الرحاب', status: 'في الطريق للتحميل', quantity: '20,000', fuel: 'بنزين 98', icon: '/transportCompany/trackingPage/gasoline98.svg', isSelected: false },
-  { id: '6', orderNum: 'ORD-2024-246', company: 'شركة بترو أمان، جدة - الرحاب', status: 'في الطريق للتوصيل', quantity: '20,000', fuel: 'بنزين 98', icon: '/transportCompany/trackingPage/gasoline98.svg', isSelected: false },
+  { id: '1', orderNum: 'ORD-2024-246', company: 'شركة بترو أمان، جدة - الرحاب', status: 'في الطريق للتوصيل', quantity: '20,000', fuel: 'بنزين 98', isSelected: false },
+  { id: '2', orderNum: 'ORD-2024-246', company: 'شركة بترو أمان، جدة - الرحاب', status: 'في الطريق للتحميل', quantity: '20,000', fuel: 'بنزين 98', isSelected: false },
+  { id: '3', orderNum: 'ORD-2024-246', company: 'شركة بترو أمان، جدة - الرحاب', status: 'في الطريق للتوصيل', quantity: '20,000', fuel: 'بنزين 98', isSelected: true },
+  { id: '4', orderNum: 'ORD-2024-246', company: 'شركة بترو أمان، جدة - الرحاب', status: 'في الطريق للتوصيل', quantity: '20,000', fuel: 'بنزين 98', isSelected: false },
+  { id: '5', orderNum: 'ORD-2024-246', company: 'شركة بترو أمان، جدة - الرحاب', status: 'في الطريق للتحميل', quantity: '20,000', fuel: 'بنزين 98', isSelected: false },
+  { id: '6', orderNum: 'ORD-2024-246', company: 'شركة بترو أمان، جدة - الرحاب', status: 'في الطريق للتوصيل', quantity: '20,000', fuel: 'بنزين 98', isSelected: false },
 ];
 
 export function TrackingSidebar() {
@@ -79,9 +80,9 @@ export function TrackingSidebar() {
                 <span className="text-slate-400 text-[9px] font-bold">الكمية</span>
                 <span className="text-slate-800 font-black text-[11px]">{order.quantity}</span>
               </div>
-              <div className="flex flex-col items-center gap-0.5">
-                <img src={order.icon} alt={order.fuel} className="w-4 h-4 object-contain" />
-                <span className="text-slate-500 font-bold text-[9px]">{order.fuel}</span>
+              <div className="flex items-center gap-1.5">
+                <FuelIcon type={order.fuel} className="w-5 h-5 object-contain" />
+                <span className="text-[#162155] font-black text-xs">{order.fuel}</span>
               </div>
             </div>
 

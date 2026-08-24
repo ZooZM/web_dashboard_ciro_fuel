@@ -8,7 +8,7 @@ import { useLayoutStore } from '@/stores/layout.store';
 import { useLogout } from '@/auth/hooks/useLogout';
 
 
-function NavItem({ to, icon: Icon, label, badge, active, isCollapsed }: { to: string; icon: any; label: string; badge?: number; active?: boolean; isCollapsed: boolean }) {
+function NavItem({ to, icon: Icon, label, badge, active, isCollapsed, iconClassName }: { to: string; icon: any; label: string; badge?: number; active?: boolean; isCollapsed: boolean; iconClassName?: string }) {
   return (
     <NavLink
       to={to}
@@ -32,12 +32,12 @@ function NavItem({ to, icon: Icon, label, badge, active, isCollapsed }: { to: st
                   alt={label} 
                   className={cn(
                     "transition-all duration-300 object-contain", 
-                    isCollapsed ? "h-5 w-5" : "h-5 w-5",
+                    iconClassName || (isCollapsed ? "h-5 w-5" : "h-5 w-5 "),
                     (isActive || active) ? "brightness-0 invert" : "opacity-70 group-hover:opacity-100"
                   )} 
                 />
              ) : (
-                <Icon className={cn("transition-all duration-300", isCollapsed ? "h-5 w-5" : "h-5 w-5", (isActive || active) ? "text-white" : "text-slate-400 group-hover:text-slate-200")} />
+                <Icon className={cn("transition-all duration-300", iconClassName || (isCollapsed ? "h-5 w-5" : "h-5  w-5"), (isActive || active) ? "text-white" : "text-slate-400 group-hover:text-slate-200")} />
              )}
           </motion.div>
           
@@ -194,7 +194,7 @@ export function Sidebar() {
               <NavItem to="/petrolCompany/fuel-exchange" icon="/sideBar/fuel-exchange.svg" label="تبادل الوقود" isCollapsed={isCollapsed} />
               <NavItem to="/petrolCompany/pricing" icon="/sideBar/fuel-pricing.svg" label="تسعير الوقود" isCollapsed={isCollapsed} />
               <NavItem to="/petrolCompany/companies" icon="/sideBar/greyTruck.svg" label="شركات النقل" isCollapsed={isCollapsed} />
-              <NavItem to="/petrolCompany/stations" icon="/sideBar/stations.svg" label="المحطات" isCollapsed={isCollapsed} />
+              <NavItem to="/petrolCompany/stations" icon="/sideBar/stations.svg" label="المحطات" isCollapsed={isCollapsed} iconClassName="h-7 w-7" />
               <NavItem to="/petrolCompany/invoices" icon="/sideBar/order.svg" label="الفواتير و المدفوعات" isCollapsed={isCollapsed} />
               <NavItem to="/petrolCompany/notifications" icon="/sideBar/notification.svg" label="الاشعارات" badge={5} isCollapsed={isCollapsed} />
             </>
@@ -203,10 +203,10 @@ export function Sidebar() {
               <NavItem to="/transport/dashboard" icon="/sideBar/home.svg" label="الرئيسية" isCollapsed={isCollapsed} />
               <NavItem to="/transport/orders" icon="/sideBar/order.svg" label="الطلبات" badge={5} isCollapsed={isCollapsed} />
               <NavItem to="/transport/tracking" icon="/sideBar/map.svg" label="تتبع الشحنات" isCollapsed={isCollapsed} />
-              <NavItem to="/transport/companies" icon="/sideBar/greyTruck.svg" label="شركات النقل" isCollapsed={isCollapsed} />
+              <NavItem to="/transport/delivery-areas" icon="/transportCompany/delivery/locationPin.svg" label="تسعير أجرة النقل" isCollapsed={isCollapsed} iconClassName="w-6 h-6" />
+              <NavItem to="/transport/trucks" icon="/sideBar/greyTruck.svg" label="الشاحنات والتانكات" isCollapsed={isCollapsed} />
               <NavItem to="/transport/drivers" icon="/sideBar/steering.svg" label="السائقين" isCollapsed={isCollapsed} />
               <NavItem to="/transport/invoices" icon="/sideBar/order.svg" label="الفواتير و المدفوعات" isCollapsed={isCollapsed} />
-              <NavItem to="/transport/reports" icon="/sideBar/charts.svg" label="التقارير" isCollapsed={isCollapsed} />
               <NavItem to="/transport/notifications" icon="/sideBar/notification.svg" label="الاشعارات" badge={5} isCollapsed={isCollapsed} />
             </>
           )}

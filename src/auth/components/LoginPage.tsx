@@ -5,6 +5,7 @@ import { ChevronDown } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from '@/lib/toast/toast';
 import { useSessionStore } from '@/stores/session.store';
+import { z } from 'zod';
 
 const loginSchema = z.object({
   email: z.string().optional(), // Keeping as email internally for backend compatibility

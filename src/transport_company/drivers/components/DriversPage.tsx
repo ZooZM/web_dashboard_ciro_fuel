@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { DriversStats } from './DriversStats';
@@ -22,6 +23,7 @@ const MOCK_DRIVERS = Array(8).fill({
 
 export function DriversPage() {
   const [activeTab, setActiveTab] = useState('الكل');
+  const navigate = useNavigate();
 
   return (
     <div className="w-full p-4 md:p-6 flex-1 -mt-4 bg-[#F8FAFC] border border-[#E7E9EF] rounded-2xl min-h-full font-sans" dir="rtl">
@@ -33,7 +35,7 @@ export function DriversPage() {
           <p className="text-slate-500 font-bold text-sm">إدارة ومتابعة سائقين و أسطول شاحنات نقل الوقود</p>
         </div>
         
-        <button className="flex items-center gap-2 bg-blue-600 text-white px-5 py-2.5 rounded-xl text-sm font-bold hover:bg-blue-700 transition-colors shadow-sm">
+        <button onClick={() => navigate('/transport/drivers/add')} className="flex items-center gap-2 bg-blue-600 text-white px-5 py-2.5 rounded-xl text-sm font-bold hover:bg-blue-700 transition-colors shadow-sm">
           <img src="/transportCompany/DriverPage/plus.svg" alt="Add" className="w-4 h-4" />
           إضافة سائق
         </button>

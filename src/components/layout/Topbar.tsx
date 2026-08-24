@@ -1,6 +1,6 @@
 import { useSession } from '@/stores/session.store';
 import { useLayoutStore } from '@/stores/layout.store';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useState, useRef, useEffect } from 'react';
 import { User, Globe, Info, ChevronLeft, ChevronUp, LifeBuoy } from 'lucide-react';
 
@@ -8,6 +8,7 @@ export function Topbar() {
   const { user } = useSession();
   const { toggleSidebar } = useLayoutStore();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isLangOpen, setIsLangOpen] = useState(false);
@@ -24,8 +25,8 @@ export function Topbar() {
   }, []);
 
   let basePath = '/transport';
-  if (user?.role === 'SUPER_ADMIN') basePath = '/admin';
-  else if (user?.role === 'CLIENT') basePath = '/petrol';
+  if (location.pathname.startsWith('/admin')) basePath = '/admin';
+  else if (location.pathname.startsWith('/petrolCompany')) basePath = '/petrolCompany';
 
   return (
 
@@ -39,7 +40,7 @@ export function Topbar() {
       {/* Center: Search */}
       <div className="hidden md:flex flex-1 items-center justify-end border-r border-slate-200 pr-3 mr-4">
         <div className="flex items-center w-[246px] h-[32px] rounded-lg border border-slate-200 bg-slate-50 px-4 gap-2 transition-all focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500" dir="rtl">
-          <img src="/topBar/search.svg" alt="Search" className="w-4 h-4 object-contain opacity-50 shrink-0" />
+          <img src="/topBar/search.svg" alt="Search" className="w-4 h-4 object-contain" />
           <input 
             type="text" 
             placeholder="ابحث بكود الطلب أو الشركة..." 

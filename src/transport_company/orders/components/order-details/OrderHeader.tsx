@@ -34,7 +34,10 @@ export function OrderHeader() {
             <img src="/transportCompany/orderPage/orderDetails/edit.svg" alt="" className="w-4 h-4 shrink-0" />
             تعديل
           </button>
-          <button className="flex-[1.8] flex justify-center items-center gap-1.5 bg-blue-600 text-white py-2.5 rounded-xl text-sm font-bold hover:bg-blue-700 transition-colors shadow-sm px-2">
+          <button 
+            onClick={() => navigate(`/transport/orders/${id}/assign`)}
+            className="flex-[1.8] flex justify-center items-center gap-1.5 bg-blue-600 text-white py-2.5 rounded-xl text-sm font-bold hover:bg-blue-700 transition-colors shadow-sm px-2"
+          >
             <img src="/transportCompany/orderPage/orderDetails/whiteRightCheck.svg" alt="" className="w-5 h-5 shrink-0" />
             <span className="">قبول و إسناد سائق</span>
           </button>

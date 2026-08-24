@@ -6,7 +6,7 @@ export function MobileDriversList({ drivers }: { drivers: any[] }) {
   return (
     <div className="lg:hidden flex flex-col gap-4 w-full">
       {drivers.map((driver, idx) => (
-        <div key={idx} className="bg-white border border-slate-200 rounded-2xl p-4 flex flex-col gap-4 shadow-sm hover:border-blue-300 transition-colors cursor-pointer">
+        <div key={idx} onClick={() => navigate(`/transport/drivers/${driver.id}`)} className="bg-white border border-slate-200 rounded-2xl p-4 flex flex-col gap-4 shadow-sm hover:border-blue-300 transition-colors cursor-pointer">
           
           {/* Header: Driver Info and Status */}
           <div className="flex items-start justify-between border-b border-slate-100 pb-3">
@@ -61,16 +61,7 @@ export function MobileDriversList({ drivers }: { drivers: any[] }) {
             </div>
           </div>
 
-          {/* Footer Actions */}
-          <div className="border-t border-slate-100 pt-3 flex justify-end">
-            <button 
-              onClick={(e) => { e.stopPropagation(); navigate(`/drivers/1`); }}
-              className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl border border-blue-100 text-blue-600 hover:bg-blue-50 transition-colors text-sm font-bold bg-white"
-            >
-              <img src="DriverPage/pen.svg" alt="تعديل بيانات السائق" className="w-4 h-4 object-contain" />
-              <p className='text-sm font-bold text-blue-600'>تعديل بيانات السائق</p>
-            </button>
-          </div>
+
 
         </div>
       ))}

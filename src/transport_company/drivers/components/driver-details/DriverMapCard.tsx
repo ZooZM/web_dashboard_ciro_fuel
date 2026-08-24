@@ -1,4 +1,10 @@
+import { useNavigate, useLocation } from 'react-router-dom';
+
 export function DriverMapCard() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const isPetrol = location.pathname.includes('/petrolCompany');
+  const trackPath = isPetrol ? '/petrolCompany/tracking' : '/transport/tracking';
   return (
     <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm flex flex-col gap-4 w-full h-fit">
       {/* Header */}
@@ -21,7 +27,10 @@ export function DriverMapCard() {
 
 
       {/* Track Button */}
-      <button className="flex items-center justify-center gap-2 bg-blue-600 text-white w-full py-3 rounded-xl text-sm font-bold hover:bg-blue-700 transition-colors shadow-sm mt-2">
+      <button 
+        onClick={() => navigate(trackPath)}
+        className="flex items-center justify-center gap-2 bg-blue-600 text-white w-full py-3 rounded-xl text-sm font-bold hover:bg-blue-700 transition-colors shadow-sm mt-2"
+      >
         <img src="/transportCompany/DriverPage/editDriver/mapButton.svg" alt="" className="w-4 h-4 object-contain" />
         تتبع الشاحنة
       </button>

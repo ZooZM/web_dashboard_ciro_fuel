@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 import type { Role } from '@/constants/roles';
 import { tokenStore } from '@/lib/auth/token-store';
 
@@ -20,19 +21,27 @@ interface SessionState {
   clearSession: () => void;
 }
 
-export const useSessionStore = create<SessionState>((set) => ({
-  user: null,
-  status: 'booting',
-  setStatus: (status) => set({ status }),
-  setSession: (user, accessToken) => {
-    tokenStore.set(accessToken);
-    set({ user, status: 'authenticated' });
-  },
-  clearSession: () => {
-    tokenStore.set(null);
-    set({ user: null, status: 'anonymous' });
-  },
-}));
+export const useSessionStore = create<SessionState>()(
+  persist(
+    (set) => ({
+      user: null,
+      status: 'booting',
+      setStatus: (status) => set({ status }),
+      setSession: (user, accessToken) => {
+        tokenStore.set(accessToken);
+        set({ user, status: 'authenticated' });
+      },
+      clearSession: () => {
+        tokenStore.set(null);
+        set({ user: null, status: 'anonymous' });
+      },
+    }),
+    {
+      name: 'session-storage',
+      partialize: (state) => ({ user: state.user, status: state.status }),
+    }
+  )
+);
 
 // Convenience selector hook mirroring the shape used throughout routing/components.
 export function useSession() {

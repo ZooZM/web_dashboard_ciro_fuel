@@ -11,6 +11,7 @@ export interface NewOrder {
 }
 
 import { Link } from 'react-router-dom';
+import { FuelIcon } from '../../tracking/components/FuelIcon';
 
 interface NewOrderRowProps {
   order: NewOrder;
@@ -56,7 +57,7 @@ export function NewOrderRow({ order }: NewOrderRowProps) {
 
         <div className="flex items-center gap-3 shrink-0 whitespace-nowrap">
           <div className="flex flex-col items-center gap-0.5">
-            <img src="/transportCompany/home/station.svg" className="w-5 h-5" />
+            <FuelIcon type={order.fuelType} className="w-5 h-5" />
             <span className="text-[10px] text-[#64748b]">{order.fuelType}</span>
           </div>
           <div className="flex flex-col items-end gap-0.5">
