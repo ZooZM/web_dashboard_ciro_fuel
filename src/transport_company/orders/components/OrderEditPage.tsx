@@ -1,4 +1,3 @@
-import { useParams } from 'react-router-dom';
 import { ChevronRight } from 'lucide-react';
 import { CustomerDataCard } from './order-details/CustomerDataCard';
 import { MapCard } from './order-details/MapCard';
@@ -8,7 +7,6 @@ import { TrackingTimelineCard } from './order-details/TrackingTimelineCard';
 import { EditTransportDetailsCard } from './order-details/EditTransportDetailsCard';
 
 export function OrderEditPage() {
-  const { id } = useParams<{ id: string }>();
 
   return (
     <div className="w-full flex-1 p-4 md:p-6 font-sans -mt-4 bg-[#F8FAFC] border border-[#E7E9EF] rounded-2xl min-h-full" dir="rtl">

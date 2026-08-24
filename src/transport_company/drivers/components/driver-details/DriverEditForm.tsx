@@ -2,7 +2,13 @@ import { Check, X, Plus, Minus } from 'lucide-react';
 import { useState } from 'react';
 
 export function DriverEditForm({ onCancel }: { onCancel: () => void }) {
-  const [capacity] = useState('20,000');
+  const [capacity, setCapacity] = useState('20,000');
+
+  const adjustCapacity = (delta: number) => {
+    const current = Number(capacity.replace(/,/g, '')) || 0;
+    const next = Math.max(0, current + delta);
+    setCapacity(next.toLocaleString('en-US'));
+  };
 
   return (
     <div className="flex flex-col gap-6 mt-4 w-full animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -81,14 +87,14 @@ export function DriverEditForm({ onCancel }: { onCancel: () => void }) {
             <div className="flex flex-col gap-2 w-full text-right mt-auto">
               <label className="text-slate-500 font-bold text-sm">السعة</label>
               <div className="flex items-center border border-slate-200 rounded-xl p-1 h-[48px]">
-                <button className="w-10 h-full flex items-center justify-center bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors text-slate-400">
+                <button type="button" onClick={() => adjustCapacity(-1000)} className="w-10 h-full flex items-center justify-center bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors text-slate-400">
                   <Minus className="w-5 h-5 text-slate-400" />
                 </button>
                 <div className="flex-1 flex flex-col items-center justify-center h-full">
                    <span className="text-[#162155] font-black text-sm">{capacity}</span>
                    <span className="text-slate-400 font-bold text-[10px]">لتر</span>
                 </div>
-                <button className="w-10 h-full flex items-center justify-center bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors text-slate-400">
+                <button type="button" onClick={() => adjustCapacity(1000)} className="w-10 h-full flex items-center justify-center bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors text-slate-400">
                   <Plus className="w-5 h-5 text-blue-600" />
                 </button>
               </div>

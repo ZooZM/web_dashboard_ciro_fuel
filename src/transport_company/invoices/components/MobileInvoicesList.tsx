@@ -1,4 +1,3 @@
-import { cn } from '@/lib/utils';
 
 export function MobileInvoicesList({ invoices }: { invoices: any[] }) {
   return (

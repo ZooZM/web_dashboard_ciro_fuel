@@ -1,7 +1,5 @@
-/* eslint-disable i18next/no-literal-string */
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
-import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
 type NotificationType = 'success' | 'warning' | 'info' | 'system' | 'error';
@@ -158,7 +156,6 @@ export function NotificationsPage() {
 
   const dateEntries = Object.entries(groupedNotifications);
 
-  const navigate = useNavigate();
 
   return (
     <div className="flex flex-col flex-1 text-right font-sans bg-[#F8FAFC] -mt-4 border border-[#E7E9EF] rounded-2xl min-h-full p-6" dir="rtl">

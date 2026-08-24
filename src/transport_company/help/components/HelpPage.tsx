@@ -1,4 +1,3 @@
-import { ChevronLeft } from 'lucide-react';
 import { SupportTeamCard } from './SupportTeamCard';
 import { ContactInfoCard } from './ContactInfoCard';
 import { QuickContactSection } from './QuickContactSection';

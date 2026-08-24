@@ -2,7 +2,7 @@ import { useSession } from '@/stores/session.store';
 import { useLayoutStore } from '@/stores/layout.store';
 import { useNavigate } from 'react-router-dom';
 import { useState, useRef, useEffect } from 'react';
-import { User, Globe, Headset, Info, ChevronLeft, ChevronUp, LifeBuoy } from 'lucide-react';
+import { User, Globe, Info, ChevronLeft, ChevronUp, LifeBuoy } from 'lucide-react';
 
 export function Topbar() {
   const { user } = useSession();

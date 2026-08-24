@@ -1,4 +1,4 @@
-import { Calendar, CircleDollarSign, Check, X } from 'lucide-react';
+import { Check, X } from 'lucide-react';
 
 export function EditTransportDetailsCard() {
   return (

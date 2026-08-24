@@ -2,7 +2,16 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ChevronDown } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { toast } from '@/lib/toast/toast';
+import { useSessionStore } from '@/stores/session.store';
+
+const loginSchema = z.object({
+  email: z.string().optional(), // Keeping as email internally for backend compatibility
+  password: z.string().optional(),
+});
+
+type LoginFormValues = z.infer<typeof loginSchema>;
 
 export function LoginPage() {
   const navigate = useNavigate();

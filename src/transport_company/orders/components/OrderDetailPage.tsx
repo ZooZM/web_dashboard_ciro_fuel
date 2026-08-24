@@ -1,4 +1,3 @@
-import { useParams } from 'react-router-dom';
 import { OrderHeader } from './order-details/OrderHeader';
 import { UrgentNotificationCard } from './order-details/UrgentNotificationCard';
 import { OrderDataCard } from './order-details/OrderDataCard';
@@ -9,7 +8,6 @@ import { MapCard } from './order-details/MapCard';
 import { AssignedDriverCard } from './order-details/AssignedDriverCard';
 
 export function OrderDetailPage() {
-  const { id } = useParams<{ id: string }>();
 
   return (
     <div className="w-full flex-1 p-4 md:p-6 font-sans -mt-4 bg-[#F8FAFC] border border-[#E7E9EF] rounded-2xl min-h-full" dir="rtl">
