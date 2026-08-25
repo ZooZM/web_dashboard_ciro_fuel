@@ -94,7 +94,7 @@ export function AdminPetrolCompanyDetailsPage() {
             <span className="text-[#162155] text-2xl font-black">34</span>
           </div>
           <div className="w-12 h-12 rounded-full bg-orange-50 flex items-center justify-center shrink-0 order-1">
-           <img src="/Admin/Brands/group.svg" alt="" />
+            <img src="/Admin/Brands/group.svg" alt="" />
           </div>
         </div>
 
@@ -192,7 +192,7 @@ export function AdminPetrolCompanyDetailsPage() {
                 { id: 'ORD-2024-256', status: 'مكتمل', color: 'slate' }
               ].map((order, index) => (
                 <div key={index} className={`flex items-center justify-between pb-4 w-full ${index !== 2 ? 'border-b border-[#E7E9EF]' : ''}`}>
-                   <div className="flex flex-col items-start flex-1 text-right">
+                  <div className="flex flex-col items-start flex-1 text-right">
                     <span className="text-xs font-black text-[#162155] mb-0.5">{order.id}</span>
                     <span className="text-[10px] font-bold text-slate-400">محمد أحمد - محطة الرحاب</span>
                   </div>
@@ -201,9 +201,9 @@ export function AdminPetrolCompanyDetailsPage() {
                     <span className="text-[10px] font-bold text-slate-500 mb-0.5">بنزين 95</span>
                     <span className="text-xs font-black text-[#162155]">20,000 لتر</span>
                   </div>
-                
 
-                   <div className="flex justify-end flex-1">
+
+                  <div className="flex justify-end flex-1">
                     <div className={`px-3 py-1.5 rounded-xl text-[10px] font-bold flex items-center justify-center gap-1.5 ${order.color === 'green' ? "bg-green-50 text-green-600 border border-green-200" : "bg-slate-50 text-slate-500 border border-slate-200"
                       }`}>
                       <div className={`w-1.5 h-1.5 rounded-full ${order.color === 'green' ? "bg-green-500" : "bg-slate-400"}`}></div>
@@ -214,8 +214,11 @@ export function AdminPetrolCompanyDetailsPage() {
               ))}
             </div>
 
-            <button className="w-full py-3 mt-2 rounded-xl border border-[#E7E9EF] text-blue-600 bg-white hover:bg-slate-50 transition-colors font-bold text-xs flex items-center justify-center gap-2 shadow-sm">
-              <img src="/petrolCompany/requests/date.svg" alt="" />
+            <button
+              onClick={() => navigate('/admin/order-tracking')}
+              className="w-full py-3 mt-2 rounded-xl border border-[#E7E9EF] text-blue-600 bg-white hover:bg-slate-50 transition-colors font-bold text-xs flex items-center justify-center gap-2 shadow-sm"
+            >
+              <img src="/petrolCompany/transporters/details/detail.svg" alt="" className="w-4 h-4 " />
               عرض المزيد
             </button>
           </div>
