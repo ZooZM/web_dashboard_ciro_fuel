@@ -17,6 +17,7 @@ import { AdminFuelExchangePage } from '@/admin/fuel_exchange/components/AdminFue
 import { AdminFuelExchangeDetailPage } from '@/admin/fuel_exchange/components/AdminFuelExchangeDetailPage';
 import { AdminPetrolCompaniesPage } from '@/admin/petrol_companies/components/AdminPetrolCompaniesPage';
 import { AddPetrolCompanyPage } from '@/admin/petrol_companies/components/AddPetrolCompanyPage';
+import { AdminPetrolCompanyDetailsPage } from '@/admin/petrol_companies/components/AdminPetrolCompanyDetailsPage';
 import { AdminProfilePage } from '@/admin/profile/components/AdminProfilePage';
 import { AdminTransportCompaniesPage } from '@/admin/transport_companies/components/AdminTransportCompaniesPage';
 import { AddTransportCompanyPage } from '@/admin/transport_companies/components/AddTransportCompanyPage';
@@ -94,7 +95,7 @@ export const router = createBrowserRouter([
       { path: 'petrol-companies/add', element: <AddPetrolCompanyPage /> },
       { path: 'petrol-companies/owners/:id', element: <PetrolStationOwnerDetailsPage /> },
       { path: 'petrol-companies/stations/:id', element: <PetrolStationDetailsPage /> },
-      { path: 'petrol-companies/:id', element:   <div className="p-6">Petrol Company Details Page (Coming Soon)</div> },
+      { path: 'petrol-companies/:id', element: <AdminPetrolCompanyDetailsPage /> },
       { path: 'invoices', element: <PetrolInvoicesListPage /> },
       { path: 'transport-companies', element: <AdminTransportCompaniesPage /> },
       { path: 'transport-companies/add', element: <AddTransportCompanyPage /> },

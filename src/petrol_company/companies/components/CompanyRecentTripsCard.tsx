@@ -8,8 +8,8 @@ export function CompanyRecentTripsCard() {
   return (
     <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm flex flex-col">
       <div className="flex items-center justify-start gap-2 mb-6">
-        <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center shrink-0">
-          <img src="/petrolCompany/transporters/details/blueOrder.svg" alt="" className="w-5 h-5" />
+        <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center shrink-0">
+          <img src="/petrolCompany/transporters/details/blueOrder.svg" alt="" className="w-6 h-6" />
         </div>
         <h2 className="text-lg font-black text-slate-900">سجل الرحلات الأخيرة</h2>
       </div>
@@ -54,7 +54,7 @@ export function CompanyRecentTripsCard() {
       </div>
 
       <button className="w-full flex items-center justify-center gap-2 py-3 rounded-xl border border-slate-200 text-blue-600 bg-white hover:bg-slate-50 transition-colors text-sm font-bold mt-2">
-        <img src="/petrolCompany/transporters/details/detail.svg" alt="" className="w-4 h-4 opacity-70" />
+        <img src="/petrolCompany/transporters/details/detail.svg" alt="" className="w-4 h-4 " />
         <span>عرض المزيد</span>
       </button>
     </div>

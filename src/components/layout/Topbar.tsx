@@ -30,15 +30,13 @@ export function Topbar() {
 
   return (
 
-    <header className="flex h-20 shrink-0 items-center justify-between border-b rounded-xl mx-3 my-2 border-slate-200 bg-white px-4 md:px-6 shadow-sm" dir="ltr">
+    <header className="flex h-16 sm:h-20 shrink-0 items-center justify-between border-b rounded-xl mx-2 sm:mx-3 my-2 border-slate-200 bg-white px-3 sm:px-4 md:px-6 shadow-sm gap-1 sm:gap-4" dir="ltr">
       {/* Left side: Logo & Mobile Toggle */}
-      <div className="flex items-center gap-2 sm:gap-3 shrink-0">
-
-
+      <div className="flex items-center shrink-0">
         <img
           src={user?.role === 'SUPER_ADMIN' ? "/LOGO/AdminLogo.svg" : "/LOGO/Logo.svg"}
           alt="CIRO FUEL"
-          className="object-contain transition-all duration-300 h-6 w-auto" />
+          className="object-contain transition-all duration-300 h-5 sm:h-6 w-auto max-w-[130px] sm:max-w-none" />
       </div>
 
       {/* Center: Search */}
@@ -54,32 +52,32 @@ export function Topbar() {
       </div>
 
       {/* Right side: Actions & Profile */}
-      <div className="flex items-center gap-3 md:gap-6 ml-auto md:ml-0">
+      <div className="flex items-center gap-3 sm:gap-4 md:gap-6 ml-auto shrink-0">
         <div className="flex items-center gap-3 md:gap-4">
-          <button className="text-blue-500 hover:text-blue-600 transition-colors">
-            <img src="/topBar/i.svg" alt="Info" className="h-5 w-5 object-contain" onClick={() => navigate(`${basePath}/terms`)} />
+          <button className="hidden sm:block shrink-0 text-blue-500 hover:text-blue-600 transition-colors">
+            <img src="/topBar/i.svg" alt="Info" className="h-5 w-5 object-contain shrink-0" onClick={() => navigate(`${basePath}/terms`)} />
           </button>
-          <button className="relative text-blue-500 hover:text-blue-600 transition-colors" onClick={() => navigate(`${basePath}/notifications`)}>
-            <img src="/topBar/notification.svg" alt="Notification" className="h-5 w-5 object-contain" />
+          <button className="relative shrink-0 text-blue-500 hover:text-blue-600 transition-colors" onClick={() => navigate(`${basePath}/notifications`)}>
+            <img src="/topBar/notification.svg" alt="Notification" className="h-5 w-5 object-contain shrink-0" />
             <span className="absolute -top-1 -right-1 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-orange-500 text-[8px] font-bold text-white border-2 border-white">
               5
             </span>
           </button>
         </div>
 
-        <div className="h-8 w-px bg-slate-200"></div>
+        <div className="hidden sm:block h-6 sm:h-8 w-px bg-slate-200"></div>
 
-        <div className="relative" ref={dropdownRef}>
+        <div className="relative shrink-0" ref={dropdownRef}>
           <div
-            className="flex items-center gap-2 md:gap-3 cursor-pointer group"
+            className="flex items-center gap-1 sm:gap-2 md:gap-3 cursor-pointer group"
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
           >
-            <img src="/topBar/profilePic.jpg" alt="Avatar" className="h-8 w-8 md:h-10 md:w-10 rounded-full object-cover border-2 border-white shadow-sm" />
+            <img src="/topBar/profilePic.jpg" alt="Avatar" className="h-8 w-8 md:h-10 md:w-10 rounded-full object-cover border-2 border-white shadow-sm shrink-0" />
             <div className="hidden sm:flex flex-col text-right" dir="rtl">
               <span className="text-sm font-bold text-slate-800">{user?.role === 'SUPER_ADMIN' ? 'حسين السيد' : user?.fullName || 'أحمد السبيعي'}</span>
               <span className="text-[10px] text-slate-500">{user?.role === 'SUPER_ADMIN' ? 'أدمن سيرو' : 'مدير عمليات'}</span>
             </div>
-            <img src="/topBar/chevronDown.svg" alt="Menu" className={`h-3 w-3 object-contain   group-hover:opacity-80 transition-all ${isDropdownOpen ? 'rotate-180' : ''}`} />
+            <img src="/topBar/chevronDown.svg" alt="Menu" className={`hidden sm:block h-3 w-3 object-contain group-hover:opacity-80 transition-all ${isDropdownOpen ? 'rotate-180' : ''}`} />
           </div>
 
           {isDropdownOpen && (

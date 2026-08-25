@@ -12,7 +12,7 @@ export function AdminLinkedInvoicesCard() {
         <h2 className="text-xl font-black text-[#162155]">الفواتير المرتبطة</h2>
       </div>
 
-      {/* Breakdown Section */}
+   {/* Breakdown Section */}
       <div className="flex flex-col gap-4 mb-6">
         {/* Date pills */}
         <div className="flex flex-col md:flex-row gap-4 w-full">
@@ -37,6 +37,7 @@ export function AdminLinkedInvoicesCard() {
             </div>
           </div>
         </div>
+
 
         {/* Invoice breakdown table */}
         <div className="flex flex-col bg-slate-50 border border-slate-200 rounded-2xl overflow-hidden shadow-sm">

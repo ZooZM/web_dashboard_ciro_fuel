@@ -49,24 +49,22 @@ export function CompanyRegionsCard() {
             </div>
 
             {/* Center - Price */}
-            <div className="flex-1 flex flex-col items-center justify-center">
+            <div className="flex-1 flex flex-col items-end">
               {region.active ? (
                 <>
                   <span className="text-sm font-black text-green-600 mb-0.5">{region.price}</span>
                   <span className="text-[10px] font-bold text-slate-400">{region.min}</span>
                 </>
               ) : (
+                <div className='flex flex-row gap-2'>
                 <span className="text-sm font-bold text-red-500 bg-red-50 px-4 py-1.5 rounded-lg border border-red-100">غير نشط</span>
+                <div className='flex flex-col items-center justify-end'>
+                <span className="text-sm font-bold text-green-600 mb-0.5">{region.price}</span>
+                <span className="text-[10px] font-bold text-slate-400">{region.min}</span>
+                </div>
+                </div>
               )}
             </div>
-
-            {/* Left - Action */}
-            <div className="flex-1 flex justify-end">
-              <button className="w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center hover:bg-blue-50 hover:border-blue-200 transition-colors shadow-sm">
-                <img src="/petrolCompany/transporters/details/edit.svg" alt="Edit" className="w-5 h-5" />
-              </button>
-            </div>
-
           </div>
         ))}
       </div>

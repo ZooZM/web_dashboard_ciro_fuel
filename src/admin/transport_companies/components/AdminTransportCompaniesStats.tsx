@@ -3,7 +3,7 @@ export function AdminTransportCompaniesStats() {
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
       
       {/* Total Companies */}
-      <div className="bg-white border border-[#E7E9EF] rounded-2xl p-5 shadow-sm flex items-center justify-between">
+      <div className="bg-white border border-[#E7E9EF] rounded-2xl p-5 shadow-sm flex items-center justify-start gap-4">
         <div className="flex flex-col text-right order-2">
           <span className="text-[#858C95] text-xs font-bold mb-1">الشركات الناقلة</span>
           <span className="text-[#162155] text-2xl font-black">4</span>
@@ -14,7 +14,7 @@ export function AdminTransportCompaniesStats() {
       </div>
 
       {/* Active Transporters */}
-      <div className="bg-white border border-[#E7E9EF] rounded-2xl p-5 shadow-sm flex items-center justify-between">
+      <div className="bg-white border border-[#E7E9EF] rounded-2xl p-5 shadow-sm flex items-center justify-start gap-4">
         <div className="flex flex-col text-right order-2">
           <span className="text-[#858C95] text-xs font-bold mb-1">الناقلون النشطون</span>
           <span className="text-[#162155] text-2xl font-black">3</span>
@@ -25,7 +25,7 @@ export function AdminTransportCompaniesStats() {
       </div>
 
       {/* Orders this month */}
-      <div className="bg-white border border-[#E7E9EF] rounded-2xl p-5 shadow-sm flex items-center justify-between">
+      <div className="bg-white border border-[#E7E9EF] rounded-2xl p-5 shadow-sm flex items-center justify-start gap-4">
         <div className="flex flex-col text-right order-2">
           <span className="text-[#858C95] text-xs font-bold mb-1">طلبات الشهر عبر الناقلين</span>
           <span className="text-[#162155] text-2xl font-black">132</span>
@@ -38,7 +38,7 @@ export function AdminTransportCompaniesStats() {
       </div>
 
       {/* Covered Areas */}
-      <div className="bg-white border border-[#E7E9EF] rounded-2xl p-5 shadow-sm flex items-center justify-between">
+      <div className="bg-white border border-[#E7E9EF] rounded-2xl p-5 shadow-sm flex items-center justify-start gap-4">
         <div className="flex flex-col text-right order-2">
           <span className="text-[#858C95] text-xs font-bold mb-1">إجمالي المناطق المغطاة</span>
           <span className="text-[#162155] text-2xl font-black">11</span>

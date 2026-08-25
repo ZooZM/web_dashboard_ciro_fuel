@@ -2,8 +2,8 @@ export function CompanyContactCard() {
   return (
     <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
       <div className="flex items-center justify-start gap-2 mb-6">
-        <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center">
-          <img src="/petrolCompany/transporters/details/detail.svg" alt="" className="w-5 h-5" />
+        <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center">
+          <img src="/petrolCompany/transporters/details/detail.svg" alt="" className="w-6 h-6" />
         </div>
         <h2 className="text-lg font-black text-slate-900">معلومات التواصل</h2>
       </div>

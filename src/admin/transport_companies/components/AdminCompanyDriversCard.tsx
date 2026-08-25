@@ -12,8 +12,8 @@ export function AdminCompanyDriversCard() {
   return (
     <div className="bg-white border border-[#E7E9EF] rounded-2xl p-6 shadow-sm flex flex-col">
       <div className="flex items-center justify-start gap-2 mb-6">
-        <div className="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center">
-          <img src="/sideBar/steering.svg" alt="" className="w-4 h-4 filter" style={{ filter: 'invert(27%) sepia(91%) saturate(2311%) hue-rotate(210deg) brightness(97%) contrast(92%)' }} />
+        <div className="w-10 h-10 rounded-xl bg-[#F4F8FD] flex items-center justify-center">
+          <img src="/transportCompany/orderPage/AssignPage/driver.svg" alt="" className="w-5 h-5 " />
         </div>
         <h3 className="text-base font-black text-[#162155]">السائقين المتاحين</h3>
       </div>

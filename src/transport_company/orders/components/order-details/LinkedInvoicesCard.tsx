@@ -1,15 +1,108 @@
 import { useState } from 'react';
-import { Download } from 'lucide-react';
+import { Download, Check } from 'lucide-react';
 
 export function LinkedInvoicesCard() {
   const [isPendingExpanded, setIsPendingExpanded] = useState(false);
   return (
     <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm flex flex-col">
-      <div className="flex items-center gap-3 mb-8">
+      <div className="flex items-center gap-3 mb-6">
         <div className="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center shrink-0">
           <img src="/transportCompany/orderPage/orderDetails/greenInvoice.svg" alt="" className="w-5 h-5 text-green-600" />
         </div>
         <h2 className="text-xl font-black text-[#162155]">الفواتير المرتبطة</h2>
+      </div>
+
+      {/* Breakdown Section */}
+      <div className="flex flex-col gap-4 mb-6">
+        {/* Date pills */}
+        <div className="flex flex-col md:flex-row gap-4 w-full">
+          {/* تاريخ الإنشاء */}
+          <div className="flex-1 bg-slate-50 rounded-xl p-4 flex items-center justify-between border border-slate-200 shadow-sm">
+            <div className="flex flex-col text-right">
+              <span className="text-slate-400 text-[11px] font-bold mb-1">تاريخ الإنشاء</span>
+              <span className="text-[#162155] font-black text-xs" dir="ltr">06/06/2026 - 06:35 ص</span>
+            </div>
+            <div className="w-8 h-8 rounded-xl bg-white flex items-center justify-center shrink-0 border border-slate-200 shadow-sm">
+              <img src="/transportCompany/home/schedule.svg" alt="" className="w-4 h-4 opacity-70 grayscale" />
+            </div>
+          </div>
+          {/* تاريخ السداد */}
+          <div className="flex-1 bg-[#DCFCE7] rounded-xl p-4 flex items-center justify-between border border-[#86efac] shadow-sm">
+            <div className="flex flex-col text-right">
+              <span className="text-emerald-700 text-[11px] font-bold mb-1">تاريخ السداد</span>
+              <span className="text-[#162155] font-black text-xs" dir="ltr">06/06/2026 - 06:35 ص</span>
+            </div>
+            <div className="w-8 h-8 rounded-xl bg-white flex items-center justify-center shrink-0 border border-emerald-200 shadow-sm">
+              <Check className="w-4 h-4 text-emerald-600" strokeWidth={3} />
+            </div>
+          </div>
+        </div>
+
+        {/* Invoice breakdown table */}
+        <div className="flex flex-col bg-slate-50 border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
+          {/* Rows */}
+          <div className="flex items-center justify-between p-3 border-b border-slate-100 bg-slate-50">
+            <span className="text-slate-500 text-[11px] font-bold flex-1 text-right">الوقود (20,000 لتر × بنزين 98)</span>
+            <div className="flex items-center gap-3">
+               <span className="bg-[#DCFCE7] text-emerald-700 px-2 py-0.5 rounded-md text-[10px] font-bold">2.33 ر.س / لتر</span>
+               <div className="flex items-center gap-1 w-24 justify-end">
+                 <span className="text-[#162155] font-black text-xs">46,600.00</span>
+                 <span className="text-slate-400 text-[9px] font-bold">ر.س</span>
+               </div>
+            </div>
+          </div>
+          
+          <div className="flex items-center justify-between p-3 border-b border-slate-100 bg-slate-50">
+            <span className="text-slate-500 text-[11px] font-bold flex-1 text-right">الضريبة (15%)</span>
+            <div className="flex items-center gap-3">
+               <div className="flex items-center gap-1 w-24 justify-end">
+                 <span className="text-[#162155] font-black text-xs">6,990.00</span>
+                 <span className="text-slate-400 text-[9px] font-bold">ر.س</span>
+               </div>
+            </div>
+          </div>
+
+          <div className="flex items-center justify-between p-3 border-b border-slate-100 bg-slate-50">
+            <span className="text-slate-500 text-[11px] font-bold flex-1 text-right">العمولة</span>
+            <div className="flex items-center gap-3">
+               <span className="bg-[#DCFCE7] text-emerald-700 px-2 py-0.5 rounded-md text-[10px] font-bold">0.13 ر.س / لتر</span>
+               <div className="flex items-center gap-1 w-24 justify-end">
+                 <span className="text-[#162155] font-black text-xs">2,600.00</span>
+                 <span className="text-slate-400 text-[9px] font-bold">ر.س</span>
+               </div>
+            </div>
+          </div>
+
+          <div className="flex items-center justify-between p-3 border-b border-slate-100 bg-slate-50">
+            <span className="text-slate-500 text-[11px] font-bold flex-1 text-right">الإجمالي</span>
+            <div className="flex items-center gap-3">
+               <div className="flex items-center gap-1 w-24 justify-end">
+                 <span className="text-[#162155] font-black text-xs">56,190.00</span>
+                 <span className="text-slate-400 text-[9px] font-bold">ر.س</span>
+               </div>
+            </div>
+          </div>
+
+          <div className="flex items-center justify-between p-3 bg-slate-50">
+            <span className="text-slate-500 text-[11px] font-bold flex-1 text-right">أجرة النقل</span>
+            <div className="flex items-center gap-3">
+               <span className="bg-[#DCFCE7] text-emerald-700 px-2 py-0.5 rounded-md text-[10px] font-bold">0.02 ر.س / لتر</span>
+               <div className="flex items-center gap-1 w-24 justify-end">
+                 <span className="text-[#162155] font-black text-xs">400.00</span>
+                 <span className="text-slate-400 text-[9px] font-bold">ر.س</span>
+               </div>
+            </div>
+          </div>
+
+          {/* Total Row */}
+          <div className="flex items-center justify-between p-4 bg-[#EFF6FF] border-t border-[#BFDBFE]">
+            <span className="text-[#2563EB] text-sm font-black">الإجمالي النهائي</span>
+            <div className="flex items-center gap-1">
+               <span className="text-[#2563EB] font-black text-base">56,590.00</span>
+               <span className="text-[#2563EB] text-[10px] font-bold opacity-70">ر.س</span>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div className="flex flex-col gap-4">
