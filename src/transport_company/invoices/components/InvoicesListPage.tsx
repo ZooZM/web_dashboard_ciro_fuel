@@ -3,6 +3,7 @@ import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
 import { DesktopInvoicesTable } from './DesktopInvoicesTable';
 import { MobileInvoicesList } from './MobileInvoicesList';
+import { FilterToolbar } from '@/components/ui/FilterToolbar';
 
 // --- Static Data ---
 const FILTERS = ['الكل', 'المدفوعة', 'المستحقة'];
@@ -30,24 +31,24 @@ export function InvoicesListPage() {
 
       {/* --- Stats Cards --- */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-        
+
         {/* Card 1: Paid */}
         <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm flex flex-col gap-4">
           <div className="flex  items-start gap-4">
             <div className="w-12 h-12 rounded-full bg-[#E8F5E9] flex items-center justify-center shrink-0">
-               <img src="/transportCompany/invoicePage/rightCheck.svg" alt="" className="w-6 h-6 object-contain" />
+              <img src="/transportCompany/invoicePage/rightCheck.svg" alt="" className="w-6 h-6 object-contain" />
             </div>
             <div className="flex flex-col gap-1">
-               <span className="text-slate-500 font-bold text-sm">المدفوع</span>
-               <span className="text-[#162155] font-black text-2xl flex items-center gap-1.5">
-                  5,120,000 <span className="text-sm text-slate-500">ر.س</span>
-               </span>
-          <div className="flex items-center gap-1.5 text-[#16A34A]">
-             <svg className='mt-1' width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M6 2L10 6H2L6 2Z" fill="currentColor"/>
-             </svg>
-             <span className="text-xs font-bold text-slate-500"><span className="text-[#16A34A]">16.30%</span> من الأسبوع الماضي</span>
-          </div>
+              <span className="text-slate-500 font-bold text-sm">المدفوع</span>
+              <span className="text-[#162155] font-black text-2xl flex items-center gap-1.5">
+                5,120,000 <span className="text-sm text-slate-500">ر.س</span>
+              </span>
+              <div className="flex items-center gap-1.5 text-[#16A34A]">
+                <svg className='mt-1' width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M6 2L10 6H2L6 2Z" fill="currentColor" />
+                </svg>
+                <span className="text-xs font-bold text-slate-500"><span className="text-[#16A34A]">16.30%</span> من الأسبوع الماضي</span>
+              </div>
             </div>
           </div>
         </div>
@@ -56,19 +57,19 @@ export function InvoicesListPage() {
         <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm flex flex-col gap-4">
           <div className="flex  items-start gap-4">
             <div className="w-12 h-12 rounded-full bg-[#FFF7ED] flex items-center justify-center shrink-0">
-               <img src="/transportCompany/invoicePage/schedule.svg" alt="" className="w-6 h-6 object-contain" />
+              <img src="/transportCompany/invoicePage/schedule.svg" alt="" className="w-6 h-6 object-contain" />
             </div>
             <div className="flex flex-col gap-1">
-               <span className="text-slate-500 font-bold text-sm">المستحق</span>
-               <span className="text-[#162155] font-black text-2xl flex items-center gap-1.5">
-                  3,599,000 <span className="text-sm text-slate-500">ر.س</span>
-               </span>
-          <div className="flex items-center gap-1.5 text-[#16A34A]">
-             <svg className='mt-1' width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M6 2L10 6H2L6 2Z" fill="currentColor"/>
-             </svg>
-             <span className="text-xs font-bold text-slate-500"><span className="text-[#16A34A]">16.30%</span> من الأسبوع الماضي</span>
-          </div>
+              <span className="text-slate-500 font-bold text-sm">المستحق</span>
+              <span className="text-[#162155] font-black text-2xl flex items-center gap-1.5">
+                3,599,000 <span className="text-sm text-slate-500">ر.س</span>
+              </span>
+              <div className="flex items-center gap-1.5 text-[#16A34A]">
+                <svg className='mt-1' width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M6 2L10 6H2L6 2Z" fill="currentColor" />
+                </svg>
+                <span className="text-xs font-bold text-slate-500"><span className="text-[#16A34A]">16.30%</span> من الأسبوع الماضي</span>
+              </div>
             </div>
 
           </div>
@@ -104,42 +105,17 @@ export function InvoicesListPage() {
 
       {/* --- Main Content Section (Table & Actions) --- */}
       <div className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden pt-4 pb-0">
-        
+
         {/* Top: Action Bar */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4 px-4">
-          
-          {/* Right Side: Arrange, Filter, Search */}
-          <div className="flex flex-wrap md:flex-nowrap items-center gap-2 md:gap-3 w-full md:w-auto">
-            {/* Arrange */}
-            <button className="flex-1 md:flex-none flex justify-center items-center gap-2 text-slate-700 px-4 py-2 rounded-xl text-sm font-bold hover:bg-slate-50 transition-colors shrink-0">
-              <img src="/transportCompany/orderPage/arrange.svg" alt="" className="w-4 h-4 hover:opacity-70" />
-              ترتيب
-            </button>
-
-            {/* Filter */}
-            <button className="flex-1 md:flex-none flex justify-center items-center gap-2 text-slate-700 px-4 py-2 rounded-xl text-sm font-bold hover:bg-slate-50 transition-colors shrink-0">
-              <img src="/transportCompany/orderPage/filter.svg" alt="" className="w-4 h-4 hover:opacity-70" />
-              تصفية
-            </button>
-
-            {/* Search */}
-            <div className="relative w-full border-r pr-4 md:w-auto flex-1 min-w-[250px] order-last md:order-none">
-              <input 
-                type="text" 
-                placeholder="ابحث بكود الطلب أو الشركة..." 
-                className="w-full pr-8 pl-4 py-2 border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-500 placeholder:text-slate-400"
-              />
-              <img src="/transportCompany/orderPage/search.svg" alt="" className="w-4 h-4 absolute right-6 top-1/2 -translate-y-1/2 opacity-50" />
-            </div>
-          </div>
-
-          {/* Left Side: Export */}
-          <button className="w-full md:w-auto flex justify-center items-center gap-2 bg-[#F0FDF4] border border-[#BBF7D0] text-[#16A34A] px-6 py-2.5 rounded-xl text-sm font-bold hover:bg-[#DCFCE7] transition-colors shrink-0">
-            <img src="/transportCompany/invoicePage/greenDownload.svg" alt="" className="w-4 h-4" />
-            تصدير
-          </button>
-
-        </div>
+        <FilterToolbar 
+          searchPlaceholder="ابحث بكود الطلب أو الشركة..."
+          onExport={() => console.log('Export Invoices')}
+          hasDateRange={true}
+          filters={[
+            { id: 'status', label: 'الحالة', options: [{ value: 'paid', label: 'مدفوعة' }, { value: 'unpaid', label: 'غير مدفوعة' }] },
+            { id: 'company', label: 'الشركة', options: [{ value: '1', label: 'شركة أ' }] }
+          ]}
+        />
 
         {/* Desktop Table View */}
         <DesktopInvoicesTable invoices={MOCK_INVOICES} />

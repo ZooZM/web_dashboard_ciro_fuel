@@ -1,10 +1,12 @@
 import { cn } from '@/lib/utils';
 
+import React from 'react';
+
 interface StatCardProps {
   title: string;
   value: string;
   unit?: string;
-  icon: string;
+  icon: string | React.ReactNode;
   trend: string;
   trendUp?: boolean;
   valueColor?: string;
@@ -27,15 +29,19 @@ export function StatCard({
     <div className="bg-white border border-slate-200 rounded-2xl p-4 flex flex-col min-h-[100px] h-auto shadow-sm hover:shadow-md transition-shadow">
       
       {/* Top row: Icon left, Title right */}
-      <div className="flex items-start justify-between ">
+      <div className="flex items-start justify-start gap-4 ">
         <div className={cn('w-9 h-9 shrink-0 flex items-center justify-center rounded-full', iconBgClass)}>
-          <img src={icon} alt="" className="w-7 h-7 object-contain" />
+          {typeof icon === 'string' ? (
+            <img src={icon} alt="" className="w-7 h-7 object-contain" />
+          ) : (
+            icon
+          )}
       </div>
         {/* Value - centered */}
 
         <div className='flex flex-col'>
         <span className="text-[12px] font-semibold text-[#64748b] text-right">{title}</span>
-          <div className=" items-baseline justify-center gap-1 flex-1" dir="rtl">
+          <div className=" items-baseline justify-start gap-1 flex-1" dir="rtl">
             <span className={cn('text-[22px] font-black leading-tight', valueColor)}>{value}</span>
             {unit && <span className="text-[11px] font-bold text-[#64748b]">{unit}</span>}
       </div>
@@ -47,7 +53,7 @@ export function StatCard({
       )}
 
       {/* Trend */}
-      <div dir="ltr" className={cn('flex items-center justify-center gap-1.5 text-[15px] font-bold mt-0.5', trendUp ? 'text-[#12A150]' : 'text-[#EF4444]')}>
+      <div dir="ltr" className={cn('flex items-center justify-start gap-1.5 text-[10px] font-medium mt-0.5', trendUp ? 'text-[#12A150]' : 'text-[#EF4444]')}>
         <span>{trend}</span>
         <svg viewBox="0 0 24 24" fill="currentColor" className={cn("w-4 h-4", trendUp ? "rotate-180" : "")}>
           <path d="M7 10l5 5 5-5z" />

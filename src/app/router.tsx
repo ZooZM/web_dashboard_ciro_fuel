@@ -8,6 +8,21 @@ import { LoginPage } from '@/auth/components/LoginPage';
 import { VerifyPage } from '@/auth/components/VerifyPage';
 import { RoleSelectionPage } from '@/auth/components/RoleSelectionPage';
 
+// Admin imports
+import { AdminDashboard } from '@/admin/dashboard/components/AdminDashboard';
+import { AdminNotificationsPage } from '@/admin/notifications/components/AdminNotificationsPage';
+import { AdminOrdersPage } from '@/admin/orders/components/AdminOrdersPage';
+import { AdminOrderDetailPage } from '@/admin/orders/components/AdminOrderDetailPage';
+import { AdminFuelExchangePage } from '@/admin/fuel_exchange/components/AdminFuelExchangePage';
+import { AdminFuelExchangeDetailPage } from '@/admin/fuel_exchange/components/AdminFuelExchangeDetailPage';
+import { AdminPetrolCompaniesPage } from '@/admin/petrol_companies/components/AdminPetrolCompaniesPage';
+import { AddPetrolCompanyPage } from '@/admin/petrol_companies/components/AddPetrolCompanyPage';
+import { AdminProfilePage } from '@/admin/profile/components/AdminProfilePage';
+import { AdminTransportCompaniesPage } from '@/admin/transport_companies/components/AdminTransportCompaniesPage';
+import { AddTransportCompanyPage } from '@/admin/transport_companies/components/AddTransportCompanyPage';
+import { AdminTransportCompanyDetailsPage } from '@/admin/transport_companies/components/AdminTransportCompanyDetailsPage';
+import { AdminDriversPage } from '@/admin/drivers/components/AdminDriversPage';
+import { AdminDriverDetailsPage } from '@/admin/drivers/components/AdminDriverDetailsPage';
 // Transport imports
 import { TransportDashboard } from '@/transport_company/dashboard/components/TransportDashboard';
 // Petrol imports
@@ -64,14 +79,28 @@ export const router = createBrowserRouter([
     element: <ProtectedRoute allow={[Role.SUPER_ADMIN]}><AppShell /></ProtectedRoute>,
     children: [
       { path: '', element: <Navigate to="dashboard" replace /> },
-      { path: 'dashboard', element: <div className="p-6">Admin Dashboard (Coming Soon)</div> },
-      { path: 'profile', element: <div className="p-6">Profile (Coming Soon)</div> },
-      { path: 'help', element: <div className="p-6">Help & Support (Coming Soon)</div> },
-      { path: 'terms', element: <div className="p-6">Terms & Conditions (Coming Soon)</div> },
-      { path: 'notifications', element: <div className="p-6">Notifications (Coming Soon)</div> },
-      { path: 'companies', element: <CompaniesListPage /> },
-      { path: 'companies/new', element: <OnboardCompanyPage /> },
-      { path: 'companies/:id', element: <CompanyDetailPage /> },
+      { path: 'dashboard', element: <AdminDashboard /> },
+      { path: 'profile', element: <AdminProfilePage /> },
+      { path: 'help', element: <HelpPage /> },
+      { path: 'terms', element: <TermsPage /> },
+      { path: 'notifications', element: <AdminNotificationsPage /> },
+      { path: 'orders', element: <AdminOrdersPage /> },
+      { path: 'orders/:id', element: <AdminOrderDetailPage /> },
+      { path: 'tracking', element: <TrackingPage /> },
+      { path: 'order-tracking', element: <OrderTrackingPage /> },
+      { path: 'fuel-exchange', element: <AdminFuelExchangePage /> },
+      { path: 'fuel-exchange/:id', element: <AdminFuelExchangeDetailPage /> },
+      { path: 'petrol-companies', element: <AdminPetrolCompaniesPage /> },
+      { path: 'petrol-companies/add', element: <AddPetrolCompanyPage /> },
+      { path: 'petrol-companies/owners/:id', element: <PetrolStationOwnerDetailsPage /> },
+      { path: 'petrol-companies/stations/:id', element: <PetrolStationDetailsPage /> },
+      { path: 'petrol-companies/:id', element:   <div className="p-6">Petrol Company Details Page (Coming Soon)</div> },
+      { path: 'invoices', element: <PetrolInvoicesListPage /> },
+      { path: 'transport-companies', element: <AdminTransportCompaniesPage /> },
+      { path: 'transport-companies/add', element: <AddTransportCompanyPage /> },
+      { path: 'transport-companies/:id', element: <AdminTransportCompanyDetailsPage /> },
+      { path: 'drivers', element: <AdminDriversPage /> },
+      { path: 'drivers/:id', element: <AdminDriverDetailsPage /> },
       { path: 'platform-orders', element: <PlatformOrdersPage /> },
     ]
   },

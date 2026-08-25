@@ -28,7 +28,7 @@ export function StationsPage() {
   const [activeTab, setActiveTab] = useState<'owners' | 'stations'>('owners');
 
   return (
-    <div className="w-full flex-1 p-4 md:p-6 font-sans -mt-4 bg-[#F8FAFC] min-h-full" dir="rtl">
+    <div className="w-full flex-1 p-4 md:p-6 font-sans -mt-4 bg-[#F8FAFC] min-h-full border border-[#E7E9EF] rounded-2xl" dir="rtl">
       
       {/* Header */}
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-8">

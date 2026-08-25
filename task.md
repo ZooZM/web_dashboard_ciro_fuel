@@ -1,0 +1,6 @@
+- [x] Update `router.tsx` to include the new Admin routes (`/admin/transport-companies`, `/admin/transport-companies/add`, `/admin/transport-companies/:id`, `/admin/drivers`).
+- [x] Update `Sidebar.tsx` to add the "السائقين" (Drivers) link under the Admin section.
+- [x] Implement `AdminTransportCompaniesPage.tsx` (using `blueTruck.svg` and `orangeTruck.svg`).
+- [x] Implement `AddTransportCompanyPage.tsx` (reusing `petrol_company` form components and styles).
+- [x] Implement `AdminTransportCompanyDetailsPage.tsx` (using `filledTruck.svg`, `pin.svg`, and `order.svg`).
+- [x] Implement `AdminDriversPage.tsx` (reusing `transport_company` drivers list logic).

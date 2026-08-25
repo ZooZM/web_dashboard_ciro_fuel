@@ -96,7 +96,7 @@ export function AssignOrderDataCard() {
               </div>
               
               {/* Note Box */}
-              <div className="w-full bg-[#F8FAFC] p-3 rounded-xl border border-slate-200 flex items-center justify-start gap-2">
+              <div className="w-full bg-[#F8FAFC] p-3 rounded-xl border border-slate-200 flex items-center justify-start gap-2 border border-[#E7E9EF] rounded-2xl">
                  <Info className="w-5 h-5 text-slate-400 shrink-0" />
                  <span className="text-slate-500 bg-[#F8FAFC] text-sm font-semibold">يرجى الالتزام بموعد التسليم والتواصل قبل الوصول بـ 15 دقيقة.</span>
               </div>

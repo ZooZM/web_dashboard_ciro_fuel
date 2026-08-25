@@ -61,7 +61,7 @@ export function FuelExchangePage() {
   const filteredRequests = MOCK_REQUESTS.filter(req => req.category === activeFilter);
 
   return (
-    <div className="w-full p-4 md:p-6 flex-1 -mt-4 bg-[#F8FAFC] min-h-full font-sans" dir="rtl">
+    <div className="w-full p-4 md:p-6 flex-1 -mt-4 bg-[#F8FAFC] min-h-full font-sans border border-[#E7E9EF] rounded-2xl" dir="rtl">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
         <div className="flex flex-col items-start text-right">
@@ -124,7 +124,7 @@ export function FuelExchangePage() {
               placeholder="ابحث بكود أو إسم المالك..."
               className="w-full pr-10 pl-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-500 placeholder:text-slate-400 shadow-sm"
             />
-            <img src="/petrolCompany/requests/search.svg" alt="" className="w-4 h-4 absolute right-3.5 top-1/2 -translate-y-1/2 opacity-50" />
+            <img src="/petrolCompany/requests/search.svg" alt="" className="w-4 h-4 absolute right-3.5 top-1/2 -translate-y-1/2 " />
           </div>
 
         </div>

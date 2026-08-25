@@ -5,7 +5,7 @@ interface FuelExchangeRequestDataProps {
 export function FuelExchangeRequestData({ isAccepted }: FuelExchangeRequestDataProps) {
   return (
     <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
-      
+
       {/* Card Header */}
       <div className="flex items-center justify-start gap-2 mb-6">
         <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center shrink-0">
@@ -28,7 +28,7 @@ export function FuelExchangeRequestData({ isAccepted }: FuelExchangeRequestDataP
                 <span className="text-sm font-black text-slate-900">الطاقة الحديثة</span>
               </div>
             </div>
-            
+
             {/* Receiver (Left) */}
             <div className="flex items-center gap-3">
               <div className="w-12 h-12 rounded-full overflow-hidden border border-slate-200 bg-white p-1 shrink-0">
@@ -56,7 +56,7 @@ export function FuelExchangeRequestData({ isAccepted }: FuelExchangeRequestDataP
           <span className="text-xs font-bold text-slate-400 mb-1">نوع الوقود</span>
           <span className="text-base font-black text-slate-900">بنزين 95</span>
         </div>
-        
+
         {/* Right Column: Price per liter */}
         <div className="flex flex-col items-start">
           <span className="text-xs font-bold text-slate-400 mb-1">سعر اللتر</span>
@@ -83,7 +83,7 @@ export function FuelExchangeRequestData({ isAccepted }: FuelExchangeRequestDataP
             <span className="text-sm font-black text-slate-900">جدة - طريق مكة القديم</span>
           </div>
         </div>
-        
+
         {/* Left Column: Date */}
         <div className="flex flex-col items-start pt-1">
           <span className="text-xs font-bold text-slate-400 mb-1">موعد التسليم</span>
@@ -94,7 +94,7 @@ export function FuelExchangeRequestData({ isAccepted }: FuelExchangeRequestDataP
       {/* Notes */}
       <div className="flex flex-col gap-2">
         <div className="flex items-center justify-start gap-2">
-          <img src="/petrolCompany/requests/details/comment.svg" alt="" className="w-4 h-4 opacity-50" />
+          <img src="/petrolCompany/requests/details/comment.svg" alt="" className="w-4 h-4  " />
           <span className="text-xs font-bold text-slate-400">ملاحظات</span>
         </div>
         <div className="bg-slate-50 rounded-xl p-4 text-sm font-semibold text-slate-500 text-right border border-slate-100">

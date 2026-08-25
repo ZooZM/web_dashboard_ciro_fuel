@@ -163,7 +163,7 @@ export function NotificationsPage() {
       {/* ── Breadcrumb ── */}
       <div className="pb-4 shrink-0 flex justify-start">
         <div className="inline-flex items-center gap-2 px-5 py-2.5text-[13.5px] text-slate-600 cursor-pointer">
-          <div className="bg-white border border-slate-100 rounded-xl shadow-sm w-8 h-8 flex font-bold items-center justify-center" onClick={()=>window.history.back()}>
+          <div className="bg-white border border-slate-100 rounded-xl shadow-sm w-8 h-8 flex font-bold items-center justify-center" onClick={() => window.history.back()}>
             <img src="/transportCompany/notification/chevronRight.svg" className="w-4 h-4" alt="" />
           </div>
           <span className="text-[20px] text-slate-900">الإشعارات</span>
@@ -179,20 +179,20 @@ export function NotificationsPage() {
             <h1 className="text-[26px] font-bold text-slate-900">الإشعارات</h1>
             <div className='flex gap-2 items-center'>
               <span className='text-[13px] font-medium text-slate-500 '>
-              {isMuted ? 'تفعيل الإشعارات' : 'كتم الإشعارات'}
+                {isMuted ? 'تفعيل الإشعارات' : 'كتم الإشعارات'}
               </span>
 
-            <button
-              onClick={() => setIsMuted(!isMuted)}
-              className="flex bg-white items-center gap-2.5 px-2.5 py-2.5 bg-white border border-slate-200 rounded-xl text-[13px] font-medium text-slate-500 hover:bg-slate-50 transition-colors"
+              <button
+                onClick={() => setIsMuted(!isMuted)}
+                className="flex bg-white items-center gap-2.5 px-2.5 py-2.5 bg-white border border-slate-200 rounded-xl text-[13px] font-medium text-slate-500 hover:bg-slate-50 transition-colors"
               >
-              {isMuted ? (
-                <img src="/transportCompany/notification/disabledNotification.svg" className="w-[20px] h-[20px] opacity-50" alt="" />
-              ) : (
-                <img src="/transportCompany/notification/notification.svg" className="w-[20px] h-[20px] " alt="" />
-              )}
-            </button>
-              </div>
+                {isMuted ? (
+                  <img src="/transportCompany/notification/disabledNotification.svg" className="w-[20px] h-[20px]  " alt="" />
+                ) : (
+                  <img src="/transportCompany/notification/notification.svg" className="w-[20px] h-[20px] " alt="" />
+                )}
+              </button>
+            </div>
           </div>
 
           {/* Filters row */}
@@ -223,12 +223,12 @@ export function NotificationsPage() {
             </div>
           </div>
 
-     
+
         </div>
 
 
         <div className='mt-10'>
-               {/* Mark as read action row */}
+          {/* Mark as read action row */}
           <div className="px-8 pb-6 flex justify-end">
             <button className="flex items-center gap-2 text-[13px] text-[#2563EB] hover:text-blue-700 font-medium transition-colors">
               تحديد الكل / المحدد كمقروء
@@ -241,7 +241,7 @@ export function NotificationsPage() {
             {dateEntries.map(([date, items], groupIndex) => {
               return (
                 <div key={date} className={cn("flex flex-col md:block", groupIndex !== dateEntries.length - 1 ? "mb-10" : "")}>
-                  
+
                   {/* MOBILE Date Header (hidden on desktop) */}
                   <div className="md:hidden flex items-center gap-3 relative z-10 mb-4 mr-1 sm:mr-0">
                     <div className="w-[34px] h-[34px] rounded-full border-[2px] border-[#10B981] bg-[#E4F7EC] flex items-center justify-center shrink-0">
@@ -263,16 +263,16 @@ export function NotificationsPage() {
                       const styles = getTypeStyles(notif.type);
                       return (
                         <div key={notif.id} className="group/item flex items-stretch mb-0 md:mb-4 md:last:mb-0">
-                          
+
                           {/* ── DESKTOP Timeline column (hidden on mobile) ── */}
                           <div className="hidden md:flex relative w-[160px] shrink-0 items-center justify-start ml-6">
                             {/* Vertical line segment (extends through margin to connect with next card) */}
                             <div className={cn(
                               "absolute right-[16px] top-0 w-[2px] bg-[#10B981]",
-                              groupIndex === dateEntries.length - 1 && cardIndex === items.length - 1 
-                                ? "bottom-0" 
-                                : cardIndex === items.length - 1 
-                                  ? "bottom-[-40px]" 
+                              groupIndex === dateEntries.length - 1 && cardIndex === items.length - 1
+                                ? "bottom-0"
+                                : cardIndex === items.length - 1
+                                  ? "bottom-[-40px]"
                                   : "bottom-[-16px]"
                             )} />
 
@@ -303,17 +303,17 @@ export function NotificationsPage() {
                           >
                             {/* Right side: Checkmark + Time */}
                             <div className="flex items-center gap-3 shrink-0">
-                              <div 
+                              <div
                                 onClick={(e) => toggleSelection(notif.id, e)}
                                 className={cn(
                                   "flex items-center justify-center w-[22px] h-[22px] rounded border cursor-pointer transition-colors",
-                                  selectedIds.includes(notif.id) 
-                                    ? "bg-[#2563EB] border-[#2563EB]" 
+                                  selectedIds.includes(notif.id)
+                                    ? "bg-[#2563EB] border-[#2563EB]"
                                     : "bg-transparent border-slate-300 hover:border-[#2563EB]"
                                 )}
                               >
-                                <svg 
-                                  className={cn("w-4 h-4 transition-colors", selectedIds.includes(notif.id) ? "text-white" : "text-[#2563EB] opacity-0")} 
+                                <svg
+                                  className={cn("w-4 h-4 transition-colors", selectedIds.includes(notif.id) ? "text-white" : "text-[#2563EB] opacity-0")}
                                   viewBox="0 0 20 20" fill="none"
                                 >
                                   <path d="M16.6667 5L7.50001 14.1667L3.33334 10" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />

@@ -107,7 +107,7 @@ export function TrackingOrderDetails() {
              </div>
              
              {/* Note Box */}
-             <div className="w-full bg-[#F8FAFC] p-3 rounded-xl border border-slate-200 flex items-start justify-start gap-2">
+             <div className="w-full bg-[#F8FAFC] p-3 rounded-xl border border-slate-200 flex items-start justify-start gap-2 border border-[#E7E9EF] rounded-2xl">
                 <MessageCircle className="w-5 h-5 text-slate-400" />
             <input className="text-slate-500 text-sm font-semibold w-full bg-[#F8FAFC]" placeholder="يرجى الالتزام بموعد التسليم والتواصل قبل الوصول بـ 15 دقيقة."></input>
              </div>

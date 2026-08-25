@@ -22,12 +22,12 @@ export function MobileOrderTrackingList({ orders }: { orders: any[] }) {
           {/* Company, Owner & Fuel Info */}
           <div className="flex items-start justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full border border-slate-200 flex items-center justify-center shrink-0">
-                <img src={order.ownerAvatar} alt="" className="w-10 h-10 rounded-full" />
+              <div className="w-10 h-10 rounded-full border border-slate-200 flex items-center justify-center shrink-0 overflow-hidden">
+                <img src={order.companyLogo} alt="" className="w-full h-full object-cover" />
               </div>
               <div className="flex flex-col gap-0.5">
-                <span className="text-slate-900 font-bold text-[13px]">{order.station}</span>
-                <span className="text-slate-500 text-[11px] font-medium">{order.ownerName}</span>
+                <span className="text-slate-900 font-black text-[13px]">{order.companyName}</span>
+                <span className="text-slate-500 text-[11px] font-medium">{order.station}</span>
               </div>
             </div>
             <div className="flex flex-col items-end gap-1">
@@ -39,7 +39,7 @@ export function MobileOrderTrackingList({ orders }: { orders: any[] }) {
           </div>
           
           {/* Locations (From -> To) */}
-          <div className="flex flex-col bg-[#F8FAFC] border border-slate-100 rounded-xl p-3 gap-2">
+          <div className="flex flex-col bg-[#F8FAFC] border border-slate-100 rounded-xl p-3 gap-2 border border-[#E7E9EF] rounded-2xl">
             <div className="flex items-start gap-2.5">
               <div className="w-2 h-2 rounded-full bg-blue-500 mt-1.5 shrink-0"></div>
               <span className="text-slate-700 text-[12px] font-semibold leading-tight">{order.loadLocation}</span>
@@ -61,10 +61,16 @@ export function MobileOrderTrackingList({ orders }: { orders: any[] }) {
               <span className="text-slate-800 font-bold text-[12px]">{order.deliveryTimeDay}</span>
               <span className="text-slate-500 text-[11px] mt-0.5">{order.deliveryTimeHour}</span>
             </div>
-            {/* The user commented out commission, so we only show fuelInvoice */}
-            <div className="flex flex-col bg-green-50/50 p-2 rounded-lg border border-green-100/50 col-span-2">
-              <span className="text-slate-500 text-[10px] mb-0.5">فاتورة الوقود</span>
-              <span className="text-green-600 font-black text-[13px]">{order.invoice} ر.س</span>
+            {/* Commission and Invoice */}
+            <div className="flex flex-col col-span-2 gap-2">
+              <div className="flex items-center justify-between bg-blue-50/50 p-2 rounded-lg border border-blue-100/50">
+                <span className="text-slate-500 text-[11px]">عمولة المنصة</span>
+                <span className="text-blue-600 font-black text-[13px]">{order.commission} ر.س</span>
+              </div>
+              <div className="flex items-center justify-between bg-green-50/50 p-2 rounded-lg border border-green-100/50">
+                <span className="text-slate-500 text-[11px]">فاتورة الوقود</span>
+                <span className="text-green-600 font-black text-[13px]">{order.invoice} ر.س</span>
+              </div>
             </div>
           </div>
           

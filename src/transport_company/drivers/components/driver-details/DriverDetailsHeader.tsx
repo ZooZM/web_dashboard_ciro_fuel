@@ -12,12 +12,18 @@ export function DriverDetailsHeader() {
       <div className="flex items-center justify-start w-full">
         <div className="flex items-center gap-3">
           <button 
-            onClick={() => navigate('/transport/drivers')}
+            onClick={() => {
+              const basePath = window.location.pathname.startsWith('/admin') ? '/admin' : '/transport';
+              navigate(`${basePath}/drivers`);
+            }}
             className="bg-white border border-slate-200 rounded-lg p-2 hover:bg-slate-50 transition-colors shadow-sm"
           >
             <ChevronRight className="w-5 h-5 text-slate-400" />
           </button>
-          <span className="text-slate-500 font-bold text-sm cursor-pointer" onClick={() => navigate('/transport/drivers')}>السائقين / <span className="text-slate-800">محمد إبراهيم</span></span>
+          <span className="text-slate-500 font-bold text-sm cursor-pointer" onClick={() => {
+              const basePath = window.location.pathname.startsWith('/admin') ? '/admin' : '/transport';
+              navigate(`${basePath}/drivers`);
+          }}>السائقين / <span className="text-slate-800">محمد إبراهيم</span></span>
         </div>
       </div>
       
@@ -63,6 +69,7 @@ export function DriverDetailsHeader() {
                    </>
                  ) : (
                    <>
+                     <img src="/petrolCompany/owner/pause.svg" alt="" className="w-4 h-4 object-contain filter" style={{ filter: 'invert(53%) sepia(66%) saturate(2222%) hue-rotate(130deg) brightness(97%) contrast(89%)' }} />
                      تفعيل السائق
                    </>
                  )}

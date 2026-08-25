@@ -44,7 +44,7 @@ export function DriverRatingsCard() {
             </div>
 
             {/* Bottom Row: Comment */}
-            <div className="bg-[#F8FAFC]  rounded-lg p-3 flex  items-center justify-start gap-2">
+            <div className="bg-[#F8FAFC] rounded-lg p-3 flex items-center justify-start gap-2 border border-[#E7E9EF] rounded-2xl">
                <Info className="w-4 h-4 text-slate-400 shrink-0" />
                <span className="text-slate-400 font-normal text-xs">{item.comment}</span>
             </div>

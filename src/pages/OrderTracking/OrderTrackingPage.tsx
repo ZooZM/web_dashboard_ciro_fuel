@@ -5,9 +5,11 @@ import { MobileOrderTrackingList } from './MobileOrderTrackingList';
 export function OrderTrackingPage() {
   const mockOrders = Array(8).fill({
     id: 'ORD-2024-256',
+    companyName: 'شركة بترو أمان',
+    companyLogo: '/petrolCompany/requests/petro-aman.jpg',
+    station: 'جدة - طريق مكة القديم - حي البوادي',
     ownerName: 'محمد أحمد',
     ownerAvatar: '/petrolCompany/orderDetails/profile.jpg',
-    station: 'جدة - الرحاب',
     fuelType: 'بنزين 95',
     fuelQuantity: '20,000 لتر',
     loadLocation: 'مستودع جدة الرئيسي',
@@ -24,7 +26,7 @@ export function OrderTrackingPage() {
   }));
 
   return (
-    <div className="w-full h-full p-4 lg:p-6" dir="rtl">
+    <div className="w-full h-full p-4 lg:p-6 border border-[#E7E9EF] rounded-2xl  " dir="rtl">
       {/* Header Area */}
       <div className="flex flex-col mb-6">
         <h1 className="text-[#0E2041] text-2xl font-black mb-1">ابحث و تابع الطلبات</h1>
@@ -76,14 +78,15 @@ export function OrderTrackingPage() {
           <TableHeader>
             <TableRow className="bg-[#f8f9fa] hover:bg-[#f8f9fa]">
               <TableHead className="font-bold text-slate-700 text-xs text-right py-4 pr-6">رقم الطلب</TableHead>
+              <TableHead className="font-bold text-slate-700 text-xs text-right py-4">الشركة</TableHead>
               <TableHead className="font-bold text-slate-700 text-xs text-right py-4">المالك</TableHead>
-              <TableHead className="font-bold text-slate-700 text-xs text-right py-4">المحطة</TableHead>
               <TableHead className="font-bold text-slate-700 text-xs text-center py-4">الوقود / الكمية</TableHead>
               <TableHead className="font-bold text-slate-700 text-xs text-center py-4">موقع التحميل &larr; التسليم</TableHead>
               <TableHead className="font-bold text-slate-700 text-xs text-center py-4">الناقل</TableHead>
               <TableHead className="font-bold text-slate-700 text-xs text-center py-4">موعد التسليم</TableHead>
               <TableHead className="font-bold text-slate-700 text-xs text-center py-4">الحالة</TableHead>
-                <TableHead className="font-bold text-slate-700 text-xs text-center py-4 pl-6">فاتورة الوقود <br/> <span className="text-[10px]">(ر.س)</span></TableHead>
+              <TableHead className="font-bold text-slate-700 text-xs text-center py-4">عمولة المنصة <br/> <span className="text-[10px]">(ر.س)</span></TableHead>
+              <TableHead className="font-bold text-slate-700 text-xs text-center py-4 pl-6">فاتورة الوقود <br/> <span className="text-[10px]">(ر.س)</span></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -95,13 +98,18 @@ export function OrderTrackingPage() {
                 
                 <TableCell className="py-4">
                   <div className="flex items-center gap-3">
-                    <img src={order.ownerAvatar} alt="" className="w-8 h-8 rounded-full border border-slate-200" />
-                    <span className="text-slate-700 font-bold text-xs">{order.ownerName}</span>
+                    <div className="w-10 h-10 rounded-full border border-slate-200 overflow-hidden shrink-0">
+                      <img src={order.companyLogo} alt={order.companyName} className="w-full h-full object-cover" />
+                    </div>
+                    <div className="flex flex-col gap-1">
+                      <span className="text-[#162155] font-black text-xs">{order.companyName}</span>
+                      <span className="text-slate-400 font-bold text-[10px]">{order.station}</span>
+                    </div>
                   </div>
                 </TableCell>
                 
                 <TableCell className="py-4">
-                  <span className="text-slate-700 font-bold text-xs">{order.station}</span>
+                  <span className="text-slate-700 font-bold text-xs">{order.ownerName}</span>
                 </TableCell>
                 
                 <TableCell className="py-4 text-center">
@@ -139,10 +147,9 @@ export function OrderTrackingPage() {
                   </div>
                 </TableCell>
                 
-                {/* <TableCell className="py-4 text-center">
+                <TableCell className="py-4 text-center">
                   <span className="text-blue-600 font-black text-xs">{order.commission}</span>
                 </TableCell>
-                 */}
                  
                 <TableCell className="py-4 text-center pl-6">
                   <span className="text-green-600 font-black text-xs">{order.invoice}</span>

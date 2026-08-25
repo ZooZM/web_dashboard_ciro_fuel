@@ -41,7 +41,7 @@ export function MobileOrdersList({ orders }: { orders: any[] }) {
           </div>
           
           {/* Locations (From -> To) */}
-          <div className="flex flex-col bg-[#F8FAFC] border border-slate-100 rounded-xl p-3 gap-2">
+          <div className="flex flex-col bg-[#F8FAFC] border border-slate-100 rounded-xl p-3 gap-2 border border-[#E7E9EF] rounded-2xl">
             <div className="flex items-start gap-2.5">
               <div className="w-2 h-2 rounded-full bg-blue-500 mt-1.5 shrink-0"></div>
               <span className="text-slate-700 text-[12px] font-semibold leading-tight">{order.locationFrom}</span>

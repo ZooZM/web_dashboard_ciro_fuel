@@ -65,8 +65,8 @@ export function StationOwnerDetailsPage() {
             <span className="text-xs font-bold text-slate-400">تاريخ الانضمام {owner.joinDate} - {owner.roleCode}</span>
           </div>
         </div>
-        <div className="flex items-center justify-center w-28 h-10 bg-red-50 text-red-500 rounded-xl font-bold text-sm gap-2 cursor-pointer hover:bg-red-100 transition-colors border border-red-100">
-          <img src="/petrolCompany/owner/continue.svg" alt="" className="w-4 h-4" />
+        <div className="flex items-center justify-center w-28 h-10 bg-red-50 text-red-500 rounded-xl font-bold text-sm gap-2 cursor-pointer hover:bg-red-100 transition-colors border border-red-200">
+          <img src="/petrolCompany/owner/pause (1).svg" alt="" className="w-4 h-4" />
           إيقاف
         </div>
       </div>
@@ -154,7 +154,7 @@ export function StationOwnerDetailsPage() {
               <div className="flex flex-col items-start">
                 <div className="flex items-center gap-2 mb-2">
                   <span className="text-sm font-bold text-slate-400">كود الحساب</span>
-                  <div className="flex items-center gap-1 bg-slate-100 text-slate-500 px-2 py-0.5 rounded text-[10px] font-bold">
+                  <div className="flex items-center gap-1 bg-slate-50 text-slate-500 px-2 py-0.5 rounded text-[10px] font-bold border border-slate-200">
                     <img src="/petrolCompany/owner/lock.svg" alt="" className="w-3 h-3" />
                     غير قابل للتعديل
                   </div>
@@ -172,7 +172,7 @@ export function StationOwnerDetailsPage() {
               <div className="flex flex-col items-start">
                 <div className="flex items-center gap-2 mb-2">
                   <span className="text-sm font-bold text-slate-400">رقم الجوال</span>
-                  <div className="flex items-center gap-1 bg-slate-100 text-slate-500 px-2 py-0.5 rounded text-[10px] font-bold">
+                  <div className="flex items-center gap-1 bg-slate-50 text-slate-500 px-2 py-0.5 rounded text-[10px] font-bold border border-slate-200">
                     <img src="/petrolCompany/owner/lock.svg" alt="" className="w-3 h-3" />
                     غير قابل للتعديل
                   </div>
@@ -191,7 +191,7 @@ export function StationOwnerDetailsPage() {
                   <img src="/petrolCompany/owner/blueStation.svg" alt="" className="w-4 h-4" />
                 </div>
                 <span className="font-black text-slate-900 text-lg">المحطات</span>
-                <div className="bg-slate-100 text-slate-500 px-3 py-1 rounded-xl text-xs font-bold">
+                <div className="bg-slate-50 text-slate-500 px-3 py-1 rounded-xl text-xs font-bold border border-slate-200">
                   {owner.stationsCount} محطات
                 </div>
               </div>
@@ -232,7 +232,7 @@ export function StationOwnerDetailsPage() {
 
                     {/* Status Badge */}
                     {!station.isActive && (
-                      <div className="bg-red-50 text-red-500 px-4 py-1.5 rounded-xl text-xs font-bold">
+                      <div className="bg-red-50 text-red-500 px-4 py-1.5 rounded-xl text-xs font-bold border border-red-200">
                         غير نشط
                       </div>
                     )}
@@ -243,7 +243,7 @@ export function StationOwnerDetailsPage() {
                         "w-10 h-10 flex items-center justify-center rounded-xl border transition-colors",
                         station.isActive ? "border-red-200 text-red-500 hover:bg-red-50" : "border-slate-200 text-slate-400 hover:bg-slate-100"
                       )}>
-                        <img src={station.isActive ? "/petrolCompany/owner/continue.svg" : "/petrolCompany/owner/pause.svg"} alt="" className="w-4 h-4" />
+                        <img src={station.isActive ? "/petrolCompany/owner/pause (1).svg" : "/petrolCompany/owner/continue.svg"} alt="" className="w-4 h-4" />
                       </button>
                     </div>
                   </div>
@@ -322,7 +322,7 @@ export function StationOwnerDetailsPage() {
                   <div className="flex justify-end flex-1">
                     <div className={cn(
                       "px-3 py-1.5 rounded-xl text-[10px] font-bold flex items-center justify-center gap-1.5",
-                      order.status === 'قيد التوصيل' ? "bg-green-50 text-green-600" : "bg-slate-100 text-slate-500"
+                      order.status === 'قيد التوصيل' ? "bg-green-50 text-green-600 border border-green-200" : "bg-slate-50 text-slate-500 border border-slate-200"
                     )}>
                       <div className={cn("w-1.5 h-1.5 rounded-full", order.status === 'قيد التوصيل' ? "bg-green-500" : "bg-slate-400")}></div>
                       {order.status}

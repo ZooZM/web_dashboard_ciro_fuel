@@ -23,7 +23,10 @@ export function DesktopDriversTable({ drivers }: { drivers: any[] }) {
           {drivers.map((driver, idx) => (
             <TableRow 
               key={idx}
-              onClick={() => navigate(`/transport/drivers/${driver.id}`)}
+              onClick={() => {
+                const basePath = window.location.pathname.startsWith('/admin') ? '/admin' : '/transport';
+                navigate(`${basePath}/drivers/${driver.id}`);
+              }}
               className="hover:bg-slate-50 border-b border-slate-100 last:border-0 cursor-pointer transition-colors"
             >
               {/* Driver */}

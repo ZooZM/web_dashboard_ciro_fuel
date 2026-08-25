@@ -72,7 +72,7 @@ export function StationDetailsPage() {
               : "bg-green-50 text-green-600 hover:bg-green-100 border-green-100"
           )}
         >
-          <img src={isActive ? "/petrolCompany/owner/continue.svg" : "/petrolCompany/owner/pause.svg"} alt="" className="w-4 h-4" />
+          <img src={isActive ? "/petrolCompany/owner/pause (1).svg" : "/petrolCompany/owner/continue.svg"} alt="" className="w-4 h-4" />
           {isActive ? "إيقاف المحطة" : "تشغيل المحطة"}
         </div>
       </div>
@@ -141,7 +141,7 @@ export function StationDetailsPage() {
             <div className="flex items-center justify-between mb-8">
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center">
-                    <img src="/petrolCompany/owner/blueStation.svg" alt="" className="w-5 h-5" />
+                  <img src="/petrolCompany/owner/blueStation.svg" alt="" className="w-5 h-5" />
 
                 </div>
                 <span className="font-black text-slate-900 text-lg">معلومات المحطة</span>
@@ -196,7 +196,7 @@ export function StationDetailsPage() {
 
                   {/* Order Details (Left and Middle) */}
                   <div className="flex items-center justify-between w-full text-right">
-                    
+
                     {/* Order Details (Right) */}
                     <div className="flex flex-col items-start flex-1 text-right">
                       <span className="text-xs font-black text-slate-900 mb-0.5">{order.id}</span>
@@ -224,7 +224,7 @@ export function StationDetailsPage() {
               ))}
             </div>
 
-            <Link 
+            <Link
               to="/petrolCompany/order-tracking"
               className="w-full py-3 mt-2 rounded-xl border border-slate-200 text-blue-600 bg-white hover:bg-slate-50 transition-colors font-bold text-xs flex items-center justify-center gap-2 shadow-sm"
             >
@@ -241,7 +241,7 @@ export function StationDetailsPage() {
           {/* Owner Information */}
           <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm flex flex-col items-center relative">
             <div className="w-full flex items-center justify-between mb-6">
-              
+
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center">
                   <img src="/petrolCompany/owner/user.svg" alt="" className="w-4 h-4" />

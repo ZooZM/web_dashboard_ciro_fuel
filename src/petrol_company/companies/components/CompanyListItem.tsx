@@ -33,7 +33,7 @@ export function CompanyListItem({ company, isLast }: CompanyListItemProps) {
 
         {/* Center - Status & Stats block */}
         <div className="shrink-0 flex items-center justify-center w-full md:w-auto">
-          <div className="bg-[#F8FAFC] border border-[#F1F5F9] rounded-xl flex items-center divide-x divide-x-reverse divide-slate-200 shadow-[inset_0_2px_4px_rgba(0,0,0,0.02)] h-12 px-2">
+          <div className="bg-[#F8FAFC] border border-[#F1F5F9] rounded-xl flex items-center divide-x divide-x-reverse divide-slate-200 shadow-[inset_0_2px_4px_rgba(0,0,0,0.02)] h-12 px-2 border border-[#E7E9EF] rounded-2xl">
             
             {/* Badge */}
             <div className="px-5 h-full flex items-center justify-center">

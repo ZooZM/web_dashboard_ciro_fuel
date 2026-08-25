@@ -70,7 +70,7 @@ export function DeliveryAreasPage() {
   ];
 
   return (
-    <div className="p-4 md:p-6 max-w-7xl mx-auto space-y-6 bg-slate-50/50 min-h-screen" dir="rtl">
+    <div className="p-4 md:p-6 w-full h-full space-y-6 bg-slate-50/50 min-h-screen" dir="rtl">
 
       {/* Header */}
       <div className="mb-6">
@@ -313,7 +313,9 @@ export function DeliveryAreasPage() {
           <div className="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm">
             <div className="flex items-center gap-2 mb-4">
               <div className="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center">
-                <img src="/sideBar/order.svg" alt="List" className="w-4 h-4 filter" style={{ filter: 'invert(32%) sepia(87%) saturate(2256%) hue-rotate(212deg) brightness(99%) contrast(106%)' }} />
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M8 8H16M8 12H16M10 16H14M3.5 12C3.5 5.5 5.5 3.5 12 3.5C18.5 3.5 20.5 5.5 20.5 12C20.5 18.5 18.5 20.5 12 20.5C5.5 20.5 3.5 18.5 3.5 12Z" stroke="#1E5FFF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
               </div>
               <h3 className="text-sm font-bold text-blue-900">المناطق حسب الشركة</h3>
             </div>

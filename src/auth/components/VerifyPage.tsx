@@ -27,7 +27,7 @@ export function VerifyPage() {
   const handleVerifyCode = (e: React.FormEvent) => {
     e.preventDefault();
     const code = otp.join('');
-    
+
     // Default fallback routing for dev
     if (!phone && !code) {
       navigate('/select-role');
@@ -73,13 +73,13 @@ export function VerifyPage() {
     >
       {/* Main Content Area */}
       <div className="flex-1 flex w-full max-w-7xl mx-auto items-center justify-start px-4 md:px-8 py-8 md:py-0">
-        
+
         {/* Login Card */}
         <div className="w-full max-w-[400px] bg-white/40 backdrop-blur-lg border border-white/60 rounded-[2.5rem] p-8 shadow-2xl flex flex-col gap-6 mt-8 md:mt-0">
-          
+
           <div className="flex flex-col items-center gap-4">
             <img src="/LOGO/Logo.svg" alt="CIRO Fuel" className="w-[180px] h-auto object-contain mb-2" />
-            
+
             <div className="text-center">
               <h1 className="text-2xl font-bold text-slate-800">أدخل رمز التحقق</h1>
               <p className="text-sm text-slate-500 mt-2 leading-relaxed">
@@ -113,19 +113,19 @@ export function VerifyPage() {
             <div className="text-center mt-2 mb-2">
               <p className="text-xs font-medium text-slate-500">
                 لم يصلك الرمز؟{' '}
-                <button 
+                <button
                   type="button"
                   disabled={timeLeft > 0}
                   onClick={() => setTimeLeft(45)}
-                  className={`font-semibold  ${timeLeft > 0 ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer text-blue-500 hover:text-blue-400'}`}
+                  className={`font-semibold  ${timeLeft > 0 ? '  cursor-not-allowed' : 'cursor-pointer text-blue-500 hover:text-blue-400'}`}
                 >
                   إعادة الإرسال {timeLeft > 0 && `خلال 00:${timeLeft.toString().padStart(2, '0')}`}
                 </button>
               </p>
             </div>
 
-            <Button 
-              type="submit" 
+            <Button
+              type="submit"
               disabled={loginMutation.isPending}
               className="w-full h-14 rounded-2xl bg-[#2563EB] hover:bg-blue-700 text-white font-bold text-base shadow-lg shadow-blue-500/30 transition-all flex items-center justify-center gap-2 mt-2"
             >
@@ -133,16 +133,16 @@ export function VerifyPage() {
               تسجيل الدخول
             </Button>
           </form>
-          
+
           <div className="text-center mt-3">
-             <p className="text-[10px] text-slate-400">© 2026 CIRO Fuel Transport &amp; Logistics</p>
+            <p className="text-[10px] text-slate-400">© 2026 CIRO Fuel Transport &amp; Logistics</p>
           </div>
         </div>
       </div>
 
       {/* Feature Cards Bottom Strip */}
       <div className="w-full max-w-7xl mx-auto px-4 md:px-8 pb-8 flex flex-col md:flex-row gap-6 justify-between mt-auto z-10">
-        
+
         {/* Card 1 (Rightmost in view due to RTL) */}
         <div className="flex-1 bg-slate-100/90 backdrop-blur-xl border border-white/50 rounded-3xl p-5 flex items-center justify-between shadow-lg">
           <div className="text-right flex-1 pl-2">

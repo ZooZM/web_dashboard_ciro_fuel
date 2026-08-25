@@ -8,10 +8,13 @@ export function AddDriverPage() {
   const [truckOption, setTruckOption] = useState<'new' | 'registered'>('new');
 
   return (
-    <div className="w-full flex-1 p-4 md:p-6 font-sans -mt-4 bg-[#F8FAFC] min-h-full" dir="rtl">
+    <div className="w-full flex-1 p-4 md:p-6 font-sans -mt-4 bg-[#F8FAFC] min-h-full border border-[#E7E9EF] rounded-2xl" dir="rtl">
       
       {/* Breadcrumbs */}
-      <div className="flex items-center gap-2 mb-6 cursor-pointer w-fit" onClick={() => navigate('/transport/drivers')}>
+      <div className="flex items-center gap-2 mb-6 cursor-pointer w-fit" onClick={() => {
+        const basePath = window.location.pathname.startsWith('/admin') ? '/admin' : '/transport';
+        navigate(`${basePath}/drivers`);
+      }}>
         <button className="w-8 h-8 flex items-center justify-center bg-white border border-slate-200 rounded-lg shadow-sm hover:bg-slate-50 transition-colors">
           <img src="/petrolCompany/requests/details/chevronRight.svg" alt="Back" className="w-4 h-4" />
         </button>
@@ -46,13 +49,13 @@ export function AddDriverPage() {
               <div className="flex-1 flex flex-row gap-6">
                 <div className="w-24 h-24 bg-blue-50 rounded-2xl border border-blue-200 flex flex-col items-center justify-center cursor-pointer hover:bg-blue-100 transition-colors shrink-0">
                   <img src="/petrolCompany/transporters/addTransporter/image.svg" alt="Upload" className="w-10 h-10 mb-2" />
-                  <span className="text-[10px] font-bold text-blue-500">+ شعار</span>
+                  <span className="text-[10px] font-bold text-blue-500">+ صورة</span>
                 </div>
                 <div className='flex w-full mt-3 flex-col'>
-                  <label className="text-sm font-bold text-slate-700 mb-2">اسم الشركة <span className="text-red-500">*</span></label>
+                  <label className="text-sm font-bold text-slate-700 mb-2">اسم السائق <span className="text-red-500">*</span></label>
                   <input 
                     type="text" 
-                    placeholder="اسم الشركة"
+                    placeholder="اسم السائق"
                     className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                   />
                 </div>
@@ -192,7 +195,10 @@ export function AddDriverPage() {
               إنشاء الحساب
             </button>
             <button 
-              onClick={() => navigate('/transport/drivers')}
+              onClick={() => {
+                const basePath = window.location.pathname.startsWith('/admin') ? '/admin' : '/transport';
+                navigate(`${basePath}/drivers`);
+              }}
               className="bg-white text-red-500 border border-red-100 px-8 py-3 rounded-xl text-sm font-bold hover:bg-red-50 transition-colors shadow-sm"
             >
               إلغاء

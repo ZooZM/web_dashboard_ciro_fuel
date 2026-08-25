@@ -6,7 +6,10 @@ export function MobileDriversList({ drivers }: { drivers: any[] }) {
   return (
     <div className="lg:hidden flex flex-col gap-4 w-full">
       {drivers.map((driver, idx) => (
-        <div key={idx} onClick={() => navigate(`/transport/drivers/${driver.id}`)} className="bg-white border border-slate-200 rounded-2xl p-4 flex flex-col gap-4 shadow-sm hover:border-blue-300 transition-colors cursor-pointer">
+        <div key={idx} onClick={() => {
+          const basePath = window.location.pathname.startsWith('/admin') ? '/admin' : '/transport';
+          navigate(`${basePath}/drivers/${driver.id}`);
+        }} className="bg-white border border-slate-200 rounded-2xl p-4 flex flex-col gap-4 shadow-sm hover:border-blue-300 transition-colors cursor-pointer">
           
           {/* Header: Driver Info and Status */}
           <div className="flex items-start justify-between border-b border-slate-100 pb-3">

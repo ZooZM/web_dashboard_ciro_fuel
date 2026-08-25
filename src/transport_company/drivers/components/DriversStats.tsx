@@ -47,13 +47,13 @@ export function DriversStats() {
       {stats.map((stat) => (
         <div 
           key={stat.id}
-          className="bg-white border border-slate-200 rounded-2xl p-4 flex items-center min-w-[180px] flex-1 shadow-sm"
+          className="bg-white border border-slate-200 rounded-2xl p-4 flex items-center justify-start gap-4 min-w-[180px] flex-1 shadow-sm"
         >
-          <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${stat.iconBg}`}>
-            <img src={stat.icon} alt={stat.title} className="w-7 h-7 object-contain" />
+          <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 border ${stat.iconBg}`}>
+            <img src={stat.icon} alt={stat.title} className="w-6 h-6 object-contain" />
           </div>
 
-          <div className="flex flex-col mr-2 gap-1 text-right">
+          <div className="flex flex-col gap-1 text-right">
             <span className="text-slate-500 font-bold text-sm">{stat.title}</span>
             <span className={`font-black text-xl ${stat.valueColor}`}>{stat.value}</span>
           </div>

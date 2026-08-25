@@ -119,7 +119,7 @@ export function EditPriceModal({ fuel, onClose }: EditPriceModalProps) {
           </div>
 
           {/* Info Box */}
-          <div className="bg-[#F8FAFC] border border-dashed border-slate-300 rounded-xl p-3 text-center">
+          <div className="bg-[#F8FAFC] border border-dashed border-slate-300 rounded-xl p-3 text-center border border-[#E7E9EF] rounded-2xl">
             <p className="text-[12px] font-medium text-slate-400 leading-relaxed">
               سيتم تطبيق السعر الجديد على كل الطلبات الواردة من محطاتك فور سريانه.
             </p>

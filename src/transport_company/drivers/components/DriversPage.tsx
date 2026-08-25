@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils';
 import { DriversStats } from './DriversStats';
 import { DesktopDriversTable } from './DesktopDriversTable';
 import { MobileDriversList } from './MobileDriversList';
+import { FilterToolbar } from '@/components/ui/FilterToolbar';
 
 const FILTERS = ['الكل', 'نشطين', 'غير نشطين'];
 
@@ -27,14 +28,14 @@ export function DriversPage() {
 
   return (
     <div className="w-full p-4 md:p-6 flex-1 -mt-4 bg-[#F8FAFC] border border-[#E7E9EF] rounded-2xl min-h-full font-sans" dir="rtl">
-      
+
       {/* Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-4">
         <div className="flex flex-col gap-1 text-right">
           <h1 className="text-[#162155] font-black text-2xl">السائقين</h1>
           <p className="text-slate-500 font-bold text-sm">إدارة ومتابعة سائقين و أسطول شاحنات نقل الوقود</p>
         </div>
-        
+
         <button onClick={() => navigate('/transport/drivers/add')} className="flex items-center gap-2 bg-blue-600 text-white px-5 py-2.5 rounded-xl text-sm font-bold hover:bg-blue-700 transition-colors shadow-sm">
           <img src="/transportCompany/DriverPage/plus.svg" alt="Add" className="w-4 h-4" />
           إضافة سائق
@@ -76,55 +77,28 @@ export function DriversPage() {
 
       {/* Main Content Section (Table & Actions) */}
       <div className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden pt-4 pb-0">
-        
+
         {/* Top: Action Bar */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4 px-4">
-          
-          {/* Right Side: Arrange, Filter, Search */}
-          <div className="flex flex-wrap md:flex-nowrap items-center gap-2 md:gap-3 w-full md:w-auto">
-
-            {/* Arrange */}
-            <button className="flex-1 md:flex-none flex justify-center items-center gap-2 text-slate-700 px-4 py-2 rounded-xl text-sm font-bold hover:bg-slate-50 transition-colors shrink-0">
-              <img src="/transportCompany/orderPage/arrange.svg" alt="" className="w-4 h-4 hover:opacity-70" />
-              ترتيب
-            </button>
-
-            {/* Filter */}
-            <button className="flex-1 md:flex-none flex justify-center items-center gap-2 text-slate-700 px-4 py-2 rounded-xl text-sm font-bold hover:bg-slate-50 transition-colors shrink-0">
-              <img src="/transportCompany/orderPage/filter.svg" alt="" className="w-4 h-4 hover:opacity-70" />
-              تصفية
-            </button>
-
-            {/* Search */}
-            <div className="relative w-full border-r pr-4 md:w-auto flex-1 min-w-[250px] order-last md:order-none">
-              <input 
-                type="text" 
-                placeholder="ابحث بكود السائق أو الشاحنة..." 
-                className="w-full pr-8 pl-4 py-2 border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-500 placeholder:text-slate-400"
-              />
-              <img src="/transportCompany/orderPage/search.svg" alt="" className="w-4 h-4 absolute right-6 top-1/2 -translate-y-1/2 opacity-50" />
-            </div>
-          </div>
-
-          {/* Left Side: Export */}
-          <button className="w-full md:w-auto flex justify-center items-center gap-2 bg-[#F0FDF4] border border-[#BBF7D0] text-[#16A34A] px-4 py-2 rounded-xl text-sm font-bold hover:bg-[#DCFCE7] transition-colors shrink-0">
-            <img src="/transportCompany/orderPage/download.svg" alt="" className="w-4 h-4" />
-            تصدير
-          </button>
-
-        </div>
+        <FilterToolbar 
+          searchPlaceholder="ابحث بكود السائق أو الشاحنة..."
+          onExport={() => console.log('Export Drivers')}
+          hasDateRange={false}
+          filters={[
+            { id: 'status', label: 'الحالة', options: [{ value: 'active', label: 'نشط' }, { value: 'inactive', label: 'غير نشط' }] }
+          ]}
+        />
 
         {/* Desktop Table View */}
         <DesktopDriversTable drivers={MOCK_DRIVERS} />
-        
+
         {/* Mobile View: Cards layout instead of Table */}
         <div className="px-4 pb-4 lg:px-0 lg:pb-0">
           <MobileDriversList drivers={MOCK_DRIVERS} />
         </div>
 
-        </div>
-
       </div>
+
+    </div>
     // </div>
   );
 }

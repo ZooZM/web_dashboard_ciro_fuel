@@ -2,18 +2,21 @@ import { ProgressOrderRow } from './ProgressOrderRow';
 
 // ---- Mock Data (easy to replace with real API data) ----
 const PROGRESS_ORDERS = [
-  { id: 'ORD-2024-246', branch: 'شركة بترو أمان، جدة - الرحاب', time: 'اليوم، 10:90 م', quantity: '20,000', fuelType: 'بنزين 91', status: 'في الطريق',    statusClass: 'bg-[#D1FAE5]/60 text-[#12A150]' },
-  { id: 'ORD-2024-246', branch: 'شركة بترو أمان، جدة - الرحاب', time: 'اليوم، 10:90 م', quantity: '20,000', fuelType: 'بنزين 91', status: 'تم التسليم',   statusClass: 'bg-[#D1FAE5]/60 text-[#12A150]' },
-  { id: 'ORD-2024-246', branch: 'شركة بترو أمان، جدة - الرحاب', time: 'اليوم، 10:90 م', quantity: '20,000', fuelType: 'بنزين 91', status: 'جاري التحميل', statusClass: 'bg-[#D1FAE5]/60 text-[#12A150]' },
-  { id: 'ORD-2024-246', branch: 'شركة بترو أمان، جدة - الرحاب', time: 'اليوم، 10:90 م', quantity: '20,000', fuelType: 'بنزين 91', status: 'جاري التحميل', statusClass: 'bg-[#D1FAE5]/60 text-[#12A150]' },
-  { id: 'ORD-2024-246', branch: 'شركة بترو أمان، جدة - الرحاب', time: 'اليوم، 10:90 م', quantity: '20,000', fuelType: 'بنزين 91', status: 'تم التسليم',   statusClass: 'bg-[#D1FAE5]/60 text-[#12A150]' },
-  { id: 'ORD-2024-246', branch: 'شركة بترو أمان، جدة - الرحاب', time: 'اليوم، 10:90 م', quantity: '20,000', fuelType: 'بنزين 91', status: 'تم التسليم',   statusClass: 'bg-[#D1FAE5]/60 text-[#12A150]' },
-  { id: 'ORD-2024-246', branch: 'شركة بترو أمان، جدة - الرحاب', time: 'اليوم، 10:90 م', quantity: '20,000', fuelType: 'بنزين 91', status: 'تم التسليم',   statusClass: 'bg-[#D1FAE5]/60 text-[#12A150]' },
-  { id: 'ORD-2024-246', branch: 'شركة بترو أمان، جدة - الرحاب', time: 'اليوم، 10:90 م', quantity: '20,000', fuelType: 'بنزين 91', status: 'تم التسليم',   statusClass: 'bg-[#D1FAE5]/60 text-[#12A150]' },
-  { id: 'ORD-2024-246', branch: 'شركة بترو أمان، جدة - الرحاب', time: 'اليوم، 10:90 م', quantity: '20,000', fuelType: 'بنزين 91', status: 'تم التسليم',   statusClass: 'bg-[#D1FAE5]/60 text-[#12A150]' },
+  { id: 'ORD-2024-246', branch: 'شركة بترو أمان، جدة - الرحاب', time: 'اليوم، 10:90 م', quantity: '20,000', fuelType: 'بنزين 98', status: 'في الطريق',    statusClass: 'bg-[#E4F7EC] text-[#12A150]' },
+  { id: 'ORD-2024-246', branch: 'شركة بترو أمان، جدة - الرحاب', time: 'اليوم، 10:90 م', quantity: '20,000', fuelType: 'بنزين 98', status: 'تم التسليم',   statusClass: 'bg-[#E4F7EC] text-[#12A150]' },
+  { id: 'ORD-2024-246', branch: 'شركة بترو أمان، جدة - الرحاب', time: 'اليوم، 10:90 م', quantity: '20,000', fuelType: 'بنزين 98', status: 'جاري التحميل', statusClass: 'bg-[#E4F7EC] text-[#12A150]' },
+  { id: 'ORD-2024-246', branch: 'شركة بترو أمان، جدة - الرحاب', time: 'اليوم، 10:90 م', quantity: '20,000', fuelType: 'بنزين 98', status: 'جاري التحميل', statusClass: 'bg-[#E4F7EC] text-[#12A150]' },
+  { id: 'ORD-2024-246', branch: 'شركة بترو أمان، جدة - الرحاب', time: 'اليوم، 10:90 م', quantity: '20,000', fuelType: 'بنزين 98', status: 'جاري التحميل', statusClass: 'bg-[#E4F7EC] text-[#12A150]' },
+  { id: 'ORD-2024-246', branch: 'شركة بترو أمان، جدة - الرحاب', time: 'اليوم، 10:90 م', quantity: '20,000', fuelType: 'بنزين 98', status: 'تم التسليم',   statusClass: 'bg-[#E4F7EC] text-[#12A150]' },
+  { id: 'ORD-2024-246', branch: 'شركة بترو أمان، جدة - الرحاب', time: 'اليوم، 10:90 م', quantity: '20,000', fuelType: 'بنزين 98', status: 'تم التسليم',   statusClass: 'bg-[#E4F7EC] text-[#12A150]' },
+  { id: 'ORD-2024-246', branch: 'شركة بترو أمان، جدة - الرحاب', time: 'اليوم، 10:90 م', quantity: '20,000', fuelType: 'بنزين 98', status: 'تم التسليم',   statusClass: 'bg-[#E4F7EC] text-[#12A150]' },
 ];
 
-export function ProgressOrdersCard() {
+interface ProgressOrdersCardProps {
+  onViewAllClick?: () => void;
+}
+
+export function ProgressOrdersCard({ onViewAllClick }: ProgressOrdersCardProps = {}) {
   return (
     <div className="bg-white border border-slate-200 rounded-3xl p-5 shadow-sm flex flex-col h-[420px]">
 
@@ -25,7 +28,12 @@ export function ProgressOrdersCard() {
           </span>
           <h2 className="text-[17px] font-black text-[#1e293b]">الطلبات قيد التنفيذ</h2>
         </div>
-        <button className="text-[14px] font-bold text-[#2563eb] hover:text-blue-700">عرض الكل</button>
+        <button 
+          onClick={onViewAllClick}
+          className="text-[14px] font-bold text-[#2563eb] hover:text-blue-700"
+        >
+          عرض الكل
+        </button>
       </div>
 
       {/* Rows */}
