@@ -177,7 +177,7 @@ export function DeliveryAreasPage() {
                                     {/* Right side (Info) */}
                                     <div className="flex items-center gap-3">
                                       <div className="w-10 h-10 rounded-lg bg-blue-600 flex items-center justify-center shrink-0 text-white">
-                                        <img src="/petrolCompany/transporters/details/pin.svg" alt="" className='w-full h-full object-cover rounded-lg' />
+                                        <img src="/petrolCompany/transporters/details/pin.svg" alt="" className='w-8 h-8 object-cover rounded-lg' />
                                       </div>
                                       <div className="flex flex-col">
                                         <span className="text-sm font-bold text-blue-900">{area.name}</span>
@@ -212,7 +212,9 @@ export function DeliveryAreasPage() {
                                           onClick={() => setEditingAreaId(area.id)}
                                           className="w-10 h-10 rounded-lg border border-slate-200 flex items-center justify-center hover:bg-white transition-colors bg-slate-50 shrink-0 text-blue-600"
                                         >
-                                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+                                          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M12.4445 19.6875H20.9445M18.4443 9.68747C18.4443 9.68747 21.4443 6.68747 19.4443 4.68747C17.4443 2.68747 14.4443 5.68747 14.4443 5.68747L5.44587 14.6859C4.78722 15.3446 4.26719 16.1441 4.10888 17.062C3.94903 17.9888 3.89583 19.139 4.44432 19.6875C4.99281 20.236 6.14299 20.1828 7.0698 20.0229C7.98772 19.8646 8.78722 19.3446 9.44587 18.6859L18.4443 9.68747ZM14.4443 5.68747L18.4443 9.68747" stroke="#1E5FFF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                          </svg>
                                         </button>
                                       )}
                                     </div>
@@ -233,7 +235,9 @@ export function DeliveryAreasPage() {
                                               className="w-full border border-slate-200 rounded-lg py-3 px-4 text-sm font-bold text-slate-900 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 bg-white"
                                             />
                                             <div className="absolute left-3 text-blue-600">
-                                              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><path d="M15 10a3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 2 6 2 6 4a3 3 0 0 1-3 3 3 3 0 0 1-3-3"></path></svg>
+                                              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M10 13.3333H10.8333C11.3889 13.3333 12.5 13 12.5 11.6667C12.5 10.3333 11.3889 10 10.8333 10H9.16667C8.61111 10 7.5 9.66667 7.5 8.33333C7.5 7 8.61111 6.66667 9.16667 6.66667H10M10 13.3333H7.5M10 13.3333V15M12.5 6.66667H10M10 6.66667V5M17.5 10C17.5 14.1421 14.1421 17.5 10 17.5C5.85786 17.5 2.5 14.1421 2.5 10C2.5 5.85786 5.85786 2.5 10 2.5C14.1421 2.5 17.5 5.85786 17.5 10Z" stroke="#1E5FFF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                              </svg>
                                             </div>
                                           </div>
                                         </div>
@@ -248,7 +252,9 @@ export function DeliveryAreasPage() {
                                               className="w-full border border-slate-200 rounded-lg py-3 px-4 text-sm font-bold text-slate-900 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 bg-white"
                                             />
                                             <div className="absolute left-3 text-blue-600">
-                                              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><path d="M15 10a3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 2 6 2 6 4a3 3 0 0 1-3 3 3 3 0 0 1-3-3"></path></svg>
+                                              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M10 13.3333H10.8333C11.3889 13.3333 12.5 13 12.5 11.6667C12.5 10.3333 11.3889 10 10.8333 10H9.16667C8.61111 10 7.5 9.66667 7.5 8.33333C7.5 7 8.61111 6.66667 9.16667 6.66667H10M10 13.3333H7.5M10 13.3333V15M12.5 6.66667H10M10 6.66667V5M17.5 10C17.5 14.1421 14.1421 17.5 10 17.5C5.85786 17.5 2.5 14.1421 2.5 10C2.5 5.85786 5.85786 2.5 10 2.5C14.1421 2.5 17.5 5.85786 17.5 10Z" stroke="#1E5FFF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                              </svg>
                                             </div>
                                           </div>
                                         </div>
@@ -285,11 +291,11 @@ export function DeliveryAreasPage() {
 
           {/* Map Location Card */}
           <div className="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm">
-            <div className="flex items-center justify-end gap-2 mb-4">
-              <h3 className="text-sm font-bold text-blue-900">الموقع على الخريطة</h3>
+            <div className="flex items-center justify-start gap-2 mb-4">
               <div className="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center">
                 <img src="/transportCompany/delivery/locationPin.svg" alt="Pin" className="w-4 h-4" />
               </div>
+              <h3 className="text-sm font-bold text-blue-900">الموقع على الخريطة</h3>
             </div>
 
             <div className="relative w-full h-56 rounded-xl overflow-hidden border border-slate-200">
@@ -323,28 +329,28 @@ export function DeliveryAreasPage() {
                 <tbody className="divide-y divide-slate-100">
                   <tr className="bg-white">
                     <td className="py-2.5 px-4 flex items-center gap-2">
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1E5FFF" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><line x1="3" y1="22" x2="15" y2="22"></line><line x1="4" y1="9" x2="14" y2="9"></line><path d="M14 22V4a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v18"></path><path d="M14 13h2a2 2 0 0 1 2 2v2a2 2 0 0 0 2 2h0a2 2 0 0 0 2-2V9.83a2 2 0 0 0-.59-1.42L18 5"></path></svg>
+                      <img src="/transportCompany/profilePage/petroAman.jpg" alt="" className='w-8 h-8 object-cover rounded-full' />
                       <span className="font-bold text-slate-700">بترو أمان</span>
                     </td>
                     <td className="py-2.5 px-4 font-black text-slate-900 text-center">3</td>
                   </tr>
                   <tr className="bg-white">
                     <td className="py-2.5 px-4 flex items-center gap-2">
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1E5FFF" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><line x1="3" y1="22" x2="15" y2="22"></line><line x1="4" y1="9" x2="14" y2="9"></line><path d="M14 22V4a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v18"></path><path d="M14 13h2a2 2 0 0 1 2 2v2a2 2 0 0 0 2 2h0a2 2 0 0 0 2-2V9.83a2 2 0 0 0-.59-1.42L18 5"></path></svg>
+                      <img src="/transportCompany/profilePage/petroAman.jpg" alt="" className='w-8 h-8 object-cover rounded-full' />
                       <span className="font-bold text-slate-700">الطاقة الحديثة</span>
                     </td>
                     <td className="py-2.5 px-4 font-black text-slate-900 text-center">3</td>
                   </tr>
                   <tr className="bg-white">
                     <td className="py-2.5 px-4 flex items-center gap-2">
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1E5FFF" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><line x1="3" y1="22" x2="15" y2="22"></line><line x1="4" y1="9" x2="14" y2="9"></line><path d="M14 22V4a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v18"></path><path d="M14 13h2a2 2 0 0 1 2 2v2a2 2 0 0 0 2 2h0a2 2 0 0 0 2-2V9.83a2 2 0 0 0-.59-1.42L18 5"></path></svg>
+                      <img src="/transportCompany/profilePage/petroAman.jpg" alt="" className='w-8 h-8 object-cover rounded-full' />
                       <span className="font-bold text-slate-700">الوقود الذكي</span>
                     </td>
                     <td className="py-2.5 px-4 font-black text-slate-900 text-center">3</td>
                   </tr>
                   <tr className="bg-white">
                     <td className="py-2.5 px-4 flex items-center gap-2">
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1E5FFF" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><line x1="3" y1="22" x2="15" y2="22"></line><line x1="4" y1="9" x2="14" y2="9"></line><path d="M14 22V4a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v18"></path><path d="M14 13h2a2 2 0 0 1 2 2v2a2 2 0 0 0 2 2h0a2 2 0 0 0 2-2V9.83a2 2 0 0 0-.59-1.42L18 5"></path></svg>
+                      <img src="/transportCompany/profilePage/petroAman.jpg" alt="" className='w-8 h-8 object-cover rounded-full' />
                       <span className="font-bold text-slate-700">النخبة للمحروقات</span>
                     </td>
                     <td className="py-2.5 px-4 font-black text-slate-900 text-center">3</td>

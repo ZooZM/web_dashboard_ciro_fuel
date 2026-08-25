@@ -203,7 +203,7 @@ export function Sidebar() {
               <NavItem to="/transport/dashboard" icon="/sideBar/home.svg" label="الرئيسية" isCollapsed={isCollapsed} />
               <NavItem to="/transport/orders" icon="/sideBar/order.svg" label="الطلبات" badge={5} isCollapsed={isCollapsed} />
               <NavItem to="/transport/tracking" icon="/sideBar/map.svg" label="تتبع الشحنات" isCollapsed={isCollapsed} />
-              <NavItem to="/transport/delivery-areas" icon="/transportCompany/delivery/locationPin.svg" label="تسعير أجرة النقل" isCollapsed={isCollapsed} iconClassName="w-6 h-6" />
+              <NavItem to="/transport/delivery-areas" icon="/petrolCompany/transporters/details/pin.svg" label="تسعير أجرة النقل" isCollapsed={isCollapsed} iconClassName="w-6 h-6" />
               <NavItem to="/transport/trucks" icon="/sideBar/greyTruck.svg" label="الشاحنات والتانكات" isCollapsed={isCollapsed} />
               <NavItem to="/transport/drivers" icon="/sideBar/steering.svg" label="السائقين" isCollapsed={isCollapsed} />
               <NavItem to="/transport/invoices" icon="/sideBar/order.svg" label="الفواتير و المدفوعات" isCollapsed={isCollapsed} />
