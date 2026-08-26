@@ -8,6 +8,8 @@ import { AdminProfilePermissions } from './AdminProfilePermissions';
 import { AdminProfileSecurity } from './AdminProfileSecurity';
 import { AdminProfileAdditionalData } from './AdminProfileAdditionalData';
 import { AdminChangePhoneModal } from './AdminChangePhoneModal';
+import { CashbackBanner } from '@/petrol_company/invoices/components/CashbackBanner';
+import { PlatformCommissionBanner } from '@/petrol_company/invoices/components/PlatformCommissionBanner';
 
 export function AdminProfilePage() {
   const navigate = useNavigate();
@@ -38,6 +40,10 @@ export function AdminProfilePage() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
             <div className="flex flex-col gap-6 col-span-1 lg:col-span-2">
               <AdminProfileAccountCard />
+              <div className="flex flex-col gap-0 -mt-2">
+                <PlatformCommissionBanner />
+                <CashbackBanner />
+              </div>
               <AdminProfilePermissions />
             </div>
 

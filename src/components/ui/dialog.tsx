@@ -40,10 +40,10 @@ export const DialogContent = React.forwardRef<
       >
         {children}
         <DialogPrimitive.Close
-          className="absolute end-4 top-4 rounded-sm opacity-70 hover:opacity-100"
+          className="absolute left-5 top-5 rounded-md bg-gray-100 p-1  hover:opacity-100 transition-colors"
           aria-label={t('common.cancel')}
         >
-          <X className="h-4 w-4" />
+          <X className="h-4 w-4 text-slate-500" />
         </DialogPrimitive.Close>
       </DialogPrimitive.Content>
     </DialogPortal>
