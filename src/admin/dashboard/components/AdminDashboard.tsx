@@ -10,6 +10,7 @@ import { useLayoutStore }     from '@/stores/layout.store';
 import { motion }             from 'framer-motion';
 import { cn }                 from '@/lib/utils';
 import { useNavigate }        from 'react-router-dom';
+import { DateRangePopup }     from '@/components/ui/date-range-popup';
 
 // ── Stat cards data ──────────────────────────────────────────────────────────
 const STAT_CARDS = [
@@ -78,10 +79,11 @@ export function AdminDashboard() {
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-3">
-            <div className="flex items-center gap-3 bg-white border border-slate-200 rounded-xl px-4 py-2.5 shadow-sm cursor-pointer hover:bg-slate-50 transition-colors">
-              <img src="/transportCompany/home/date.svg" className="w-4 h-4 opacity-70" />
-              <span className="text-[11px] font-bold text-slate-700 font-mono" dir="ltr">2024/05/02 - 2024/05/08</span>
-            </div>
+            <DateRangePopup 
+              initialFrom="2024-05-02" 
+              initialTo="2024-05-08" 
+              className="w-[240px]"
+            />
           </div>
         </div>
 

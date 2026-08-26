@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Search, Filter, Download, X, ChevronDown, Clock, CircleDollarSign, Fuel, TrendingUp, TrendingDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { DateRangePopup } from '@/components/ui/date-range-popup';
 
 export interface FilterOptionDef {
   id: string;
@@ -241,57 +243,37 @@ export function FilterToolbar({
               <div key={filter.id} className="flex flex-col gap-2 flex-1 min-w-[150px]">
                 <span className="text-xs font-bold text-slate-700">{filter.label}</span>
                 <div className="relative">
-                  <select 
-                    value={localFilters[filter.id] || ''}
-                    onChange={(e) => setLocalFilters({...localFilters, [filter.id]: e.target.value})}
-                    className="w-full appearance-none bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-bold text-slate-600 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                  <Select 
+                    value={localFilters[filter.id] || ''} 
+                    onValueChange={(val) => setLocalFilters({...localFilters, [filter.id]: val === 'all' ? '' : val})}
                   >
-                    <option value="">كل {filter.label}</option>
-                    {filter.options.map(opt => (
-                      <option key={opt.value} value={opt.value}>{opt.label}</option>
-                    ))}
-                  </select>
-                  <ChevronDown className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder={`كل ${filter.label}`} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">كل {filter.label}</SelectItem>
+                      {filter.options.map(opt => (
+                        <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
               </div>
             ))}
 
             {/* Date Range */}
             {hasDateRange && (
-              <div className="flex flex-col gap-2 flex-[2] min-w-[300px]">
+              <div className="flex flex-col gap-2 flex-[2] min-w-[220px]">
                 <span className="text-xs font-bold text-slate-700">الفترة</span>
-                <div className="flex items-center gap-3">
-                  <div className="flex items-center gap-2 flex-1">
-                    <span className="text-xs font-bold text-slate-500 w-6">من</span>
-                    <div className="relative flex-1">
-                      <input 
-                        type="text" 
-                        placeholder="YYYY/MM/DD"
-                        value={dateFrom}
-                        onChange={(e) => setDateFrom(e.target.value)}
-                        className="w-full bg-white border border-slate-200 rounded-xl pl-4 pr-10 py-2.5 text-sm font-bold text-slate-600 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
-                        dir="ltr"
-                        style={{ textAlign: 'right' }}
-                      />
-                      <img src="/filter/date.svg" alt="Date" className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4" />
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2 flex-1">
-                    <span className="text-xs font-bold text-slate-500 w-6">إلي</span>
-                    <div className="relative flex-1">
-                      <input 
-                        type="text" 
-                        placeholder="YYYY/MM/DD"
-                        value={dateTo}
-                        onChange={(e) => setDateTo(e.target.value)}
-                        className="w-full bg-white border border-slate-200 rounded-xl pl-4 pr-10 py-2.5 text-sm font-bold text-slate-600 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
-                        dir="ltr"
-                        style={{ textAlign: 'right' }}
-                      />
-                      <img src="/filter/date.svg" alt="Date" className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4" />
-                    </div>
-                  </div>
-                </div>
+                <DateRangePopup 
+                  initialFrom={dateFrom} 
+                  initialTo={dateTo} 
+                  onApply={(range) => {
+                    setDateFrom(range.from);
+                    setDateTo(range.to);
+                  }}
+                  className="w-full"
+                />
               </div>
             )}
           </div>

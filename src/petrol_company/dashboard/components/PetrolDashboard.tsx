@@ -9,6 +9,8 @@ import { DoughnutSection } from '@/transport_company/home/components/DoughnutSec
 import { useLayoutStore } from '@/stores/layout.store';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
+import { DateRangePopup } from '@/components/ui/date-range-popup';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 // ── Stat cards data ──────────────────────────────────────────────────────────
 const STAT_CARDS = [
@@ -73,14 +75,22 @@ export function PetrolDashboard() {
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-3">
-            <div className="flex items-center gap-3 bg-white border border-slate-200 rounded-xl px-4 py-2.5 shadow-sm cursor-pointer hover:bg-slate-50 transition-colors">
-              <span className="text-[11px] font-bold text-slate-700">كل المحطات</span>
-              <img src="/transportCompany/home/chevronDown.svg" className="w-3.5 h-3.5  " />
-            </div>
-            <div className="flex items-center gap-3 bg-white border border-slate-200 rounded-xl px-4 py-2.5 shadow-sm cursor-pointer hover:bg-slate-50 transition-colors">
-              <img src="/transportCompany/home/date.svg" className="w-4 h-4 opacity-70" />
-              <span className="text-[11px] font-bold text-slate-700 font-mono" dir="ltr">2024/05/02 - 2024/05/08</span>
-            </div>
+            <Select defaultValue="all">
+              <SelectTrigger className="w-[140px]">
+                <SelectValue placeholder="اختر المحطة" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">كل المحطات</SelectItem>
+                <SelectItem value="s1">محطة الرحاب</SelectItem>
+                <SelectItem value="s2">محطة النزهة</SelectItem>
+              </SelectContent>
+            </Select>
+
+            <DateRangePopup 
+              initialFrom="2024-05-02" 
+              initialTo="2024-05-08" 
+              className="w-[240px]"
+            />
           </div>
         </div>
 
