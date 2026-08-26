@@ -47,6 +47,7 @@ const DOUGHNUT_CHARTS = [
     label: 'إجمالي السائقين',
     gradient: 'conic-gradient(#10B981 0% 70%, #3B82F6 70% 88%, #F97316 88% 96%, #94A3B8 96% 100%)',
     legend: DOUGHNUT_LEGEND,
+    href: '/transport/drivers'
   },
   {
     title: 'الشاحنات',
@@ -54,6 +55,7 @@ const DOUGHNUT_CHARTS = [
     label: 'إجمالي الشاحنات',
     gradient: 'conic-gradient(#10B981 0% 65%, #3B82F6 65% 85%, #F97316 85% 95%, #94A3B8 95% 100%)',
     legend: DOUGHNUT_LEGEND,
+    href: '/transport/trucks'
   },
 ];
 

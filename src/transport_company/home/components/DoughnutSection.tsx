@@ -1,3 +1,5 @@
+import { useNavigate } from 'react-router-dom';
+
 interface LegendItem {
   label: string;
   value: string;
@@ -10,16 +12,23 @@ interface DoughnutSectionProps {
   label: string;
   gradient: string;
   legend?: LegendItem[];
+  href?: string;
 }
 
-export function DoughnutSection({ title, total, label, gradient, legend }: DoughnutSectionProps) {
+export function DoughnutSection({ title, total, label, gradient, legend, href }: DoughnutSectionProps) {
+  const navigate = useNavigate();
   return (
     <div className="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm flex flex-col h-full items-center">
 
       {/* Header */}
       <div className="flex items-center justify-between w-full mb-6">
         <h2 className="text-sm font-black text-slate-800">{title}</h2>
-        <button className="text-[11px] font-bold text-blue-600 hover:text-blue-700">عرض الكل</button>
+        <button 
+          onClick={() => href && navigate(href)}
+          className="text-[11px] font-bold text-blue-600 hover:text-blue-700"
+        >
+          عرض الكل
+        </button>
       </div>
 
       {/* Doughnut */}

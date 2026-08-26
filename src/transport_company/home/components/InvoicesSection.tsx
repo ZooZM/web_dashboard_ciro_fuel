@@ -1,4 +1,7 @@
+import { useNavigate } from 'react-router-dom';
+
 export function InvoicesSection() {
+  const navigate = useNavigate();
   const chartData = [
     { label: 'يناير', paid: 60, due: 70 },
     { label: 'فبراير', paid: 50, due: 60 },
@@ -20,7 +23,12 @@ export function InvoicesSection() {
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-sm font-black text-slate-800">الفواتير و المدفوعات</h2>
-        <button className="text-[11px] font-bold text-blue-600 hover:text-blue-700">عرض الكل</button>
+        <button 
+          onClick={() => navigate('/transport/invoices')}
+          className="text-[11px] font-bold text-blue-600 hover:text-blue-700"
+        >
+          عرض الكل
+        </button>
       </div>
 
       {/* Due / Paid / Total summary blocks */}
@@ -92,7 +100,10 @@ export function InvoicesSection() {
       </div>
 
       {/* Footer Button */}
-      <button className="w-full mt-6 py-3 bg-white border border-slate-200 rounded-xl flex items-center justify-center gap-2 text-xs font-bold text-blue-600 hover:bg-slate-50 transition-colors">
+      <button 
+        onClick={() => navigate('/transport/invoices')}
+        className="w-full mt-6 py-3 bg-white border border-slate-200 rounded-xl flex items-center justify-center gap-2 text-xs font-bold text-blue-600 hover:bg-slate-50 transition-colors"
+      >
         <span className="text-[11px]">إدارة الفواتير</span>
         <img src="/transportCompany/home/invoice.svg" className="w-4 h-4" style={{ filter: 'brightness(0) saturate(100%) invert(32%) sepia(87%) saturate(2250%) hue-rotate(209deg) brightness(97%) contrast(93%)' }} />
       </button>
