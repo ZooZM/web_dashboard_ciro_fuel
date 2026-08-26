@@ -5,10 +5,14 @@ import { ProtectedRoute } from '@/routing/ProtectedRoute';
 import { useSessionStore } from '@/stores/session.store';
 import { Role } from '@/constants/roles';
 
+// Feature 009 T013/T014: exercises the role vocabulary and route guards this feature
+// rewrote (research.md R1). `Role.COMPANY_ADMIN` no longer exists — every case below uses one
+// of the platform's five real roles — and the app's actual login route is `/` (router.tsx),
+// not `/login`; this file previously asserted a redirect target the app never uses.
 function renderProtected(allow: Role[], initialEntries: string[] = ['/secret']) {
   const router = createMemoryRouter(
     [
-      { path: '/login', element: <div>Login page</div> },
+      { path: '/', element: <div>Login page</div> },
       { path: '/403', element: <div>Forbidden page</div> },
       {
         element: <ProtectedRoute allow={allow} />,
@@ -25,17 +29,17 @@ afterEach(() => {
   useSessionStore.setState({ status: 'booting' });
 });
 
-describe('<ProtectedRoute> (FR-004/FR-005, SC-001)', () => {
+describe('<ProtectedRoute> (FR-068, SC-001)', () => {
   it('shows a spinner while booting and renders no route content', () => {
     useSessionStore.setState({ status: 'booting', user: null });
-    renderProtected([Role.COMPANY_ADMIN]);
+    renderProtected([Role.TRANSPORT_COMPANY_ADMIN]);
     expect(screen.queryByText('Secret content')).not.toBeInTheDocument();
     expect(screen.getByRole('status')).toBeInTheDocument();
   });
 
-  it('redirects unauthenticated users to /login', () => {
+  it('redirects an unauthenticated user to the login route', () => {
     useSessionStore.setState({ status: 'anonymous', user: null });
-    renderProtected([Role.COMPANY_ADMIN]);
+    renderProtected([Role.TRANSPORT_COMPANY_ADMIN]);
     expect(screen.getByText('Login page')).toBeInTheDocument();
     expect(screen.queryByText('Secret content')).not.toBeInTheDocument();
   });
@@ -45,17 +49,46 @@ describe('<ProtectedRoute> (FR-004/FR-005, SC-001)', () => {
       { id: '1', role: Role.SUPER_ADMIN, companyId: null, fullName: 'Owner', email: 'a@b.com' },
       'token',
     );
-    renderProtected([Role.COMPANY_ADMIN]);
+    renderProtected([Role.TRANSPORT_COMPANY_ADMIN]);
     expect(screen.getByText('Forbidden page')).toBeInTheDocument();
     expect(screen.queryByText('Secret content')).not.toBeInTheDocument();
   });
 
   it('renders the route for an allowed authenticated role', () => {
     useSessionStore.getState().setSession(
-      { id: '2', role: Role.COMPANY_ADMIN, companyId: 'c1', fullName: 'Admin', email: 'c@d.com' },
+      { id: '2', role: Role.TRANSPORT_COMPANY_ADMIN, companyId: 'c1', fullName: 'Admin', email: 'c@d.com' },
       'token',
     );
-    renderProtected([Role.COMPANY_ADMIN]);
+    renderProtected([Role.TRANSPORT_COMPANY_ADMIN]);
+    expect(screen.getByText('Secret content')).toBeInTheDocument();
+  });
+
+  it('a DRIVER is refused the transport admin surface (FR-068 — this reached both admin surfaces before Slice 0)', () => {
+    useSessionStore.getState().setSession(
+      { id: '3', role: Role.DRIVER, companyId: 'c1', fullName: 'Driver', email: 'd@e.com' },
+      'token',
+    );
+    renderProtected([Role.TRANSPORT_COMPANY_ADMIN, Role.SUPER_ADMIN]);
+    expect(screen.getByText('Forbidden page')).toBeInTheDocument();
+    expect(screen.queryByText('Secret content')).not.toBeInTheDocument();
+  });
+
+  it('a CLIENT is refused the fuel company admin surface (FR-068 — this reached it before Slice 0)', () => {
+    useSessionStore.getState().setSession(
+      { id: '4', role: Role.CLIENT, companyId: 'c1', fullName: 'Client', email: 'f@g.com' },
+      'token',
+    );
+    renderProtected([Role.FUEL_COMPANY_ADMIN, Role.SUPER_ADMIN]);
+    expect(screen.getByText('Forbidden page')).toBeInTheDocument();
+    expect(screen.queryByText('Secret content')).not.toBeInTheDocument();
+  });
+
+  it('SUPER_ADMIN reaches every guarded surface (tenant-isolation exemption)', () => {
+    useSessionStore.getState().setSession(
+      { id: '5', role: Role.SUPER_ADMIN, companyId: null, fullName: 'Owner', email: 'a@b.com' },
+      'token',
+    );
+    renderProtected([Role.TRANSPORT_COMPANY_ADMIN, Role.SUPER_ADMIN]);
     expect(screen.getByText('Secret content')).toBeInTheDocument();
   });
 });

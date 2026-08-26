@@ -5,8 +5,6 @@ import { Forbidden } from '@/routing/Forbidden';
 import { NotFound } from '@/routing/NotFound';
 import { AppShell } from '@/components/layout/AppShell';
 import { LoginPage } from '@/auth/components/LoginPage';
-import { VerifyPage } from '@/auth/components/VerifyPage';
-import { RoleSelectionPage } from '@/auth/components/RoleSelectionPage';
 
 // Admin imports
 import { AdminDashboard } from '@/admin/dashboard/components/AdminDashboard';
@@ -70,8 +68,6 @@ import { OrderTrackingPage } from '@/pages/OrderTracking/OrderTrackingPage';
 
 export const router = createBrowserRouter([
   { path: '/', element: <LoginPage /> },
-  { path: '/verify', element: <VerifyPage /> },
-  { path: '/select-role', element: <RoleSelectionPage /> },
   { path: '/403', element: <Forbidden /> },
 
   // Admin Routes
@@ -109,7 +105,7 @@ export const router = createBrowserRouter([
   // Petrol Brand Routes
   {
     path: '/petrolCompany',
-    element: <ProtectedRoute allow={[Role.CLIENT, Role.COMPANY_ADMIN]}><AppShell /></ProtectedRoute>,
+    element: <ProtectedRoute allow={[Role.FUEL_COMPANY_ADMIN, Role.SUPER_ADMIN]}><AppShell /></ProtectedRoute>,
     children: [
       { path: '', element: <Navigate to="dashboard" replace /> },
       { path: 'dashboard', element: <PetrolDashboard /> },
@@ -140,7 +136,7 @@ export const router = createBrowserRouter([
   // Transportation Routes
   {
     path: '/transport',
-    element: <ProtectedRoute allow={[Role.COMPANY_ADMIN, Role.DRIVER, Role.SUPER_ADMIN]}><AppShell /></ProtectedRoute>,
+    element: <ProtectedRoute allow={[Role.TRANSPORT_COMPANY_ADMIN, Role.SUPER_ADMIN]}><AppShell /></ProtectedRoute>,
     children: [
       { path: '', element: <Navigate to="dashboard" replace /> },
       { path: 'dashboard', element: <TransportDashboard /> },

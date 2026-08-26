@@ -1,16 +1,13 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { queryKeys } from '@/constants/query-keys';
 import { ORDER_POLL_INTERVAL_MS } from '@/constants/polling';
 import * as ordersApi from '@/transport_company/orders/api/orders.api';
-import type {
-  OrderListParams,
-  ApproveOrderInput,
-  RejectOrderInput,
-  ForceCompleteOrderInput,
-} from '@/transport_company/orders/types';
+import type { OrderListParams } from '@/transport_company/orders/types';
 
-// FR-012a: active order lists/detail auto-refresh via polling — no Socket.io in v1.
-// Paused when the tab is hidden (refetchIntervalInBackground: false, the default).
+// FR-020: active order lists/detail stay current by repeated background refresh, at the
+// longest interval that still meets the 15s bound (SC-003) — never a live connection; that is
+// reserved for the truck's position alone (contracts/realtime-contract.md). Paused when the
+// tab is hidden (refetchIntervalInBackground: false, the default) — FR-022.
 export function useOrdersList(params: OrderListParams) {
   return useQuery({
     queryKey: queryKeys.orders.list(params),
@@ -28,42 +25,8 @@ export function useOrderDetail(id: string) {
   });
 }
 
-function useInvalidateOrder(id: string) {
-  const queryClient = useQueryClient();
-  return () => {
-    void queryClient.invalidateQueries({ queryKey: queryKeys.orders.detail(id) });
-    void queryClient.invalidateQueries({ queryKey: ['orders'] });
-  };
-}
-
-export function useApproveOrder(id: string) {
-  const invalidate = useInvalidateOrder(id);
-  return useMutation({
-    mutationFn: (input: ApproveOrderInput) => ordersApi.approveOrder(id, input),
-    onSuccess: invalidate,
-  });
-}
-
-export function useRejectOrder(id: string) {
-  const invalidate = useInvalidateOrder(id);
-  return useMutation({
-    mutationFn: (input: RejectOrderInput) => ordersApi.rejectOrder(id, input),
-    onSuccess: invalidate,
-  });
-}
-
-export function useCancelOrder(id: string) {
-  const invalidate = useInvalidateOrder(id);
-  return useMutation({
-    mutationFn: () => ordersApi.cancelOrder(id),
-    onSuccess: invalidate,
-  });
-}
-
-export function useForceCompleteOrder(id: string) {
-  const invalidate = useInvalidateOrder(id);
-  return useMutation({
-    mutationFn: (input: ForceCompleteOrderInput) => ordersApi.forceCompleteOrder(id, input),
-    onSuccess: invalidate,
-  });
-}
+// Feature 009 T023 (US1): useApproveOrder/useRejectOrder/useCancelOrder/useForceCompleteOrder
+// removed along with the API calls they wrapped — all four belong to FUEL_COMPANY_ADMIN or
+// CLIENT and this role receives 403 for every one (FR-070). The transporter's own mutations
+// (useAssignDriver, useOverrideVerification, useReassignVehicle) live in dispatch-related hook
+// files, not here — see contracts/dashboard-integration.md Slice 2/5.

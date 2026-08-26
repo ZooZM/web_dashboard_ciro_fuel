@@ -1,18 +1,15 @@
 import { apiClient } from '@/lib/api/api.client';
 import { apiRoutes } from '@/constants/api-routes';
-import type { LoginInput, LoginResponse, RefreshResponse, AuthUserDto } from '@/auth/types';
+import type { LoginInput, LoginResponse, AuthUserDto } from '@/auth/types';
 
 export async function login(input: LoginInput): Promise<LoginResponse> {
   const { data } = await apiClient.post<LoginResponse>(apiRoutes.auth.login, input);
   return data;
 }
 
-/** Uses a bare axios call (not `apiClient`) so it never recurses through the response
- *  interceptor's own refresh logic — see api.client.ts single-flight refresh (FR-008). */
-export async function refresh(bareClient = apiClient): Promise<RefreshResponse> {
-  const { data } = await bareClient.post<RefreshResponse>(apiRoutes.auth.refresh);
-  return data;
-}
+// Refresh itself is NOT exposed here — api.client.ts's `runRefresh` calls the bare client
+// directly, since it must own the refresh-token body and the single-flight promise together
+// (T010). A second implementation here would be a second place to keep the two in sync.
 
 export async function me(): Promise<AuthUserDto> {
   const { data } = await apiClient.get<AuthUserDto>(apiRoutes.auth.me);

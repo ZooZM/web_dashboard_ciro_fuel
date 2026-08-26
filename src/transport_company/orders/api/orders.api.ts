@@ -1,21 +1,10 @@
 import { apiClient } from '@/lib/api/api.client';
 import { apiRoutes } from '@/constants/api-routes';
-import type {
-  Order,
-  OrderListParams,
-  ApproveOrderInput,
-  RejectOrderInput,
-  ForceCompleteOrderInput,
-} from '@/transport_company/orders/types';
+import type { CursorPage } from '@/lib/api/pagination';
+import type { Order, OrderListParams } from '@/transport_company/orders/types';
 
-interface Paginated<T> {
-  items: T[];
-  total: number;
-  page: number;
-}
-
-export async function listOrders(params: OrderListParams): Promise<Paginated<Order>> {
-  const { data } = await apiClient.get<Paginated<Order>>(apiRoutes.orders.list, { params });
+export async function listOrders(params: OrderListParams): Promise<CursorPage<Order>> {
+  const { data } = await apiClient.get<CursorPage<Order>>(apiRoutes.orders.list, { params });
   return data;
 }
 
@@ -24,27 +13,10 @@ export async function getOrder(id: string): Promise<Order> {
   return data;
 }
 
-export async function approveOrder(id: string, input: ApproveOrderInput): Promise<Order> {
-  const { data } = await apiClient.patch<Order>(apiRoutes.orders.approve(id), input);
-  return data;
-}
-
-export async function rejectOrder(id: string, input: RejectOrderInput): Promise<Order> {
-  const { data } = await apiClient.patch<Order>(apiRoutes.orders.reject(id), input);
-  return data;
-}
-
-export async function cancelOrder(id: string): Promise<Order> {
-  const { data } = await apiClient.patch<Order>(apiRoutes.orders.cancel(id));
-  return data;
-}
-
-export async function forceCompleteOrder(id: string, input: ForceCompleteOrderInput): Promise<Order> {
-  const { data } = await apiClient.patch<Order>(apiRoutes.orders.forceComplete(id), input);
-  return data;
-}
-
-export async function redispatchOrder(id: string): Promise<{ assigned: boolean }> {
-  const { data } = await apiClient.post<{ assigned: boolean }>(apiRoutes.orders.redispatch(id));
-  return data;
-}
+// Feature 009 T023 (US1): `approve`/`reject`/`forceComplete`/`cancel` removed. All four belong
+// to FUEL_COMPANY_ADMIN or CLIENT (`OrdersController.cancel` checks
+// `user.role === UserRole.FUEL_COMPANY_ADMIN`, admitting no transporter) — this role receives
+// 403 for all of them (FR-070). The spec and contracts/rest-api-delta.md originally named only
+// three; `cancel` is a finding from wiring this file, corrected there too. `redispatch`'s
+// underlying platform path no longer exists (research.md R1; see dispatch.api.ts for the
+// transporter's own actions: getCandidates/assignDriver/overrideVerification/reassignVehicle).

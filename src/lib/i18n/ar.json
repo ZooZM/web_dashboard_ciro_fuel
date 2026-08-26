@@ -88,5 +88,20 @@
     "fileTypeError": "نوع الملف غير مدعوم",
     "fileSizeError": "حجم الملف كبير جداً (الحد الأقصى 10 ميغابايت)",
     "fileRequired": "ملف السجل التجاري مطلوب"
+  },
+  "orderStatus": {
+    "PENDING_APPROVAL": "بانتظار الموافقة",
+    "APPROVED": "تمت الموافقة",
+    "AWAITING_ROUTING": "بانتظار التوجيه",
+    "ROUTED_TO_TRANSPORT": "بانتظار التعيين",
+    "ASSIGNED_TO_DRIVER": "تم التعيين",
+    "PENDING_PAYMENT": "بانتظار الدفع",
+    "LOADING": "جارٍ التحميل",
+    "IN_TRANSIT": "في الطريق",
+    "UNLOADING": "جارٍ التفريغ",
+    "DELIVERED": "تم التسليم",
+    "REJECTED": "مرفوض",
+    "CANCELLED": "ملغى",
+    "unknown": "حالة غير معروفة"
   }
 }

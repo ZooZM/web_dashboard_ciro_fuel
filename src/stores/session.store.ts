@@ -17,7 +17,9 @@ interface SessionState {
   user: SessionUser | null;
   status: SessionStatus;
   setStatus: (status: SessionStatus) => void;
-  setSession: (user: SessionUser, accessToken: string) => void;
+  // refreshToken is optional only for the rehydration path (bootstrapSession's `/auth/me` call
+  // has no fresh refresh token to offer) — every real login or refresh MUST pass one (FR-078).
+  setSession: (user: SessionUser, accessToken: string, refreshToken?: string) => void;
   clearSession: () => void;
 }
 
@@ -27,12 +29,15 @@ export const useSessionStore = create<SessionState>()(
       user: null,
       status: 'booting',
       setStatus: (status) => set({ status }),
-      setSession: (user, accessToken) => {
+      setSession: (user, accessToken, refreshToken) => {
         tokenStore.set(accessToken);
+        if (refreshToken) {
+          tokenStore.setRefreshToken(refreshToken);
+        }
         set({ user, status: 'authenticated' });
       },
       clearSession: () => {
-        tokenStore.set(null);
+        tokenStore.clear();
         set({ user: null, status: 'anonymous' });
       },
     }),

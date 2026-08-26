@@ -24,17 +24,12 @@ export interface OrderListParams {
   status?: OrderStatus;
   from?: string;
   to?: string;
-  page?: number;
+  // Feature 009 T018: the platform paginates by cursor, never `page` — `?status=&cursor=`
+  // (contracts/rest-api-delta.md Part 5). Passing `page` here has never done anything; the
+  // platform's query parser simply ignores unrecognised keys.
+  cursor?: string;
 }
 
-export interface ApproveOrderInput {
-  finalPrice?: number;
-}
-
-export interface RejectOrderInput {
-  reason: string;
-}
-
-export interface ForceCompleteOrderInput {
-  reason: string;
-}
+// Feature 009 T023: ApproveOrderInput/RejectOrderInput/ForceCompleteOrderInput removed along
+// with the mutations and dialogs that used them — approve/reject/force-complete/cancel all
+// belong to FUEL_COMPANY_ADMIN or CLIENT, and this role receives 403 for every one (FR-070).

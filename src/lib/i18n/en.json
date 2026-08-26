@@ -88,5 +88,20 @@
     "fileTypeError": "Unsupported file type",
     "fileSizeError": "File too large (max 10MB)",
     "fileRequired": "Commercial register file is required"
+  },
+  "orderStatus": {
+    "PENDING_APPROVAL": "Pending approval",
+    "APPROVED": "Approved",
+    "AWAITING_ROUTING": "Awaiting routing",
+    "ROUTED_TO_TRANSPORT": "Awaiting assignment",
+    "ASSIGNED_TO_DRIVER": "Assigned",
+    "PENDING_PAYMENT": "Pending payment",
+    "LOADING": "Loading",
+    "IN_TRANSIT": "In transit",
+    "UNLOADING": "Unloading",
+    "DELIVERED": "Delivered",
+    "REJECTED": "Rejected",
+    "CANCELLED": "Cancelled",
+    "unknown": "Unrecognised stage"
   }
 }
