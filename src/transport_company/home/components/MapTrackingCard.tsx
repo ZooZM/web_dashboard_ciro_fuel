@@ -1,6 +1,8 @@
 import { CustomGoogleMap } from '@/components/ui/CustomGoogleMap';
+import { useNavigate } from 'react-router-dom';
 
 export function MapTrackingCard() {
+  const navigate = useNavigate();
   const mapCenter = { lat: 24.7136, lng: 46.6753 }; // Riyadh coordinates
 
   return (
@@ -9,7 +11,12 @@ export function MapTrackingCard() {
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-sm font-black text-slate-800">تتبع الشحنات المباشرة</h2>
-        <button className="text-[11px] font-bold text-blue-600 hover:text-blue-700">عرض الكل</button>
+        <button 
+          onClick={() => navigate('/transport/tracking')}
+          className="text-[11px] font-bold text-blue-600 hover:text-blue-700"
+        >
+          عرض الكل
+        </button>
       </div>
 
       {/* Map Image */}
