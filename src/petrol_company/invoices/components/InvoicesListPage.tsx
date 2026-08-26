@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
+import { useQuery } from '@tanstack/react-query';
+import { Skeleton } from '@/components/ui/skeleton';
 import { DesktopInvoicesTable } from './DesktopInvoicesTable';
 import { MobileInvoicesList } from './MobileInvoicesList';
 import { CashbackBanner } from './CashbackBanner';
@@ -24,6 +26,16 @@ export function InvoicesListPage() {
   const [activeFilter, setActiveFilter] = useState('الكل');
   const location = useLocation();
   const isAdmin = location.pathname.startsWith('/admin');
+
+  const { data: invoices = [], isLoading } = useQuery({
+    queryKey: ['invoices', activeFilter],
+    queryFn: async () => {
+      // Simulating API call for architectural demonstration
+      return new Promise<typeof MOCK_INVOICES>((resolve) => 
+        setTimeout(() => resolve(MOCK_INVOICES), 1500)
+      );
+    }
+  });
 
   return (
     <div className="w-full p-4 md:p-6 flex-1 -mt-4 bg-[#F8FAFC] border border-[#E7E9EF] rounded-2xl min-h-full font-sans" dir="rtl">
@@ -201,13 +213,26 @@ export function InvoicesListPage() {
 
         </div>
 
-        {/* Desktop Table View */}
-        <DesktopInvoicesTable invoices={MOCK_INVOICES} />
+        {/* Loading State or Data */}
+        {isLoading ? (
+          <div className="p-6 space-y-4">
+            <Skeleton className="h-12 w-full" />
+            <Skeleton className="h-12 w-full" />
+            <Skeleton className="h-12 w-full" />
+            <Skeleton className="h-12 w-full" />
+            <Skeleton className="h-12 w-full" />
+          </div>
+        ) : (
+          <>
+            {/* Desktop Table View */}
+            <DesktopInvoicesTable invoices={invoices} />
 
-        {/* Mobile View: Cards layout instead of Table */}
-        <div className="px-4 pb-4 lg:px-0 lg:pb-0">
-          <MobileInvoicesList invoices={MOCK_INVOICES} />
-        </div>
+            {/* Mobile View: Cards layout instead of Table */}
+            <div className="px-4 pb-4 lg:px-0 lg:pb-0">
+              <MobileInvoicesList invoices={invoices} />
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

@@ -1,4 +1,8 @@
+import { CustomGoogleMap } from '@/components/ui/CustomGoogleMap';
+
 export function MapTrackingCard() {
+  const mapCenter = { lat: 24.7136, lng: 46.6753 }; // Riyadh coordinates
+
   return (
     <div className="bg-white border border-slate-200 rounded-3xl p-5 shadow-sm flex flex-col h-[420px]">
 
@@ -10,7 +14,10 @@ export function MapTrackingCard() {
 
       {/* Map Image */}
       <div className="relative flex-1 rounded-2xl overflow-hidden border border-slate-200 bg-slate-50 shadow-inner">
-        <img src="/transportCompany/home/map.png" alt="Map" className="w-full h-full object-cover" />
+        <CustomGoogleMap 
+          center={mapCenter} 
+          className="w-full h-full object-cover" 
+        />
       </div>
 
       {/* Legend */}

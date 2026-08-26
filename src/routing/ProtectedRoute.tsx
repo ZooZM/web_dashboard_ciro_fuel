@@ -1,7 +1,7 @@
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import type { Role } from '@/constants/roles';
 import { useSession } from '@/stores/session.store';
-
+import toast from 'react-hot-toast';
 interface ProtectedRouteProps {
   allow: readonly Role[];
   children?: React.ReactNode;
@@ -30,6 +30,9 @@ export function ProtectedRoute({ allow, children }: ProtectedRouteProps) {
   }
 
   if (status !== 'authenticated' || !user) {
+    if (status !== 'booting') {
+      toast.error('يرجى تسجيل الدخول أولاً')
+    }
     return <Navigate to="/" replace state={{ from: location }} />;
   }
 

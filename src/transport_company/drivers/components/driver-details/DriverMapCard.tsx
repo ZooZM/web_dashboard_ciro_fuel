@@ -1,10 +1,13 @@
 import { useNavigate, useLocation } from 'react-router-dom';
+import { CustomGoogleMap } from '@/components/ui/CustomGoogleMap';
 
 export function DriverMapCard() {
   const navigate = useNavigate();
   const location = useLocation();
   const isPetrol = location.pathname.includes('/petrolCompany');
   const trackPath = isPetrol ? '/petrolCompany/tracking' : '/transport/tracking';
+  const mapCenter = { lat: 24.7136, lng: 46.6753 }; // Riyadh coordinates
+  
   return (
     <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm flex flex-col gap-4 w-full h-fit">
       {/* Header */}
@@ -19,7 +22,10 @@ export function DriverMapCard() {
 
       {/* Map Image */}
       <div className="w-full rounded-xl overflow-hidden border border-slate-200 h-[180px] relative">
-        <img src="/transportCompany/orderPage/orderDetails/map.png" alt="Map" className="w-full h-full object-cover" />
+        <CustomGoogleMap 
+          center={mapCenter} 
+          className="w-full h-full object-cover" 
+        />
         <div className="absolute top-3 left-3  flex items-center justify-center">
           <img src="/transportCompany/DriverPage/editDriver/map.svg" alt="" className="w-full h-full object-contain" />
         </div>

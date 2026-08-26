@@ -1,4 +1,8 @@
+import { CustomGoogleMap } from '@/components/ui/CustomGoogleMap';
+
 export function AssignMapCard() {
+  const mapCenter = { lat: 24.7136, lng: 46.6753 }; // Riyadh coordinates
+
   return (
     <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm flex flex-col gap-4 h-full">
       <div className="flex items-center justify-between">
@@ -8,7 +12,10 @@ export function AssignMapCard() {
         </div>
       </div>
       <div className="flex-1 w-full rounded-xl overflow-hidden border border-slate-200 relative min-h-[250px]">
-        <img src="/transportCompany/orderPage/orderDetails/map.png" alt="Map" className="w-full h-full object-cover" />
+        <CustomGoogleMap 
+          center={mapCenter} 
+          className="w-full h-full object-cover" 
+        />
         <button className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm p-2 rounded-lg shadow-sm hover:bg-white transition-colors">
           <img src="/transportCompany/orderPage/orderDetails/buttonMap.svg" alt="" className="w-5 h-5" />
         </button>
