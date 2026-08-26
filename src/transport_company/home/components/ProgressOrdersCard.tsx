@@ -16,7 +16,10 @@ interface ProgressOrdersCardProps {
   onViewAllClick?: () => void;
 }
 
+import { useNavigate } from 'react-router-dom';
+
 export function ProgressOrdersCard({ onViewAllClick }: ProgressOrdersCardProps = {}) {
+  const navigate = useNavigate();
   return (
     <div className="bg-white border border-slate-200 rounded-3xl p-5 shadow-sm flex flex-col h-[420px]">
 
@@ -29,7 +32,7 @@ export function ProgressOrdersCard({ onViewAllClick }: ProgressOrdersCardProps =
           <h2 className="text-[17px] font-black text-[#1e293b]">الطلبات قيد التنفيذ</h2>
         </div>
         <button 
-          onClick={onViewAllClick}
+          onClick={onViewAllClick || (() => navigate('/transport/order-tracking'))}
           className="text-[14px] font-bold text-[#2563eb] hover:text-blue-700"
         >
           عرض الكل

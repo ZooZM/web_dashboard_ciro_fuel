@@ -161,6 +161,7 @@ export const router = createBrowserRouter([
       { path: 'profile', element: <ProfilePage /> },
       { path: 'terms', element: <TermsPage /> },
       { path: 'help', element: <HelpPage /> },
+      { path: 'order-tracking', element: <OrderTrackingPage /> },
     ]
   },
 

@@ -1,4 +1,5 @@
 import { NewOrderRow } from './NewOrderRow';
+import { useNavigate } from 'react-router-dom';
 
 // ---- Mock Data (easy to replace with real API data) ----
 const NEW_ORDERS = [
@@ -14,7 +15,9 @@ const NEW_ORDERS = [
   { logo: '/transportCompany/home/petroAman.jpg', companyName: 'شركة بترو أمان', location: 'جدة - الرحاب', time: 'اليوم، 10:90 م', quantity: '20,000', fuelType: 'بنزين 98' },
 ];
 
+
 export function NewOrdersCard() {
+  const navigate = useNavigate();
   return (
     <div className="bg-white border border-slate-200 rounded-3xl p-5 shadow-sm flex flex-col h-[420px]">
 
@@ -26,7 +29,7 @@ export function NewOrdersCard() {
           </span>
           <h2 className="text-[17px] font-black text-[#1e293b]">الطلبات الجديدة</h2>
         </div>
-        <button className="text-[14px] font-bold text-[#2563eb] hover:text-blue-700">عرض الكل</button>
+        <button className="text-[14px] font-bold text-[#2563eb] hover:text-blue-700" onClick={()=>navigate('/transport/order-tracking')}>عرض الكل</button>
       </div>
 
       {/* Rows */}
