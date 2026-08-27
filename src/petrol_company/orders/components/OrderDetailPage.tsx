@@ -8,6 +8,7 @@ import { EditTransportDetailsCard } from './order-details/EditTransportDetailsCa
 import { OrderDataCard } from './order-details/OrderDataCard';
 import { TrackingTimelineCard } from './order-details/TrackingTimelineCard';
 import { LinkedInvoicesCard } from './order-details/LinkedInvoicesCard';
+import { LimitCard } from './order-details/LimitCard';
 
 export function OrderDetailPage() {
   const [isEditingTransport, setIsEditingTransport] = useState(false);
@@ -15,7 +16,9 @@ export function OrderDetailPage() {
   return (
     <div className="w-full flex-1 p-4 md:p-6 font-sans -mt-4 bg-[#F8FAFC] border border-[#E7E9EF] rounded-2xl min-h-full" dir="rtl">
       <OrderHeader />
-
+      <div className='mb-5'>
+        <LimitCard/>
+      </div>
       {/* Main Grid */}
       <div className="flex flex-col lg:flex-row gap-6 items-start">
         

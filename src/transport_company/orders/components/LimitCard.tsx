@@ -48,7 +48,7 @@ export function LimitCard() {
                     </div>
                 </div>
                 <div
-                    className="text-sm font-bold hover:underline"
+                    className="text-sm font-bold "
                 >
 
                     <div className="text-xl font-bold">46.600 <span className="text-sm font-normal">ر.س</span></div>
