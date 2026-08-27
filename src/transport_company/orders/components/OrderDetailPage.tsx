@@ -6,7 +6,8 @@ import { LinkedInvoicesCard } from './order-details/LinkedInvoicesCard';
 import { CustomerDataCard } from './order-details/CustomerDataCard';
 import { MapCard } from './order-details/MapCard';
 import { AssignedDriverCard } from './order-details/AssignedDriverCard';
-import {LimitCard} from './limitCard'
+import { Sadaad } from '../../../components/order payment state/Sadaad'
+import { Default } from '@/components/order payment state/Default';
 
 export function OrderDetailPage() {
 
@@ -14,7 +15,7 @@ export function OrderDetailPage() {
     <div className="w-full flex-1 p-4 md:p-6 font-sans -mt-4 bg-[#F8FAFC] border border-[#E7E9EF] rounded-2xl min-h-full" dir="rtl">
       <OrderHeader />
       <div className='mb-5'>
-      <LimitCard/>
+        <Sadaad />
       </div>
 
       {/* Main Grid */}

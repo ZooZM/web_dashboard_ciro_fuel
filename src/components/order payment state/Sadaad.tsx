@@ -1,4 +1,4 @@
-export function LimitCard() {
+export function Sadaad() {
     return (
         <div className="bg-white rounded-2xl p-6 shadow-xl flex flex-col overflow-hidden">
             <div className="flex items-center justify-between">

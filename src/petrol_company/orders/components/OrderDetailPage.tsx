@@ -8,7 +8,7 @@ import { EditTransportDetailsCard } from './order-details/EditTransportDetailsCa
 import { OrderDataCard } from './order-details/OrderDataCard';
 import { TrackingTimelineCard } from './order-details/TrackingTimelineCard';
 import { LinkedInvoicesCard } from './order-details/LinkedInvoicesCard';
-import { LimitCard } from './order-details/LimitCard';
+import { LimitCard } from '../../../components/order payment state/LimitCard';
 
 export function OrderDetailPage() {
   const [isEditingTransport, setIsEditingTransport] = useState(false);

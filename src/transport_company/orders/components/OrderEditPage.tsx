@@ -5,7 +5,7 @@ import { AssignedDriverCard } from './order-details/AssignedDriverCard';
 import { OrderDataCard } from './order-details/OrderDataCard';
 import { TrackingTimelineCard } from './order-details/TrackingTimelineCard';
 import { EditTransportDetailsCard } from './order-details/EditTransportDetailsCard';
-import { LimitCard } from './limitCard';
+import { Sadaad } from '../../../components/order payment state/Sadaad';
 
 export function OrderEditPage() {
 
@@ -24,11 +24,11 @@ export function OrderEditPage() {
         <h1 className="text-2xl font-black text-slate-900">تفاصيل الطلب – ORD-2024-256</h1>
       </div>
       <div className='mb-5'>
-      <LimitCard/>
+        <Sadaad />
       </div>
       {/* Main Grid */}
       <div className="flex flex-col lg:flex-row gap-6 items-start">
-        
+
         {/* Right Column (Wider) */}
         <div className="flex-1 w-full flex flex-col gap-6">
           <EditTransportDetailsCard />
