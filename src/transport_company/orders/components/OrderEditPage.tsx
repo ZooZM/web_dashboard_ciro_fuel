@@ -5,6 +5,7 @@ import { AssignedDriverCard } from './order-details/AssignedDriverCard';
 import { OrderDataCard } from './order-details/OrderDataCard';
 import { TrackingTimelineCard } from './order-details/TrackingTimelineCard';
 import { EditTransportDetailsCard } from './order-details/EditTransportDetailsCard';
+import { LimitCard } from './limitCard';
 
 export function OrderEditPage() {
 
@@ -22,7 +23,9 @@ export function OrderEditPage() {
         </div>
         <h1 className="text-2xl font-black text-slate-900">تفاصيل الطلب – ORD-2024-256</h1>
       </div>
-
+      <div className='mb-5'>
+      <LimitCard/>
+      </div>
       {/* Main Grid */}
       <div className="flex flex-col lg:flex-row gap-6 items-start">
         
