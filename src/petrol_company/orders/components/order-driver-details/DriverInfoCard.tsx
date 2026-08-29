@@ -11,9 +11,6 @@ export function DriverInfoCard() {
           </div>
           <span className="text-[#162155] font-bold text-base">معلومات السائق</span>
         </div>
-        <button className="w-10 h-10 flex items-center justify-center bg-white border border-slate-200 rounded-xl hover:bg-slate-50 shadow-sm shrink-0">
-          <Edit className="w-4 h-4 text-blue-600" />
-        </button>
       </div>
 
       {/* Details Grid */}
@@ -27,11 +24,7 @@ export function DriverInfoCard() {
 
         {/* كود السائق */}
         <div className="flex flex-col gap-1 text-right">
-          <div className="flex items-center justify-end gap-1.5">
-            <div className="flex items-center gap-1 bg-red-50 border border-red-100 px-2 py-0.5 rounded-full">
-              <Lock className="w-2.5 h-2.5 text-red-500" />
-              <span className="text-red-400 text-[9px] font-bold">غير قابل للتعديل</span>
-            </div>
+          <div className="flex items-center justify-start gap-1.5">
             <span className="text-slate-400 text-xs font-bold">كود السائق</span>
           </div>
           <span className="text-slate-800 font-black text-sm">TRN-2024-001</span>
@@ -45,11 +38,7 @@ export function DriverInfoCard() {
 
         {/* رقم الجوال */}
         <div className="flex flex-col gap-1 text-right">
-          <div className="flex items-center justify-end gap-1.5">
-            <div className="flex items-center gap-1 bg-red-50 border border-red-100 px-2 py-0.5 rounded-full">
-              <Lock className="w-2.5 h-2.5 text-red-500" />
-              <span className="text-red-400 text-[9px] font-bold">غير قابل للتعديل</span>
-            </div>
+          <div className="flex items-center justify-start gap-1.5">
             <span className="text-slate-400 text-xs font-bold">رقم الجوال</span>
           </div>
           <span className="text-[#162155] font-black text-sm" dir="ltr">05xxxxxxxx</span>
