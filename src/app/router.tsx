@@ -46,11 +46,9 @@ import { StationDetailsPage as PetrolStationDetailsPage } from '@/petrol_company
 import { AddStationOwnerPage as PetrolAddStationOwnerPage } from '@/petrol_company/stations/components/AddStationOwnerPage';
 import { TrackingPage } from '@/transport_company/tracking/components/TrackingPage';
 import { OrderDetailPage } from '@/transport_company/orders/components/OrderDetailPage';
-import { OrderEditPage } from '@/transport_company/orders/components/OrderEditPage';
 import { DriversPage } from '@/transport_company/drivers/components/DriversPage';
 import { AddDriverPage } from '@/transport_company/drivers/components/AddDriverPage';
 import { DriverDetailsPage } from '@/transport_company/drivers/components/driver-details/DriverDetailsPage';
-import { ClientsPage } from '@/transport_company/clients/components/ClientsPage';
 import { SettingsPage } from '@/transport_company/settings/components/SettingsPage';
 import { ProfilePage } from '@/transport_company/profile/components/ProfilePage';
 import { TermsPage } from '@/transport_company/terms/components/TermsPage';
@@ -143,7 +141,6 @@ export const router = createBrowserRouter([
       { path: 'notifications', element: <NotificationsPage /> },
       { path: 'orders', element: <OrdersListPage /> },
       { path: 'orders/:id', element: <OrderDetailPage /> },
-      { path: 'orders/:id/edit', element: <OrderEditPage /> },
       { path: 'orders/:id/assign', element: <OrderAssignPage /> },
       { path: 'tracking', element: <TrackingPage /> },
       { path: 'delivery-areas', element: <DeliveryAreasPage /> },
@@ -152,7 +149,6 @@ export const router = createBrowserRouter([
       { path: 'drivers/add', element: <AddDriverPage /> },
       { path: 'drivers/:id', element: <DriverDetailsPage /> },
       { path: 'trucks', element: <TrucksAndTanksPage /> },
-      { path: 'clients', element: <ClientsPage /> },
       { path: 'settings', element: <SettingsPage /> },
       { path: 'profile', element: <ProfilePage /> },
       { path: 'terms', element: <TermsPage /> },

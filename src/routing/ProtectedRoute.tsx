@@ -30,9 +30,9 @@ export function ProtectedRoute({ allow, children }: ProtectedRouteProps) {
   }
 
   if (status !== 'authenticated' || !user) {
-    if (status !== 'booting') {
-      toast.error('يرجى تسجيل الدخول أولاً')
-    }
+    // `status === 'booting'` already returned above, so reaching here means
+    // 'anonymous' — the guard this used to repeat could never be false.
+    toast.error('يرجى تسجيل الدخول أولاً');
     return <Navigate to="/" replace state={{ from: location }} />;
   }
 

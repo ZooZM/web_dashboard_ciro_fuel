@@ -9,7 +9,10 @@
     "retry": "إعادة المحاولة",
     "back": "رجوع",
     "language": "اللغة",
-    "fullName": "الاسم الكامل"
+    "fullName": "الاسم الكامل",
+    "all": "الكل",
+    "quantity": "الكمية",
+    "review": "مراجعة"
   },
   "auth": {
     "login": {
@@ -43,7 +46,8 @@
     "forceComplete": "إنهاء يدوي",
     "reason": "السبب",
     "empty": "لا توجد طلبات حالياً",
-    "detail": "تفاصيل الطلب"
+    "detail": "تفاصيل الطلب",
+    "fuelType": "نوع الوقود"
   },
   "drivers": {
     "title": "السائقون",
@@ -53,7 +57,15 @@
     "fuelTypes": "أنواع الوقود المدعومة",
     "active": "نشط",
     "inactive": "غير نشط",
-    "empty": "لا يوجد سائقون بعد"
+    "empty": "لا يوجد سائقون بعد",
+    "createError": "تعذر إنشاء حساب السائق. يرجى التحقق من البيانات والمحاولة مرة أخرى.",
+    "loginMethodNote": "يسجّل السائق الدخول بالبريد الإلكتروني وكلمة المرور المدخلة هنا — لا يوجد رمز تفعيل منفصل.",
+    "notYetRated": "لم يُقيَّم بعد",
+    "rating": "التقييم",
+    "reinstate": "إعادة تفعيل",
+    "suspend": "إيقاف",
+    "locationOnMap": "الموقع على الخريطة",
+    "trackTruck": "تتبع الشاحنة"
   },
   "clients": {
     "title": "العملاء",
@@ -103,5 +115,183 @@
     "REJECTED": "مرفوض",
     "CANCELLED": "ملغى",
     "unknown": "حالة غير معروفة"
+  },
+  "trucks": {
+    "title": "الشاحنات والتانكات",
+    "subtitle": "إدارة رؤوس الشاحنات والتانكات المقطورة بشكل مستقل - يتم ربطهم بسائق عند إسناد كل رحلة",
+    "totalTrucks": "إجمالي الشاحنات",
+    "totalTanks": "إجمالي التانكات",
+    "totalCapacity": "إجمالي السعة",
+    "tabTrucks": "الشاحنات",
+    "tabTanks": "التانكات",
+    "truckEntity": "شاحنة",
+    "tankEntity": "تانك",
+    "addEntity": "إضافة {{entity}}",
+    "plateNumber": "رقم اللوحة",
+    "model": "الطراز",
+    "tankCode": "كود التانك",
+    "capacity": "السعة",
+    "liters": "لتر",
+    "material": "نوع الهيكل",
+    "materialAluminium": "ألومنيوم",
+    "materialIron": "حديد",
+    "withdraw": "إيقاف الخدمة",
+    "restore": "إعادة التفعيل",
+    "statusAvailable": "متاح",
+    "statusCommitted": "مرتبط برحلة",
+    "statusWithdrawn": "متوقف",
+    "noTrucks": "لا توجد شاحنات مسجلة بعد",
+    "noTanks": "لا توجد تانكات مسجلة بعد",
+    "duplicatePlate": "توجد شاحنة بنفس رقم اللوحة بالفعل.",
+    "duplicateTankCode": "يوجد تانك بنفس الكود بالفعل.",
+    "pairing": {
+      "title": "ربط كارت — {{plate}}",
+      "pair": "ربط كارت",
+      "rePair": "إعادة ربط الكارت",
+      "cardPaired": "الكارت مرتبط",
+      "noCard": "لا يوجد كارت",
+      "codeActive": "الرمز مفعّل",
+      "noCode": "لا يوجد رمز",
+      "waitingForReader": "بانتظار تمرير الكارت...",
+      "readWithDevice": "قراءة عبر هذا الجهاز",
+      "deviceReading": "جارٍ القراءة...",
+      "deviceError": "تعذر على هذا الجهاز قراءة الكارت. استخدم القارئ أو أدخل الرمز يدوياً.",
+      "manualPlaceholder": "أدخل معرّف الكارت يدوياً",
+      "useManual": "استخدام هذه القيمة",
+      "captured": "تم الالتقاط — ربط بـ {{target}}؟",
+      "manualEntry": "تم الإدخال يدوياً",
+      "confirm": "تأكيد الربط",
+      "alreadyPaired": "هذا الكارت مرتبط بالفعل بشاحنة أخرى.",
+      "alreadyPairedNamed": "هذا الكارت مرتبط بالفعل بالشاحنة {{plate}}."
+    }
+  },
+  "assign": {
+    "title": "إسناد السائق",
+    "destinationMap": "الوجهة",
+    "noAddress": "لا يوجد عنوان توصيل مسجل",
+    "notSelected": "لم يتم الاختيار",
+    "notAssignable": "هذا الطلب لم يعد بانتظار الإسناد.",
+    "noDriversRegistered": "لا يوجد سائقون مسجّلون لدى هذه الشركة بعد",
+    "selectionHint": "ملحوظة: عند اختيار سائق، يتم تحديد آخر شاحنة تعامل معها تلقائياً، ويمكن اختيار غيرها في حال كانت غير متاحة.",
+    "confirm": "تأكيد الإسناد",
+    "eligibility": {
+      "busy": "مرتبط برحلة أخرى حالياً",
+      "offlineSince": "غير متصل — آخر ظهور {{time}}",
+      "neverOnline": "لم يتصل من قبل",
+      "inactive": "معطّل"
+    },
+    "offlineReasonLabel": "سبب إسناد سائق غير متصل (مطلوب)",
+    "offlineReasonPlaceholder": "مثال: أقرب سائق متاح، ومن المتوقع اتصاله قريباً",
+    "refusal": {
+      "tankCapacity": "التانك المختار لا يمكنه حمل كمية هذا الطلب.",
+      "tankGrade": "التانك المختار غير مصرح له بحمل نوع وقود هذا الطلب.",
+      "truckUnavailable": "الشاحنة المختارة لم تعد متاحة (متوقفة أو مرتبطة برحلة أخرى).",
+      "tankUnavailable": "التانك المختار لم يعد متاحاً (متوقف أو مرتبط برحلة أخرى).",
+      "noWarehouse": "لا يوجد مستودع فعّال يوفر نوع وقود هذا الطلب.",
+      "reasonRequired": "يجب إدخال سبب لإسناد سائق غير متصل حالياً.",
+      "generic": "تعذر إتمام هذا الإسناد. يرجى التحديث والمحاولة مرة أخرى."
+    },
+    "acknowledgment": {
+      "waiting": "في انتظار تأكيد السائق",
+      "smsSentAt": "تم إرسال رسالة نصية إلى السائق في {{time}}",
+      "acknowledgedAt": "أكّد السائق الاستلام في {{time}}",
+      "assignedWhileOffline": "تم الإسناد أثناء عدم الاتصال — يوجد سبب مسجّل"
+    },
+    "assignedDriver": "السائق المسند",
+    "contactDriver": "تواصل مع السائق",
+    "customerData": "بيانات العميل",
+    "customerUnavailable": "تتوفر بيانات التواصل مع العميل بعد إسناد سائق.",
+    "eta": "الوقت المتوقع للوصول",
+    "minutes": "دقيقة",
+    "noDriverYet": "لم يُسند بعد",
+    "noHistory": "لا يوجد سجل مراحل بعد",
+    "notTrackable": "غير قابل للتتبع حالياً",
+    "overridden": "تجاوز يدوي",
+    "timeline": "سجل المراحل",
+    "trackTruck": "تتبع الشاحنة"
+  },
+  "tracking": {
+    "title": "التتبع",
+    "noDeliveries": "لا توجد شحنات في الطريق حالياً",
+    "selectDelivery": "اختر شحنة لتتبعها",
+    "viewOrder": "عرض الطلب",
+    "stalePosition": "قد يكون الموقع غير محدّث — آخر تحديث منذ {{seconds}} ثانية",
+    "liveTitle": "تتبع الشحنات المباشرة"
+  },
+  "stalled": {
+    "title": "معالجة شحنة متعثرة",
+    "overrideVerification": "تجاوز التحقق",
+    "reasonPlaceholder": "اذكر سبب التجاوز (10 أحرف على الأقل)",
+    "confirmOverride": "تأكيد التجاوز",
+    "reassignVehicle": "إعادة تعيين المركبة",
+    "confirmReassign": "تأكيد إعادة التعيين",
+    "alreadyDeparted": "هذه الشحنة غادرت بالفعل — لا يمكن إعادة تعيين المركبة الآن."
+  },
+  "dashboard": {
+    "greeting": "مرحباً {{name}}",
+    "subtitle": "إليك ملخص عمليات النقل والتوصيل اليوم",
+    "awaitingAssignment": "بانتظار الإسناد",
+    "inProgress": "قيد التنفيذ",
+    "completedInPeriod": "مكتملة",
+    "driversOnDuty": "السائقون في الخدمة",
+    "outstandingSettlements": "مستحق التحصيل",
+    "newOrders": "الطلبات الجديدة",
+    "noNewOrders": "لا توجد طلبات بانتظار الإسناد",
+    "noInProgress": "لا توجد شحنات قيد التنفيذ",
+    "viewAll": "عرض الكل",
+    "quickActions": {
+      "title": "إجراءات سريعة",
+      "viewInvoices": {
+        "title": "عرض الفواتير",
+        "subtitle": "الفواتير و المستحقات"
+      },
+      "updateFare": {
+        "title": "تحديث أجرة النقل",
+        "subtitle": "تحديث تسعيرة المناطق"
+      },
+      "addDriver": {
+        "title": "إضافة سائق",
+        "subtitle": "إضافة سائق جديد"
+      },
+      "assignOrder": {
+        "title": "إسناد طلب جديد",
+        "subtitle": "تعيين سائق و مركبة"
+      }
+    }
+  },
+  "invoices": {
+    "title": "الفواتير",
+    "amount": "المبلغ",
+    "issued": "تاريخ الإصدار",
+    "action": "إجراء",
+    "settle": "تسوية",
+    "empty": "لا توجد فواتير بعد",
+    "state": {
+      "ISSUED": "مستحقة",
+      "SETTLED": "مسددة",
+      "VOID": "ملغاة"
+    }
+  },
+  "stopAlert": {
+    "title": "توقف الشحنة",
+    "state": {
+      "waiting": "متوقف — بانتظار توضيح السائق",
+      "escalated": "متوقف — لم يرد السائق",
+      "answered": "متوقف — أوضح السائق السبب",
+      "declared": "توقف مخطط — أبلغنا السائق مسبقًا",
+      "resolved": "تمت المعالجة"
+    },
+    "noResponse": "سُئل السائق عن سبب التوقف ولم يرد خلال المهلة المحددة.",
+    "expectedDuration": "من المتوقع أن يستغرق نحو {{minutes}} دقيقة",
+    "markHandled": "تحديد كمعالج",
+    "reason": {
+      "TRAFFIC": "ازدحام مروري",
+      "VEHICLE_PROBLEM": "عطل في المركبة",
+      "REST_OR_PRAYER": "استراحة أو صلاة",
+      "REFUELLING": "تعبئة وقود",
+      "ROAD_CLOSURE": "الطريق مغلق",
+      "ACCIDENT": "حادث",
+      "OTHER": "سبب آخر"
+    }
   }
 }

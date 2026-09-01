@@ -1,106 +1,97 @@
-import { MapPin } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { CustomGoogleMap } from '@/components/ui/CustomGoogleMap';
-import { useRef, useCallback } from 'react';
+import { useTracking } from './TrackingContext';
 
+const STALE_THRESHOLD_MS = 60_000; // matches SC-004's 60s bound
+
+/**
+ * Feature 009 T052/FR-017/FR-018/SC-004: the platform decides trackability — this card
+ * only renders what `useOrderPosition` reports, never a local judgement. Seeds from the
+ * order's own `driverLocation` so the map draws before the first live update arrives; once
+ * live, position updates without a reload; if updates stop, states staleness with age
+ * rather than silently freezing on the last point.
+ */
 export function TrackingMapCard() {
-  const mapCenter = { lat: 24.7136, lng: 46.6753 }; // Riyadh coordinates
+  const { t } = useTranslation();
+  const { selectedOrder, position } = useTracking();
   const mapRef = useRef<google.maps.Map | null>(null);
+  const [, forceTick] = useState(0);
 
-  const handleZoomIn = useCallback(() => {
-    if (mapRef.current) {
-      mapRef.current.setZoom((mapRef.current.getZoom() || 13) + 1);
-    }
+  // Re-render every few seconds so the "stale, Ns ago" label keeps counting up.
+  useEffect(() => {
+    const interval = setInterval(() => forceTick((n) => n + 1), 5000);
+    return () => clearInterval(interval);
   }, []);
 
-  const handleZoomOut = useCallback(() => {
-    if (mapRef.current) {
-      mapRef.current.setZoom((mapRef.current.getZoom() || 13) - 1);
-    }
-  }, []);
+  if (!selectedOrder) {
+    return (
+      <div className="w-full h-[400px] md:h-[500px] rounded-2xl border border-slate-200 bg-white flex items-center justify-center">
+        <p className="text-sm text-slate-400">{t('tracking.selectDelivery')}</p>
+      </div>
+    );
+  }
+
+  if (position.status === 'not-trackable') {
+    return (
+      <div className="w-full h-[400px] md:h-[500px] rounded-2xl border border-slate-200 bg-white flex items-center justify-center">
+        <p className="text-sm text-amber-600 font-bold">{t('assign.notTrackable')}</p>
+      </div>
+    );
+  }
+
+  const seeded = selectedOrder.driverLocation;
+  const center =
+    position.status === 'live'
+      ? { lat: position.lat, lng: position.lng }
+      : seeded
+        ? { lat: seeded.lat, lng: seeded.lng }
+        : { lat: 24.7136, lng: 46.6753 };
+
+  // spec 011 FR-017a. The original check covered only the LIVE case — a
+  // socket that had been delivering and then went quiet. It missed the case
+  // that matters most: a socket that never delivered anything at all. There,
+  // the map falls back to `seeded` (the order's own last recorded fix) and
+  // used to draw it with no marking whatsoever — a position frozen in place,
+  // presented exactly as though it were current. A truck whose driver's phone
+  // died and a truck parked at that spot rendered identically.
+  //
+  // Both paths now feed one age, so both are marked. `driverLocationAt` is
+  // what the platform recorded for the seeded fix; the live path keeps using
+  // its own arrival time, which is more accurate when it applies.
+  const seededAgeMs =
+    selectedOrder.driverLocationAt !== null && selectedOrder.driverLocationAt !== undefined
+      ? Date.now() - new Date(selectedOrder.driverLocationAt).getTime()
+      : null;
+  const ageMs =
+    position.status === 'live' ? Date.now() - position.lastReceivedAt : seededAgeMs;
+  const isStale = ageMs !== null && ageMs > STALE_THRESHOLD_MS;
+  const staleSeconds = ageMs !== null ? Math.floor(ageMs / 1000) : 0;
 
   return (
     <div className="relative w-full h-[400px] md:h-[500px] rounded-2xl overflow-hidden border border-slate-200 shadow-sm shrink-0">
-      
-      {/* Background Map Image */}
-      <CustomGoogleMap 
-        center={mapCenter} 
-        className="absolute inset-0 w-full h-full object-cover" 
-        onLoad={(map) => { mapRef.current = map; }}
+      <CustomGoogleMap
+        center={center}
+        className="absolute inset-0 w-full h-full object-cover"
+        onLoad={(map) => {
+          mapRef.current = map;
+        }}
         options={{ zoomControl: false }}
       />
 
-      {/* Top Left Control */}
-      <div className="absolute top-4 left-4">
-        <button className="w-10 h-10 bg-white rounded-xl shadow-md flex items-center justify-center text-blue-600 hover:bg-slate-50 transition-colors">
-          <img src="/transportCompany/trackingPage/location.svg" alt="" className="w-5 h-5" />
-        </button>
-      </div>
-
-      {/* Bottom Left Controls */}
-      <div className="absolute left-4 bottom-4 flex flex-col gap-2">
-        <button className="w-10 h-10 bg-white rounded-xl shadow-md flex items-center justify-center text-blue-600 hover:bg-slate-50 transition-colors">
-          <img src="/transportCompany/trackingPage/reload.svg" alt="" className="w-5 h-5" />
-        </button>
-        <button onClick={handleZoomIn} className="w-10 h-10 bg-white rounded-xl shadow-md flex items-center justify-center text-blue-600 hover:bg-slate-50 transition-colors">
-          <img src="/transportCompany/trackingPage/zoomIn.svg" alt="" className="w-5 h-5" />
-        </button>
-        <button onClick={handleZoomOut} className="w-10 h-10 bg-white rounded-xl shadow-md flex items-center justify-center text-blue-600 hover:bg-slate-50 transition-colors">
-          <img src="/transportCompany/trackingPage/zoomOut.svg" alt="" className="w-5 h-5" />
-        </button>
-        <button className="w-10 h-10 bg-white rounded-xl shadow-md flex items-center justify-center text-blue-600 hover:bg-slate-50 transition-colors">
-          <img src="/transportCompany/trackingPage/share.svg" alt="" className="w-5 h-5" />
-        </button>
-      </div>
-
-      {/* Top Right Card: Time Remaining */}
-      <div className="absolute top-4 right-4 bg-white/95 backdrop-blur-sm rounded-2xl p-4 shadow-lg flex items-center gap-4">
-
-       <div className="relative w-14 h-14 flex items-center justify-center">
-          {/* Circular Progress SVG */}
-          <svg className="absolute inset-0 w-full h-full transform -rotate-90" viewBox="0 0 36 36">
-            <path
-              className="text-slate-100"
-              strokeWidth="3"
-              stroke="currentColor"
-              fill="none"
-              d="M18 2.0845
-                a 15.9155 15.9155 0 0 1 0 31.831
-                a 15.9155 15.9155 0 0 1 0 -31.831"
-            />
-            <path
-              className="text-[#16A34A]"
-              strokeWidth="3"
-              strokeDasharray="75, 100"
-              strokeLinecap="round"
-              stroke="currentColor"
-              fill="none"
-              d="M18 2.0845
-                a 15.9155 15.9155 0 0 1 0 31.831
-                a 15.9155 15.9155 0 0 1 0 -31.831"
-            />
-          </svg>
-          <div className=" w-10 h-10 rounded-full flex items-center justify-center relative z-10">
-             <img src="/transportCompany/trackingPage/hollowTruck.svg" alt="" className="w-6 h-6 object-contain" />
-          </div>
+      {isStale && (
+        <div className="absolute top-4 right-4 bg-amber-50 border border-amber-300 rounded-xl px-4 py-2 shadow-lg">
+          <span className="text-amber-700 text-xs font-bold">
+            {t('tracking.stalePosition', { seconds: staleSeconds })}
+          </span>
         </div>
+      )}
 
-        <div className="flex flex-col text-center">
-          <span className="text-slate-800 font-bold text-xs mb-1">المتبقي للوصول</span>
-          <span className="text-[#162155] font-bold text-lg leading-none">35</span>
-          <span className="text-slate-500 font-bold text-[10px]">دقيقة</span>
+      {position.status === 'connecting' && (
+        <div className="absolute inset-0 flex items-center justify-center bg-white/60">
+          <span className="text-sm text-slate-500 font-bold">{t('common.loading')}</span>
         </div>
-       
-      </div>
-
-      {/* Bottom Right Card: Distance Remaining */}
-      <div className="absolute bottom-4 right-4 bg-white/95 backdrop-blur-sm rounded-xl px-4 py-3 shadow-lg flex items-center gap-0.5">
-          <div className=" w-6 h-6 rounded-full flex items-center justify-center shrink-0">
-          <MapPin className="w-3.5 h-3.5 text-[#16A34A]" />
-        </div>
-        <span className="text-slate-800 font-bold text-xs">المسافة المتبقية <span className="text-[#162155] font-black">1.2 </span> <span>كم</span></span>
-        
-      </div>
-
+      )}
     </div>
   );
 }

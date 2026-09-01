@@ -112,20 +112,41 @@ export const CompanyStatus = {
 
 export type CompanyStatus = (typeof CompanyStatus)[keyof typeof CompanyStatus];
 
+// Feature 010 FR-002/FR-004: computed by the platform per candidate, never inferred
+// client-side — four values, not a boolean, because the two ineligible-but-selectable-with-
+// a-reason states (BUSY vs OFFLINE) must read distinctly, and INACTIVE is a separate,
+// never-selectable-at-all state (corrected during implementation: a suspended/deactivated
+// driver is still shown, per FR-001's "whole roster," but has no override path at all,
+// unlike BUSY/OFFLINE, and only OFFLINE actually accepts one — see the platform's own
+// dispatch.service.ts for why BUSY can never be force-assigned).
+export const DriverEligibility = {
+  ELIGIBLE: 'ELIGIBLE',
+  BUSY: 'BUSY',
+  OFFLINE: 'OFFLINE',
+  INACTIVE: 'INACTIVE',
+} as const;
+
+export type DriverEligibility = (typeof DriverEligibility)[keyof typeof DriverEligibility];
+
+// Feature 009 (found wiring the tank form, T040/FR-011): these four values did not match
+// the platform's `FuelType` enum at all — `OCTANE_98` doesn't exist on the platform, and the
+// platform's `KEROSENE` didn't exist here. An order's `fuelType` and a tank's `fuelTypes`
+// both carry the platform's literal values, so a tank's grade guard (FR-011, TANK_GRADE_
+// UNSUPPORTED) could never have matched correctly against this vocabulary.
 export const FuelType = {
-  OCTANE_91: '91',
-  OCTANE_95: '95',
-  OCTANE_98: '98',
   DIESEL: 'DIESEL',
+  PETROL_91: 'PETROL_91',
+  PETROL_95: 'PETROL_95',
+  KEROSENE: 'KEROSENE',
 } as const;
 
 export type FuelType = (typeof FuelType)[keyof typeof FuelType];
 
 export const FUEL_TYPES: readonly FuelType[] = [
-  FuelType.OCTANE_91,
-  FuelType.OCTANE_95,
-  FuelType.OCTANE_98,
   FuelType.DIESEL,
+  FuelType.PETROL_91,
+  FuelType.PETROL_95,
+  FuelType.KEROSENE,
 ];
 
 export type Language = 'ar' | 'en';

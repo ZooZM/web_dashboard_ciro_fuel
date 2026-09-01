@@ -11,6 +11,7 @@ export interface NewOrder {
 }
 
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { FuelIcon } from '../../tracking/components/FuelIcon';
 
 interface NewOrderRowProps {
@@ -18,6 +19,7 @@ interface NewOrderRowProps {
 }
 
 export function NewOrderRow({ order }: NewOrderRowProps) {
+  const { t } = useTranslation();
   const orderId = order.id || '1'; // Defaulting to 1 if no id is provided in mock data
 
   return (
@@ -43,7 +45,7 @@ export function NewOrderRow({ order }: NewOrderRowProps) {
         <div className="sm:hidden shrink-0 ml-1">
           <Link to={`/transport/orders/${orderId}`}>
             <button className="px-3 py-1.5 rounded-xl text-[12px] font-bold bg-[#E8F5E9] text-[#12A150] border border-[#12A150]/20 hover:bg-[#d1fae5] transition-colors whitespace-nowrap">
-              مراجعة
+              {t('common.review')}
             </button>
           </Link>
         </div>
@@ -61,7 +63,7 @@ export function NewOrderRow({ order }: NewOrderRowProps) {
             <span className="text-[10px] text-[#64748b]">{order.fuelType}</span>
           </div>
           <div className="flex flex-col items-end gap-0.5">
-            <span className="text-[10px] text-[#64748b]">الكمية</span>
+            <span className="text-[10px] text-[#64748b]">{t('common.quantity')}</span>
             <span className="text-[13px] font-bold text-[#1e293b]" dir="ltr">{order.quantity}</span>
           </div>
         </div>
@@ -70,7 +72,7 @@ export function NewOrderRow({ order }: NewOrderRowProps) {
         <div className="hidden sm:flex shrink-0 w-[68px] justify-center mr-2">
           <Link to={`/transport/orders/${orderId}`}>
             <button className="px-3 py-1.5 rounded-xl text-[12px] font-bold bg-[#E8F5E9] text-[#12A150] border border-[#12A150]/20 hover:bg-[#d1fae5] transition-colors whitespace-nowrap">
-              مراجعة
+              {t('common.review')}
             </button>
           </Link>
         </div>

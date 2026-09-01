@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useApproveOrder } from '@/transport_company/orders/hooks/useOrders';
+import { useApproveOrder } from '@/petrol_company/orders/hooks/useOrderActions';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {

@@ -9,7 +9,10 @@
     "retry": "Retry",
     "back": "Back",
     "language": "Language",
-    "fullName": "Full name"
+    "fullName": "Full name",
+    "all": "All",
+    "quantity": "Quantity",
+    "review": "Review"
   },
   "auth": {
     "login": {
@@ -43,7 +46,8 @@
     "forceComplete": "Force complete",
     "reason": "Reason",
     "empty": "No orders yet",
-    "detail": "Order detail"
+    "detail": "Order detail",
+    "fuelType": "Fuel grade"
   },
   "drivers": {
     "title": "Drivers",
@@ -53,7 +57,15 @@
     "fuelTypes": "Supported fuel types",
     "active": "Active",
     "inactive": "Inactive",
-    "empty": "No drivers yet"
+    "empty": "No drivers yet",
+    "createError": "Could not create the driver. Please check the details and try again.",
+    "loginMethodNote": "The driver signs in with the email and password set here — there is no separate activation code.",
+    "notYetRated": "Not yet rated",
+    "rating": "Rating",
+    "reinstate": "Reinstate",
+    "suspend": "Suspend",
+    "locationOnMap": "Location on the map",
+    "trackTruck": "Track the truck"
   },
   "clients": {
     "title": "Clients",
@@ -103,5 +115,183 @@
     "REJECTED": "Rejected",
     "CANCELLED": "Cancelled",
     "unknown": "Unrecognised stage"
+  },
+  "trucks": {
+    "title": "Trucks & Tanks",
+    "subtitle": "Manage tractors and trailers independently — they are paired with a driver at assignment.",
+    "totalTrucks": "Total trucks",
+    "totalTanks": "Total tanks",
+    "totalCapacity": "Total capacity",
+    "tabTrucks": "Trucks",
+    "tabTanks": "Tanks",
+    "truckEntity": "truck",
+    "tankEntity": "tank",
+    "addEntity": "Add {{entity}}",
+    "plateNumber": "Plate number",
+    "model": "Model",
+    "tankCode": "Tank code",
+    "capacity": "Capacity",
+    "liters": "liters",
+    "material": "Material",
+    "materialAluminium": "Aluminium",
+    "materialIron": "Iron",
+    "withdraw": "Withdraw",
+    "restore": "Restore",
+    "statusAvailable": "Available",
+    "statusCommitted": "Committed",
+    "statusWithdrawn": "Withdrawn",
+    "noTrucks": "No trucks registered yet",
+    "noTanks": "No tanks registered yet",
+    "duplicatePlate": "A truck with this plate number already exists.",
+    "duplicateTankCode": "A tank with this code already exists.",
+    "pairing": {
+      "title": "Pair a card — {{plate}}",
+      "pair": "Pair card",
+      "rePair": "Re-pair card",
+      "cardPaired": "Card paired",
+      "noCard": "No card",
+      "codeActive": "Code active",
+      "noCode": "No code",
+      "waitingForReader": "Waiting for a card to be presented...",
+      "readWithDevice": "Read with this device",
+      "deviceReading": "Reading...",
+      "deviceError": "This device could not read the card. Use the reader or enter the code manually.",
+      "manualPlaceholder": "Enter the card's identifier manually",
+      "useManual": "Use this value",
+      "captured": "Captured — pair to {{target}}?",
+      "manualEntry": "Entered manually",
+      "confirm": "Confirm pairing",
+      "alreadyPaired": "This card is already paired to another truck.",
+      "alreadyPairedNamed": "This card is already paired to truck {{plate}}."
+    }
+  },
+  "assign": {
+    "title": "Assign driver",
+    "destinationMap": "Destination",
+    "noAddress": "No delivery address on file",
+    "notSelected": "Not selected",
+    "notAssignable": "This order is no longer awaiting assignment.",
+    "noDriversRegistered": "No drivers registered for this company yet",
+    "selectionHint": "Note: choosing a driver pre-selects their last-operated truck; pick another if it is unavailable.",
+    "confirm": "Confirm assignment",
+    "eligibility": {
+      "busy": "Already assigned elsewhere",
+      "offlineSince": "Offline — last seen {{time}}",
+      "neverOnline": "Never been online",
+      "inactive": "Deactivated"
+    },
+    "offlineReasonLabel": "Reason for assigning an offline driver (required)",
+    "offlineReasonPlaceholder": "e.g. Nearest available driver, expected back online shortly",
+    "refusal": {
+      "tankCapacity": "The selected tank cannot carry this order's quantity.",
+      "tankGrade": "The selected tank is not permitted to carry this order's fuel grade.",
+      "truckUnavailable": "The chosen truck is no longer available (withdrawn or already committed).",
+      "tankUnavailable": "The chosen tank is no longer available (withdrawn or already committed).",
+      "noWarehouse": "No in-service warehouse supplies this order's fuel grade.",
+      "reasonRequired": "A reason is required to assign a driver who is currently offline.",
+      "generic": "This assignment could not be completed. Please refresh and try again."
+    },
+    "acknowledgment": {
+      "waiting": "Waiting for the driver to acknowledge",
+      "smsSentAt": "SMS sent to the driver at {{time}}",
+      "acknowledgedAt": "Acknowledged by the driver at {{time}}",
+      "assignedWhileOffline": "Assigned while offline — reason on file"
+    },
+    "assignedDriver": "Assigned driver",
+    "contactDriver": "Contact driver",
+    "customerData": "Customer",
+    "customerUnavailable": "Customer contact is available once a driver is assigned.",
+    "eta": "ETA",
+    "minutes": "min",
+    "noDriverYet": "Not yet assigned",
+    "noHistory": "No stage history yet",
+    "notTrackable": "Not currently trackable",
+    "overridden": "Overridden",
+    "timeline": "Stage history",
+    "trackTruck": "Track the truck"
+  },
+  "tracking": {
+    "title": "Tracking",
+    "noDeliveries": "No deliveries in transit right now",
+    "selectDelivery": "Select a delivery to track",
+    "viewOrder": "View order",
+    "stalePosition": "Position may be stale — last updated {{seconds}}s ago",
+    "liveTitle": "Live shipment tracking"
+  },
+  "stalled": {
+    "title": "Stalled delivery",
+    "overrideVerification": "Override verification",
+    "reasonPlaceholder": "State why this is being overridden (at least 10 characters)",
+    "confirmOverride": "Confirm override",
+    "reassignVehicle": "Reassign vehicle",
+    "confirmReassign": "Confirm reassignment",
+    "alreadyDeparted": "This delivery has already departed — the vehicle can no longer be reassigned."
+  },
+  "dashboard": {
+    "greeting": "Welcome, {{name}}",
+    "subtitle": "Here's today's transport and delivery summary",
+    "awaitingAssignment": "Awaiting assignment",
+    "inProgress": "In progress",
+    "completedInPeriod": "Completed",
+    "driversOnDuty": "Drivers on duty",
+    "outstandingSettlements": "Outstanding settlements",
+    "newOrders": "New orders",
+    "noNewOrders": "No orders awaiting assignment",
+    "noInProgress": "No deliveries in progress",
+    "viewAll": "View all",
+    "quickActions": {
+      "title": "Quick actions",
+      "viewInvoices": {
+        "title": "View invoices",
+        "subtitle": "Invoices and dues"
+      },
+      "updateFare": {
+        "title": "Update transport fare",
+        "subtitle": "Update region pricing"
+      },
+      "addDriver": {
+        "title": "Add driver",
+        "subtitle": "Add a new driver"
+      },
+      "assignOrder": {
+        "title": "Assign new order",
+        "subtitle": "Assign a driver and vehicle"
+      }
+    }
+  },
+  "invoices": {
+    "title": "Invoices",
+    "amount": "Amount",
+    "issued": "Issued",
+    "action": "Action",
+    "settle": "Settle",
+    "empty": "No invoices yet",
+    "state": {
+      "ISSUED": "Outstanding",
+      "SETTLED": "Settled",
+      "VOID": "Void"
+    }
+  },
+  "stopAlert": {
+    "title": "Delivery stop",
+    "state": {
+      "waiting": "Stopped — waiting for the driver to explain",
+      "escalated": "Stopped — the driver has not responded",
+      "answered": "Stopped — the driver explained",
+      "declared": "Planned stop — the driver told us in advance",
+      "resolved": "Handled"
+    },
+    "noResponse": "The driver was asked why they stopped and did not reply within the response window.",
+    "expectedDuration": "Expected to last about {{minutes}} minutes",
+    "markHandled": "Mark as handled",
+    "reason": {
+      "TRAFFIC": "Traffic",
+      "VEHICLE_PROBLEM": "Vehicle problem",
+      "REST_OR_PRAYER": "Rest or prayer",
+      "REFUELLING": "Refuelling",
+      "ROAD_CLOSURE": "Road closed",
+      "ACCIDENT": "Accident",
+      "OTHER": "Something else"
+    }
   }
 }

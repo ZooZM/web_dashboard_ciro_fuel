@@ -1,5 +1,6 @@
 import { cn } from '@/lib/utils';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { FuelIcon } from '../../tracking/components/FuelIcon';
 
 export interface ProgressOrder {
@@ -17,6 +18,7 @@ interface ProgressOrderRowProps {
 }
 
 export function ProgressOrderRow({ order }: ProgressOrderRowProps) {
+  const { t } = useTranslation();
   return (
     <Link to={`/transport/orders/${order.id}`} className="block">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between py-4 sm:py-3 border-b border-slate-100 last:border-0 hover:bg-slate-50/70 transition-colors px-2 gap-4 sm:gap-2">
@@ -48,7 +50,7 @@ export function ProgressOrderRow({ order }: ProgressOrderRowProps) {
               <span className="text-[10px] text-[#64748b]">{order.fuelType}</span>
             </div>
             <div className="flex flex-col items-end gap-0.5">
-              <span className="text-[10px] text-[#64748b]">الكمية</span>
+              <span className="text-[10px] text-[#64748b]">{t('common.quantity')}</span>
               <span className="text-[13px] font-bold text-[#1e293b]" dir="ltr">{order.quantity}</span>
             </div>
           </div>

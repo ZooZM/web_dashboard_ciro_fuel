@@ -7,7 +7,10 @@ interface StatCardProps {
   value: string;
   unit?: string;
   icon: string | React.ReactNode;
-  trend: string;
+  // Feature 009: no period-over-period trend is computed by the platform's summary
+  // endpoint (it would need a second, prior-period query) — optional, so a real figure
+  // with nothing to compare against renders without a fabricated percentage.
+  trend?: string;
   trendUp?: boolean;
   valueColor?: string;
   iconBgClass?: string;
@@ -52,13 +55,15 @@ export function StatCard({
               <span className="text-[10px] text-[#94a3b8]">{date}</span>
       )}
 
-      {/* Trend */}
-      <div dir="ltr" className={cn('flex items-center justify-start gap-1.5 text-[10px] font-medium mt-0.5', trendUp ? 'text-[#12A150]' : 'text-[#EF4444]')}>
-        <span>{trend}</span>
-        <svg viewBox="0 0 24 24" fill="currentColor" className={cn("w-4 h-4", trendUp ? "rotate-180" : "")}>
-          <path d="M7 10l5 5 5-5z" />
-        </svg>
-      </div>
+      {/* Trend — only when the caller actually has one to show */}
+      {trend && (
+        <div dir="ltr" className={cn('flex items-center justify-start gap-1.5 text-[10px] font-medium mt-0.5', trendUp ? 'text-[#12A150]' : 'text-[#EF4444]')}>
+          <span>{trend}</span>
+          <svg viewBox="0 0 24 24" fill="currentColor" className={cn("w-4 h-4", trendUp ? "rotate-180" : "")}>
+            <path d="M7 10l5 5 5-5z" />
+          </svg>
+        </div>
+      )}
 
     </div>
     </div>
