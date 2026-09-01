@@ -1,7 +1,9 @@
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { CustomGoogleMap } from '@/components/ui/CustomGoogleMap';
 
 export function DriverMapCard() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
   const isPetrol = location.pathname.includes('/petrolCompany');
@@ -16,7 +18,7 @@ export function DriverMapCard() {
           <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center shrink-0">
             <img src="/transportCompany/DriverPage/editDriver/pin.svg" alt="" className="w-6 h-4 object-contain" />
           </div>
-          <span className="text-[#162155] font-black text-lg">الموقع على الخريطة</span>
+          <span className="text-[#162155] font-black text-lg">{t('drivers.locationOnMap')}</span>
         </div>
       </div>
 
@@ -38,7 +40,7 @@ export function DriverMapCard() {
         className="flex items-center justify-center gap-2 bg-blue-600 text-white w-full py-3 rounded-xl text-sm font-bold hover:bg-blue-700 transition-colors shadow-sm mt-2"
       >
         <img src="/transportCompany/DriverPage/editDriver/mapButton.svg" alt="" className="w-4 h-4 object-contain" />
-        تتبع الشاحنة
+        {t('drivers.trackTruck')}
       </button>
     </div>
   );

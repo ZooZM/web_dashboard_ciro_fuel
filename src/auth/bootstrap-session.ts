@@ -6,28 +6,35 @@ import { logout as logoutRequest } from '@/auth/api/auth.api';
 import { tokenStore } from '@/lib/auth/token-store';
 
 /**
- * Silent refresh on app load (FR-011): the httpOnly refresh cookie (if any) restores the
- * access token without a visible re-login. A CLIENT/DRIVER token is rejected — this surface
- * is admin-only (FR-001).
+ * Feature 009 Slice 0 (T007): the demonstration bypass this function used to contain —
+ *
+ *   if (accessToken === 'dummy-token' && existingUser) { setSession(existingUser, accessToken); return; }
+ *
+ * — admitted a session fabricated by the deleted RoleSelectionPage for ANY role, with no
+ * platform involved at all. It is removed, not adjusted: every session now originates from a
+ * real `/auth/login` or, here, a real `/auth/me` lookup.
+ *
+ * Because both tokens are now held in memory only (FR-078, research.md R2), neither survives a
+ * page reload — there is no httpOnly refresh cookie in this feature (plan.md Complexity
+ * Tracking), so a hard reload always starts from zero and this call is expected to end in
+ * `clearSession()` on one. What it still does: resolve an in-SPA-memory access token against
+ * `/auth/me` (e.g. after a client-side navigation that re-invoked this), and reject a
+ * CLIENT/DRIVER token outright — this surface is admin-only (FR-068).
  */
 export async function bootstrapSession(): Promise<void> {
-  const { setSession, clearSession, setStatus, user: existingUser } = useSessionStore.getState();
+  const { setSession, clearSession, setStatus } = useSessionStore.getState();
   setStatus('booting');
 
   try {
     const accessToken = tokenStore.get();
-
-    // Bypass for Demo/Mock mode
-    if (accessToken === 'dummy-token' && existingUser) {
-      setSession(existingUser, accessToken);
+    if (!accessToken) {
+      clearSession();
       return;
     }
 
-    // Rely on the existing token. If it's expired or missing, the interceptor 
-    // will catch the 401 and attempt a refresh automatically.
     const user = await me();
 
-    if (!isDashboardRole(user.role) || !accessToken) {
+    if (!isDashboardRole(user.role)) {
       clearSession();
       return;
     }

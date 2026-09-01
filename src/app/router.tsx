@@ -5,8 +5,6 @@ import { Forbidden } from '@/routing/Forbidden';
 import { NotFound } from '@/routing/NotFound';
 import { AppShell } from '@/components/layout/AppShell';
 import { LoginPage } from '@/auth/components/LoginPage';
-import { VerifyPage } from '@/auth/components/VerifyPage';
-import { RoleSelectionPage } from '@/auth/components/RoleSelectionPage';
 
 // Admin imports
 import { AdminDashboard } from '@/admin/dashboard/components/AdminDashboard';
@@ -48,11 +46,9 @@ import { StationDetailsPage as PetrolStationDetailsPage } from '@/petrol_company
 import { AddStationOwnerPage as PetrolAddStationOwnerPage } from '@/petrol_company/stations/components/AddStationOwnerPage';
 import { TrackingPage } from '@/transport_company/tracking/components/TrackingPage';
 import { OrderDetailPage } from '@/transport_company/orders/components/OrderDetailPage';
-import { OrderEditPage } from '@/transport_company/orders/components/OrderEditPage';
 import { DriversPage } from '@/transport_company/drivers/components/DriversPage';
 import { AddDriverPage } from '@/transport_company/drivers/components/AddDriverPage';
 import { DriverDetailsPage } from '@/transport_company/drivers/components/driver-details/DriverDetailsPage';
-import { ClientsPage } from '@/transport_company/clients/components/ClientsPage';
 import { SettingsPage } from '@/transport_company/settings/components/SettingsPage';
 import { ProfilePage } from '@/transport_company/profile/components/ProfilePage';
 import { TermsPage } from '@/transport_company/terms/components/TermsPage';
@@ -70,8 +66,6 @@ import { OrderTrackingPage } from '@/pages/OrderTracking/OrderTrackingPage';
 
 export const router = createBrowserRouter([
   { path: '/', element: <LoginPage /> },
-  { path: '/verify', element: <VerifyPage /> },
-  { path: '/select-role', element: <RoleSelectionPage /> },
   { path: '/403', element: <Forbidden /> },
 
   // Admin Routes
@@ -109,7 +103,7 @@ export const router = createBrowserRouter([
   // Petrol Brand Routes
   {
     path: '/petrolCompany',
-    element: <ProtectedRoute allow={[Role.CLIENT, Role.COMPANY_ADMIN]}><AppShell /></ProtectedRoute>,
+    element: <ProtectedRoute allow={[Role.FUEL_COMPANY_ADMIN, Role.SUPER_ADMIN]}><AppShell /></ProtectedRoute>,
     children: [
       { path: '', element: <Navigate to="dashboard" replace /> },
       { path: 'dashboard', element: <PetrolDashboard /> },
@@ -140,14 +134,13 @@ export const router = createBrowserRouter([
   // Transportation Routes
   {
     path: '/transport',
-    element: <ProtectedRoute allow={[Role.COMPANY_ADMIN, Role.DRIVER, Role.SUPER_ADMIN]}><AppShell /></ProtectedRoute>,
+    element: <ProtectedRoute allow={[Role.TRANSPORT_COMPANY_ADMIN, Role.SUPER_ADMIN]}><AppShell /></ProtectedRoute>,
     children: [
       { path: '', element: <Navigate to="dashboard" replace /> },
       { path: 'dashboard', element: <TransportDashboard /> },
       { path: 'notifications', element: <NotificationsPage /> },
       { path: 'orders', element: <OrdersListPage /> },
       { path: 'orders/:id', element: <OrderDetailPage /> },
-      { path: 'orders/:id/edit', element: <OrderEditPage /> },
       { path: 'orders/:id/assign', element: <OrderAssignPage /> },
       { path: 'tracking', element: <TrackingPage /> },
       { path: 'delivery-areas', element: <DeliveryAreasPage /> },
@@ -156,7 +149,6 @@ export const router = createBrowserRouter([
       { path: 'drivers/add', element: <AddDriverPage /> },
       { path: 'drivers/:id', element: <DriverDetailsPage /> },
       { path: 'trucks', element: <TrucksAndTanksPage /> },
-      { path: 'clients', element: <ClientsPage /> },
       { path: 'settings', element: <SettingsPage /> },
       { path: 'profile', element: <ProfilePage /> },
       { path: 'terms', element: <TermsPage /> },

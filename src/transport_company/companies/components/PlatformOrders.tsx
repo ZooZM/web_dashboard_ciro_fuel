@@ -8,7 +8,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
  *  is composed here. */
 export function PlatformOrdersPage() {
   const { t } = useTranslation();
-  const { data, isLoading } = useOrdersList({ page: 1 });
+  const { data, isLoading } = useOrdersList({});
 
   const orders = data?.items ?? [];
 
@@ -29,7 +29,7 @@ export function PlatformOrdersPage() {
           </TableHeader>
           <TableBody>
             {orders.map((order) => (
-              <TableRow key={order.id}>
+              <TableRow key={order._id}>
                 <TableCell>
                   <OrderStatusBadge status={order.status} />
                 </TableCell>

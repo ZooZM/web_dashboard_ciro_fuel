@@ -1,13 +1,21 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { queryKeys } from '@/constants/query-keys';
 import * as driversApi from '@/transport_company/drivers/api/drivers.api';
-import type { CreateDriverInput, UpdateTruckInput } from '@/transport_company/drivers/types';
+import type { CreateDriverInput } from '@/transport_company/drivers/types';
 import { Role } from '@/constants/roles';
 
-export function useDriversList(page = 1) {
+export function useDriversList(isActive?: boolean) {
   return useQuery({
-    queryKey: queryKeys.users.list({ role: Role.DRIVER, page }),
-    queryFn: () => driversApi.listDrivers(page),
+    queryKey: queryKeys.users.list({ role: Role.DRIVER, isActive }),
+    queryFn: () => driversApi.listDrivers(isActive),
+  });
+}
+
+export function useDriver(id: string) {
+  return useQuery({
+    queryKey: queryKeys.users.detail(id),
+    queryFn: () => driversApi.getDriver(id),
+    enabled: Boolean(id),
   });
 }
 
@@ -29,15 +37,6 @@ export function useSetDriverActive() {
   return useMutation({
     mutationFn: ({ id, isActive }: { id: string; isActive: boolean }) =>
       driversApi.setDriverActive(id, isActive),
-    onSuccess: invalidate,
-  });
-}
-
-export function useUpdateDriverTruck() {
-  const invalidate = useInvalidateDrivers();
-  return useMutation({
-    mutationFn: ({ id, input }: { id: string; input: UpdateTruckInput }) =>
-      driversApi.updateDriverTruck(id, input),
     onSuccess: invalidate,
   });
 }

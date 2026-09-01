@@ -1,129 +1,69 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
-import { motion } from 'framer-motion';
 import { DesktopInvoicesTable } from './DesktopInvoicesTable';
 import { MobileInvoicesList } from './MobileInvoicesList';
-import { FilterToolbar } from '@/components/ui/FilterToolbar';
+import { useInvoicesList } from '@/transport_company/invoices/hooks/useInvoices';
 
-// --- Static Data ---
-const FILTERS = ['الكل', 'المدفوعة', 'المستحقة'];
+type FilterValue = 'ALL' | 'ISSUED' | 'SETTLED';
 
-const MOCK_INVOICES = [
-  { id: '1', invoiceNum: 'INV-2024-158', orderNum: 'ORD-2024-256', company: 'بترو أمان', station: 'جدة - طريق مكة القديم - حي البوادي', owner: 'محمد أحمد', deliveryFee: '400', amount: '1,150,000', issueDate: '06/06/2026', issueTime: '04:30 م', status: 'مدفوع' },
-  { id: '2', invoiceNum: 'INV-2024-158', orderNum: 'ORD-2024-256', company: 'بترو أمان', station: 'جدة - طريق مكة القديم - حي البوادي', owner: 'محمد أحمد', deliveryFee: '400', amount: '1,150,000', issueDate: '06/06/2026', issueTime: '04:30 م', status: 'مدفوع' },
-  { id: '3', invoiceNum: 'INV-2024-158', orderNum: 'ORD-2024-256', company: 'بترو أمان', station: 'جدة - طريق مكة القديم - حي البوادي', owner: 'محمد أحمد', deliveryFee: '400', amount: '1,150,000', issueDate: '06/06/2026', issueTime: '04:30 م', status: 'مستحق' },
-  { id: '4', invoiceNum: 'INV-2024-158', orderNum: 'ORD-2024-256', company: 'بترو أمان', station: 'جدة - طريق مكة القديم - حي البوادي', owner: 'محمد أحمد', deliveryFee: '400', amount: '1,150,000', issueDate: '06/06/2026', issueTime: '04:30 م', status: 'مدفوع' },
-  { id: '5', invoiceNum: 'INV-2024-158', orderNum: 'ORD-2024-256', company: 'بترو أمان', station: 'جدة - طريق مكة القديم - حي البوادي', owner: 'محمد أحمد', deliveryFee: '400', amount: '1,150,000', issueDate: '06/06/2026', issueTime: '04:30 م', status: 'مستحق' },
-  { id: '6', invoiceNum: 'INV-2024-158', orderNum: 'ORD-2024-256', company: 'بترو أمان', station: 'جدة - طريق مكة القديم - حي البوادي', owner: 'محمد أحمد', deliveryFee: '400', amount: '1,150,000', issueDate: '06/06/2026', issueTime: '04:30 م', status: 'مستحق' },
-  { id: '7', invoiceNum: 'INV-2024-158', orderNum: 'ORD-2024-256', company: 'بترو أمان', station: 'جدة - طريق مكة القديم - حي البوادي', owner: 'محمد أحمد', deliveryFee: '400', amount: '1,150,000', issueDate: '06/06/2026', issueTime: '04:30 م', status: 'مدفوع' },
-];
-
+/**
+ * Feature 009 T115/SC-005: wired to `GET /invoices` — seven identical fabricated invoices,
+ * fake weekly-trend percentages and a fake company/station breakdown are gone.
+ */
 export function InvoicesListPage() {
-  const [activeFilter, setActiveFilter] = useState('الكل');
+  const { t } = useTranslation();
+  const [activeFilter, setActiveFilter] = useState<FilterValue>('ALL');
+  const { data, isLoading, isError, refetch } = useInvoicesList(activeFilter === 'ALL' ? {} : { state: activeFilter });
+  const invoices = data?.items ?? [];
+
+  const FILTERS: { id: FilterValue; label: string }[] = [
+    { id: 'ALL', label: t('common.all') },
+    { id: 'ISSUED', label: t('invoices.state.ISSUED') },
+    { id: 'SETTLED', label: t('invoices.state.SETTLED') },
+  ];
 
   return (
     <div className="w-full p-4 md:p-6 flex-1 -mt-4 bg-[#F8FAFC] border border-[#E7E9EF] rounded-2xl min-h-full font-sans" dir="rtl">
-      {/* --- Header --- */}
       <div className="mb-6 flex flex-col items-start text-right">
-        <h1 className="text-2xl font-black text-slate-900">الفواتير</h1>
-        <p className="text-sm font-semibold text-slate-500 mt-1">إدارة ومتابعة كل فواتير نقل الوقود</p>
+        <h1 className="text-2xl font-black text-slate-900">{t('invoices.title')}</h1>
       </div>
 
-      {/* --- Stats Cards --- */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-
-        {/* Card 1: Paid */}
-        <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm flex flex-col gap-4">
-          <div className="flex  items-start gap-4">
-            <div className="w-12 h-12 rounded-full bg-[#E8F5E9] flex items-center justify-center shrink-0">
-              <img src="/transportCompany/invoicePage/rightCheck.svg" alt="" className="w-6 h-6 object-contain" />
-            </div>
-            <div className="flex flex-col gap-1">
-              <span className="text-slate-500 font-bold text-sm">المدفوع</span>
-              <span className="text-[#162155] font-black text-2xl flex items-center gap-1.5">
-                5,120,000 <span className="text-sm text-slate-500">ر.س</span>
-              </span>
-              <div className="flex items-center gap-1.5 text-[#16A34A]">
-                <svg className='mt-1' width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M6 2L10 6H2L6 2Z" fill="currentColor" />
-                </svg>
-                <span className="text-xs font-bold text-slate-500"><span className="text-[#16A34A]">16.30%</span> من الأسبوع الماضي</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Card 2: Due */}
-        <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm flex flex-col gap-4">
-          <div className="flex  items-start gap-4">
-            <div className="w-12 h-12 rounded-full bg-[#FFF7ED] flex items-center justify-center shrink-0">
-              <img src="/transportCompany/invoicePage/schedule.svg" alt="" className="w-6 h-6 object-contain" />
-            </div>
-            <div className="flex flex-col gap-1">
-              <span className="text-slate-500 font-bold text-sm">المستحق</span>
-              <span className="text-[#162155] font-black text-2xl flex items-center gap-1.5">
-                3,599,000 <span className="text-sm text-slate-500">ر.س</span>
-              </span>
-              <div className="flex items-center gap-1.5 text-[#16A34A]">
-                <svg className='mt-1' width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M6 2L10 6H2L6 2Z" fill="currentColor" />
-                </svg>
-                <span className="text-xs font-bold text-slate-500"><span className="text-[#16A34A]">16.30%</span> من الأسبوع الماضي</span>
-              </div>
-            </div>
-
-          </div>
-        </div>
-
-      </div>
-
-      {/* --- Filters Tabs --- */}
       <div className="flex items-center border border-slate-200 rounded-xl overflow-hidden w-full sm:w-fit mb-6 bg-white divide-x divide-x-reverse divide-slate-200">
-        {FILTERS.map((filter) => {
-          const isActive = activeFilter === filter;
-          return (
-            <button
-              key={filter}
-              onClick={() => setActiveFilter(filter)}
-              className={cn(
-                'relative flex-1 sm:flex-none px-4 sm:px-12 py-3 text-sm font-bold transition-colors whitespace-nowrap cursor-pointer text-center',
-                isActive ? 'text-[#162155]' : 'text-slate-500 hover:bg-slate-50'
-              )}
-            >
-              {isActive && (
-                <motion.div
-                  layoutId="active-tab-indicator"
-                  className="absolute inset-0 bg-[#EEF2FF] border-b-2 border-blue-600"
-                  transition={{ type: 'spring', stiffness: 300, damping: 25 }}
-                />
-              )}
-              <span className="relative z-10">{filter}</span>
-            </button>
-          );
-        })}
+        {FILTERS.map((filter) => (
+          <button
+            key={filter.id}
+            onClick={() => setActiveFilter(filter.id)}
+            className={cn(
+              'px-4 sm:px-12 py-3 text-sm font-bold transition-colors whitespace-nowrap',
+              activeFilter === filter.id ? 'bg-[#EEF2FF] text-[#162155] border-b-2 border-blue-600' : 'text-slate-500 hover:bg-slate-50',
+            )}
+          >
+            {filter.label}
+          </button>
+        ))}
       </div>
 
-      {/* --- Main Content Section (Table & Actions) --- */}
       <div className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden pt-4 pb-0">
-
-        {/* Top: Action Bar */}
-        <FilterToolbar 
-          searchPlaceholder="ابحث بكود الطلب أو الشركة..."
-          onExport={() => console.log('Export Invoices')}
-          hasDateRange={true}
-          filters={[
-            { id: 'status', label: 'الحالة', options: [{ value: 'paid', label: 'مدفوعة' }, { value: 'unpaid', label: 'غير مدفوعة' }] },
-            { id: 'company', label: 'الشركة', options: [{ value: '1', label: 'شركة أ' }] }
-          ]}
-        />
-
-        {/* Desktop Table View */}
-        <DesktopInvoicesTable invoices={MOCK_INVOICES} />
-
-        {/* Mobile View: Cards layout instead of Table */}
-        <div className="px-4 pb-4 lg:px-0 lg:pb-0">
-          <MobileInvoicesList invoices={MOCK_INVOICES} />
-        </div>
+        {isLoading ? (
+          <p className="text-center text-sm text-slate-400 py-12">{t('common.loading')}</p>
+        ) : isError ? (
+          <div className="flex flex-col items-center gap-3 py-12">
+            <p className="text-sm text-red-500">{t('errors.generic')}</p>
+            <button onClick={() => refetch()} className="text-sm font-bold text-blue-600 hover:underline">
+              {t('common.retry')}
+            </button>
+          </div>
+        ) : invoices.length === 0 ? (
+          <p className="text-center text-sm text-slate-400 py-12">{t('invoices.empty')}</p>
+        ) : (
+          <>
+            <DesktopInvoicesTable invoices={invoices} />
+            <div className="px-4 pb-4 lg:px-0 lg:pb-0">
+              <MobileInvoicesList invoices={invoices} />
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

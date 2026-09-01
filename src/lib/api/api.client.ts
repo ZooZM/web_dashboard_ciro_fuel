@@ -1,12 +1,11 @@
 import axios, { type AxiosRequestConfig } from 'axios';
 import { tokenStore } from '@/lib/auth/token-store';
 import { apiRoutes } from '@/constants/api-routes';
+import type { RefreshResponse } from '@/auth/types';
 import { toApiError } from './api-error';
 
 export const apiClient = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
-  // Sends the httpOnly refresh-token cookie automatically (FR-011a).
-  withCredentials: true,
 });
 
 apiClient.interceptors.request.use((config) => {
@@ -35,15 +34,26 @@ export function setOnSessionExpired(handler: () => void): void {
 // recurse through this same 401-handling logic.
 const bareClient = axios.create({
   baseURL: apiClient.defaults.baseURL,
-  withCredentials: true,
 });
 
 // Single-flight: concurrent 401s share exactly ONE /auth/refresh call (FR-008, SC-004).
 let refreshPromise: Promise<string> | null = null;
 
+/**
+ * Feature 009 T010: the platform's `AuthController.refresh` reads the refresh token from the
+ * request body (`RefreshTokenDto`), not an httpOnly cookie — no cookie is issued anywhere on
+ * this platform (research.md R2, plan.md Complexity Tracking). The platform also rotates the
+ * refresh token on every call, so the response's new one MUST replace the one just spent —
+ * reusing a superseded refresh token is itself refused server-side.
+ */
 async function runRefresh(): Promise<string> {
-  const { data } = await bareClient.post<{ accessToken: string }>(apiRoutes.auth.refresh);
+  const refreshToken = tokenStore.getRefreshToken();
+  if (!refreshToken) {
+    throw new Error('No refresh token available');
+  }
+  const { data } = await bareClient.post<RefreshResponse>(apiRoutes.auth.refresh, { refreshToken });
   tokenStore.set(data.accessToken);
+  tokenStore.setRefreshToken(data.refreshToken);
   return data.accessToken;
 }
 
@@ -64,14 +74,6 @@ apiClient.interceptors.response.use(
     const axiosError = error as { config?: RetryableConfig; response?: { status?: number } };
     const status = axiosError.response?.status;
     const original = axiosError.config;
-
-    const currentToken = tokenStore.get();
-    
-    // If we're using the dummy token, don't try to refresh or log out. 
-    // Just fail the request so the UI can handle the error.
-    if (currentToken === 'dummy-token') {
-      return Promise.reject(toApiError(error));
-    }
 
     // 403/404 are access-boundary responses, never an auth failure — no refresh (FR-010).
     if (status !== 401 || !original || original._retry) {
