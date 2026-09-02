@@ -93,7 +93,10 @@ export function useCardCapture(armed: boolean) {
       const gap = now - lastKeyAtRef.current;
       lastKeyAtRef.current = now;
 
-      if (e.key === 'Enter') {
+      // Enter is the usual terminator, but these readers are commonly
+      // configured to send Tab instead, and a Tab that terminates a scan must
+      // not also move focus out of the dialog.
+      if (e.key === 'Enter' || e.key === 'Tab') {
         const buffered = bufferRef.current;
         bufferRef.current = '';
         const timestamps = keyTimestampsRef.current;
@@ -104,6 +107,7 @@ export function useCardCapture(armed: boolean) {
           buffered.length >= MIN_BURST_LENGTH &&
           timestamps.every((g) => g <= READER_MAX_INTERVAL_MS);
         if (isFastBurst) {
+          if (e.key === 'Tab') e.preventDefault();
           acceptCapture(buffered, 'reader');
         }
         // A newline after slow typing is not auto-accepted — FR-047 requires
@@ -118,8 +122,16 @@ export function useCardCapture(armed: boolean) {
           bufferRef.current = '';
           keyTimestampsRef.current = [];
         }
+        // Record the gap only BETWEEN characters. The gap before the first
+        // character is idle time since whatever was typed last — often
+        // minutes — and says nothing about how fast this burst arrived.
+        // Recording it put a value no scan could ever satisfy at the head of
+        // every burst, so the `every()` test above rejected every genuine
+        // read and the wedge path never accepted a card at all.
+        if (bufferRef.current) {
+          keyTimestampsRef.current.push(gap);
+        }
         bufferRef.current += e.key;
-        keyTimestampsRef.current.push(gap);
       }
     }
 

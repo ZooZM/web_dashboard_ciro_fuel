@@ -13,6 +13,9 @@ import { toast } from '@/lib/toast/toast';
  * email + password, not a phone OTP (no such admin-created-account flow exists on the
  * platform).
  */
+/** Mirrors the platform's E164_PATTERN exactly (`src/common/constants/phone.ts`). */
+const E164 = /^\+[1-9]\d{7,14}$/;
+
 export function AddDriverPage(): React.JSX.Element {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -29,7 +32,7 @@ export function AddDriverPage(): React.JSX.Element {
   }
 
   function onSubmit(): void {
-    if (!fullName.trim() || !email.trim() || !phone.trim() || password.length < 8) return;
+    if (!canSubmit) return;
     createDriver.mutate(
       { fullName: fullName.trim(), email: email.trim(), phone: phone.trim(), password },
       {
@@ -39,7 +42,15 @@ export function AddDriverPage(): React.JSX.Element {
     );
   }
 
-  const canSubmit = fullName.trim() && email.trim() && phone.trim() && password.length >= 8;
+  // The placeholder already promises E.164 but nothing enforced it, so a
+  // locally-formatted number reached `CreateUserDto` (which requires the
+  // country prefix) and came back as a generic createError toast naming no
+  // field — the operator had no way to tell which of four inputs was wrong.
+  const phoneValid = E164.test(phone.trim());
+  const phoneInvalid = phone.trim().length > 0 && !phoneValid;
+  const canSubmit = Boolean(
+    fullName.trim() && email.trim() && phoneValid && password.length >= 8,
+  );
 
   return (
     <div className="w-full flex-1 p-4 md:p-6 font-sans -mt-4 bg-[#F8FAFC] min-h-full border border-[#E7E9EF] rounded-2xl" dir="rtl">
@@ -96,8 +107,18 @@ export function AddDriverPage(): React.JSX.Element {
                   onChange={(e) => setPhone(e.target.value)}
                   placeholder="+9665XXXXXXXX"
                   dir="ltr"
-                  className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 text-right"
+                  aria-invalid={phoneInvalid}
+                  className={`w-full px-4 py-3 bg-white border rounded-xl text-sm font-medium focus:outline-none focus:ring-1 text-right ${
+                    phoneInvalid
+                      ? 'border-red-400 focus:border-red-500 focus:ring-red-500'
+                      : 'border-slate-200 focus:border-blue-500 focus:ring-blue-500'
+                  }`}
                 />
+                {phoneInvalid && (
+                  <span className="mt-1.5 text-xs font-bold text-red-500" dir="ltr">
+                    +9665XXXXXXXX
+                  </span>
+                )}
               </div>
             </div>
 

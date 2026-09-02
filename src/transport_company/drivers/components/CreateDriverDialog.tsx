@@ -16,10 +16,17 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 
+// `phone` mirrors the platform's E164_PATTERN exactly. Validated here and not
+// merely on the server because `CreateUserDto` refuses anything without the
+// country prefix: a locally-formatted number (0551234567) passed a `min(6)`
+// check, reached the API and came back as an unattributed 400, leaving the
+// operator to guess which of four fields the server disliked.
+const E164 = /^\+[1-9]\d{7,14}$/;
+
 const createDriverSchema = z.object({
   fullName: z.string().min(2),
   email: z.string().email(),
-  phone: z.string().min(6),
+  phone: z.string().regex(E164, '+9665XXXXXXXX'),
   password: z.string().min(8),
 });
 

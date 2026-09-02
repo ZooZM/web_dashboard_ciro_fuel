@@ -58,13 +58,18 @@ export function CardCaptureField({ armed, targetLabel, onConfirm, disabled }: Ca
 
   return (
     <div className="flex flex-col gap-3">
+      {/* Deliberately NOT an <input>: capture listens at the window level and
+          ignores keystrokes landing in an INPUT/TEXTAREA (so the manual field
+          below stays typeable). As a focusable input this box swallowed the
+          whole scan the moment an operator clicked the one element that looks
+          like the thing to click. */}
       <div className="relative">
-        <input
-          type="text"
-          readOnly
-          placeholder={t('trucks.pairing.waitingForReader')}
-          className="w-full text-center text-xs font-bold text-slate-400 placeholder-slate-300 border border-slate-200 rounded-xl py-3.5 px-4 focus:outline-none bg-white"
-        />
+        <div
+          aria-live="polite"
+          className="w-full text-center text-xs font-bold text-slate-300 border border-slate-200 rounded-xl py-3.5 px-4 bg-white select-none"
+        >
+          {t('trucks.pairing.waitingForReader')}
+        </div>
         {armed && (
           <div className="absolute right-4 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-blue-600 animate-pulse" />
         )}
