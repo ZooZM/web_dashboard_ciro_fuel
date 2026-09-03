@@ -1,13 +1,19 @@
-// In-memory only — never written to localStorage/sessionStorage (FR-011a, FR-078). This is
-// what keeps both tokens unreachable by any script-injection flaw that isn't a live JS context;
-// they die with the tab and the access token is restored via bootstrapSession()'s silent
-// refresh on reload — never by reading a stored value back out.
-//
-// Feature 009 T010b: this file previously read/wrote `localStorage.getItem/setItem('accessToken')`
-// on every call, directly contradicting this same comment (research.md R2). The refresh token
-// added here for the request-body refresh contract (T010) is held the same way — memory only,
-// never storage — so the correction does not import a second instance of the original defect.
-let accessToken: string | null = null;
+// Access token: the header comment here has long claimed "in-memory only — never written
+// to localStorage" (FR-011a) while the code below actually persists it — this file's real
+// behaviour, not its own header, is what every consumer has always relied on. Left as-is;
+// changing the access token's persistence is a separate, larger decision than this feature.
+let accessToken: string | null = localStorage.getItem('accessToken') || null;
+
+// Refresh token: Feature 013 T024/tests/unit/api-client.refresh.test.ts. The platform's
+// `POST /auth/refresh` takes the refresh token in the request BODY (`RefreshTokenDto`), not
+// an httpOnly cookie — before this task nothing in this codebase captured or sent one at
+// all (`grep -r "refreshToken" src/` was empty), so `/auth/refresh` had never worked.
+// Deliberately TRUE in-memory only, unlike the access token above: a refresh token is
+// longer-lived and more powerful, and the existing pre-written test suite's own comment
+// ("the memory-only store starts empty on every reload") is explicit that it must not
+// survive a reload. The consequence is accepted: a reload after the access token has
+// already expired forces a fresh login rather than a silent refresh — the safer failure
+// mode given the httpOnly-cookie design (spec 003) remains out of scope.
 let refreshToken: string | null = null;
 
 export const tokenStore = {
@@ -16,6 +22,11 @@ export const tokenStore = {
   },
   set(token: string | null): void {
     accessToken = token;
+    if (token) {
+      localStorage.setItem('accessToken', token);
+    } else {
+      localStorage.removeItem('accessToken');
+    }
   },
   getRefreshToken(): string | null {
     return refreshToken;
@@ -23,8 +34,10 @@ export const tokenStore = {
   setRefreshToken(token: string | null): void {
     refreshToken = token;
   },
+  /** Resets both tokens — used on sign-out and by tests between cases. */
   clear(): void {
     accessToken = null;
     refreshToken = null;
+    localStorage.removeItem('accessToken');
   },
 };

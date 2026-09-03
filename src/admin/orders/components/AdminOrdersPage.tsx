@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { AdminDesktopOrdersTable } from './AdminDesktopOrdersTable';
 import { AdminMobileOrdersList } from './AdminMobileOrdersList';
 import { FilterToolbar } from '@/components/ui/FilterToolbar';
+import { Pagination } from '@/components/ui/pagination';
 
 // --- Static Mock Data ---
 const STAT_CARDS = [
@@ -14,18 +15,37 @@ const STAT_CARDS = [
 ];
 const FILTERS = ['الكل', 'جديد', 'قيد التنفيذ', 'مكتملة', 'مرفوضة'];
 
-const MOCK_ORDERS = [
-  { id: '256', num: 'ORD-2024-256', company: 'شركة بترو أمان', companyAddress: 'جدة - طريق مكة القديم - حي البوادي', owner: 'محمد أحمد', fuel: 'بنزين 95', fuelLiters: '20,000 لتر', locationFrom: 'مستودع جدة الرئيسي', locationTo: 'جدة - طريق مكة القديم - حي البوادي', transporter: 'شركة النقل المتحدة', timeDate: 'اليوم، 04:30', timeAmPm: 'م', status: 'جديد', platformCommission: '400', fuelInvoice: '210,000' },
-  { id: '255', num: 'ORD-2024-255', company: 'شركة بترو أمان', companyAddress: 'جدة - طريق مكة القديم - حي البوادي', owner: 'محمد أحمد', fuel: 'بنزين 95', fuelLiters: '20,000 لتر', locationFrom: 'مستودع جدة الرئيسي', locationTo: 'جدة - طريق مكة القديم - حي البوادي', transporter: 'شركة النقل المتحدة', timeDate: 'اليوم، 04:30', timeAmPm: 'م', status: 'جديد', platformCommission: '400', fuelInvoice: '210,000' },
-  { id: '254', num: 'ORD-2024-254', company: 'شركة بترو أمان', companyAddress: 'جدة - طريق مكة القديم - حي البوادي', owner: 'محمد أحمد', fuel: 'بنزين 95', fuelLiters: '20,000 لتر', locationFrom: 'مستودع جدة الرئيسي', locationTo: 'جدة - طريق مكة القديم - حي البوادي', transporter: 'شركة النقل المتحدة', timeDate: 'اليوم، 04:30', timeAmPm: 'م', status: 'جديد', platformCommission: '400', fuelInvoice: '210,000' },
-  { id: '253', num: 'ORD-2024-253', company: 'شركة بترو أمان', companyAddress: 'جدة - طريق مكة القديم - حي البوادي', owner: 'محمد أحمد', fuel: 'بنزين 95', fuelLiters: '20,000 لتر', locationFrom: 'مستودع جدة الرئيسي', locationTo: 'جدة - طريق مكة القديم - حي البوادي', transporter: 'شركة النقل المتحدة', timeDate: 'اليوم، 04:30', timeAmPm: 'م', status: 'جديد', platformCommission: '400', fuelInvoice: '210,000' },
-  { id: '252', num: 'ORD-2024-252', company: 'شركة بترو أمان', companyAddress: 'جدة - طريق مكة القديم - حي البوادي', owner: 'محمد أحمد', fuel: 'بنزين 95', fuelLiters: '20,000 لتر', locationFrom: 'مستودع جدة الرئيسي', locationTo: 'جدة - طريق مكة القديم - حي البوادي', transporter: 'شركة النقل المتحدة', timeDate: 'اليوم، 04:30', timeAmPm: 'م', status: 'جديد', platformCommission: '400', fuelInvoice: '210,000' },
-  { id: '251', num: 'ORD-2024-251', company: 'شركة بترو أمان', companyAddress: 'جدة - طريق مكة القديم - حي البوادي', owner: 'محمد أحمد', fuel: 'بنزين 95', fuelLiters: '20,000 لتر', locationFrom: 'مستودع جدة الرئيسي', locationTo: 'جدة - طريق مكة القديم - حي البوادي', transporter: 'شركة النقل المتحدة', timeDate: 'اليوم، 04:30', timeAmPm: 'م', status: 'جديد', platformCommission: '400', fuelInvoice: '210,000' },
-  { id: '250', num: 'ORD-2024-250', company: 'شركة بترو أمان', companyAddress: 'جدة - طريق مكة القديم - حي البوادي', owner: 'محمد أحمد', fuel: 'بنزين 95', fuelLiters: '20,000 لتر', locationFrom: 'مستودع جدة الرئيسي', locationTo: 'جدة - طريق مكة القديم - حي البوادي', transporter: 'شركة النقل المتحدة', timeDate: 'اليوم، 04:30', timeAmPm: 'م', status: 'جديد', platformCommission: '400', fuelInvoice: '210,000' },
-];
+const MOCK_ORDERS = Array(56).fill({
+  company: 'شركة بترو أمان', 
+  companyAddress: 'جدة - طريق مكة القديم - حي البوادي', 
+  owner: 'محمد أحمد', 
+  fuel: 'بنزين 95', 
+  fuelLiters: '20,000 لتر', 
+  locationFrom: 'مستودع جدة الرئيسي', 
+  locationTo: 'جدة - طريق مكة القديم - حي البوادي', 
+  transporter: 'شركة النقل المتحدة', 
+  timeDate: 'اليوم، 04:30', 
+  timeAmPm: 'م', 
+  status: 'جديد', 
+  platformCommission: '400', 
+  fuelInvoice: '210,000'
+}).map((order, index) => ({
+  ...order,
+  id: `${256 - index}`,
+  num: `ORD-2024-${256 - index}`,
+  paymentMethod: index % 2 === 0 ? 'bank' : 'sadad'
+}));
 
 export function AdminOrdersPage() {
   const [activeFilter, setActiveFilter] = useState('الكل');
+
+  // Pagination State
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(8);
+
+  // Paginate Data
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const paginatedOrders = MOCK_ORDERS.slice(startIndex, startIndex + itemsPerPage);
 
   return (
     <div className="w-full p-4 md:p-6 flex-1 -mt-4 bg-[#F8FAFC] border border-[#E7E9EF] rounded-2xl min-h-full font-sans" dir="rtl">
@@ -94,10 +114,22 @@ export function AdminOrdersPage() {
         <div className="bg-white">
           {MOCK_ORDERS.length > 0 ? (
             <>
-              <AdminDesktopOrdersTable orders={MOCK_ORDERS} />
-              <div className="px-4 pb-4">
-                <AdminMobileOrdersList orders={MOCK_ORDERS} />
+              <AdminDesktopOrdersTable orders={paginatedOrders} />
+              <div className="px-4 pb-4 lg:hidden">
+                <AdminMobileOrdersList orders={paginatedOrders} />
               </div>
+              <Pagination
+                totalItems={MOCK_ORDERS.length}
+                itemsPerPage={itemsPerPage}
+                currentPage={currentPage}
+                itemName="طلب"
+                onPageChange={setCurrentPage}
+                onItemsPerPageChange={(items) => {
+                  setItemsPerPage(items);
+                  setCurrentPage(1);
+                }}
+                className="border-t border-slate-100"
+              />
             </>
           ) : (
             <div className="flex flex-col items-center justify-center py-20 text-slate-400">

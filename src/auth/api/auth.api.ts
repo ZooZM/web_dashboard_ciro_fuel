@@ -7,9 +7,12 @@ export async function login(input: LoginInput): Promise<LoginResponse> {
   return data;
 }
 
-// Refresh itself is NOT exposed here — api.client.ts's `runRefresh` calls the bare client
-// directly, since it must own the refresh-token body and the single-flight promise together
-// (T010). A second implementation here would be a second place to keep the two in sync.
+// Feature 013 FR-007 ("exactly one session store and platform-access layer"): a second,
+// dead `refresh()` export used to live here — zero consumers, superseded by
+// api.client.ts's own `runRefresh()`/`refreshAccessToken()` (the one the response
+// interceptor actually calls), and it never sent the refresh token at all. Removed
+// rather than fixed in place, to avoid exactly the duplicate-refresh-path shape this
+// feature is closing everywhere else.
 
 export async function me(): Promise<AuthUserDto> {
   const { data } = await apiClient.get<AuthUserDto>(apiRoutes.auth.me);

@@ -1,3 +1,8 @@
+// Feature 013 T038/FR-097: routes every later phase's `api/*.api.ts` file consumes are
+// defined once here, never as a literal path at the point of use. The `contracts/
+// rest-api-delta.md` column in each comment names the phase that actually wires the
+// route — most of these have no consumer yet and are added ahead of their phase so the
+// route constant, not the literal string, is what a phase author reaches for first.
 export const apiRoutes = {
   auth: {
     login: '/auth/login',
@@ -11,6 +16,12 @@ export const apiRoutes = {
     detail: (id: string) => `/companies/${id}`,
     status: (id: string) => `/companies/${id}/status`,
     fuelPrices: (id: string) => `/companies/${id}/fuel-prices`,
+    pricingConfig: (id: string) => `/companies/${id}/pricing-config`, // Phase 8 (US5)
+    transporters: (id: string) => `/companies/${id}/transporters`, // Phase 7 (US4)
+    regions: (id: string) => `/companies/${id}/regions`, // Phase 7 (US4) — :id is the transporter
+    coveredRegions: (id: string) => `/companies/${id}/covered-regions`, // Phase 7 (US4), T086b
+    commissionCeiling: (id: string) => `/companies/${id}/commission-ceiling`, // Phase 12 (US9)
+    exchangePartners: '/companies/exchange-partners', // Phase 15 (US12)
   },
   users: {
     list: '/users',
@@ -18,35 +29,35 @@ export const apiRoutes = {
     detail: (id: string) => `/users/${id}`,
     activate: (id: string) => `/users/${id}/activate`,
     deactivate: (id: string) => `/users/${id}/deactivate`,
-    // Feature 009 T024: `truck(id)` (`PATCH /users/:id/truck`) removed. A
-    // vehicle is no longer a field embedded on the driver (spec 008
-    // cutover) — see trucks/tanks below.
+    truck: (id: string) => `/users/${id}/truck`,
+    stations: (id: string) => `/users/${id}/stations`, // Phase 6 (US3)
+    creditLimit: (id: string) => `/users/${id}/credit-limit`, // Phase 6 (US3)
+    creditLimitRequests: '/users/me/credit-limit-requests', // Phase 6 (US3), client side
+    phoneVerificationRequest: '/users/me/phone/verification', // Phase 11 (US8)
+    phoneVerificationConfirm: '/users/me/phone/verification/confirm', // Phase 11 (US8)
   },
   orders: {
     list: '/orders',
+    summary: '/orders/summary', // Phase 10 (US7), T109
+    quote: '/orders/quote',
     detail: (id: string) => `/orders/${id}`,
-    summary: '/orders/summary',
-    // approve/reject/cancel/forceComplete belong to FUEL_COMPANY_ADMIN (or
-    // CLIENT for cancel) — this file is shared platform-wide, not owned by
-    // the transport surface. Feature 009 T023 removed the TRANSPORT-side
-    // wrapper functions that called these (`transport_company/orders/api/
-    // orders.api.ts`, FR-070: this role gets 403 for all four) — it never
-    // removed the routes themselves, which `petrol_company/orders/api/`
-    // still legitimately needs.
     approve: (id: string) => `/orders/${id}/approve`,
     reject: (id: string) => `/orders/${id}/reject`,
+    route: (id: string) => `/orders/${id}/route`, // Phase 5 (US2)
     cancel: (id: string) => `/orders/${id}/cancel`,
     forceComplete: (id: string) => `/orders/${id}/force-complete`,
+    redispatch: (id: string) => `/orders/${id}/redispatch`,
+    supplierInvoiceUpload: (id: string) => `/orders/${id}/supplier-invoice/upload`, // Phase 14 (US11)
+    supplierInvoice: (id: string) => `/orders/${id}/supplier-invoice`, // Phase 14 (US11)
     overrideVerification: (id: string) => `/orders/${id}/override-verification`,
     reassignVehicle: (id: string) => `/orders/${id}/reassign-vehicle`,
-    // spec 011 FR-012: mark a stop handled. Addressed by stop, not by
-    // order — a delivery can accumulate several across one journey.
+    // spec 011 FR-012: mark a stop handled. Addressed by stop, not by order — a delivery
+    // can accumulate several across one journey.
     resolveStop: (id: string, stopId: string) => `/orders/${id}/stops/${stopId}/resolve`,
   },
   dispatch: {
-    // Feature 009 T024/T025: `trigger` (`POST /dispatch/orders/:id`) removed
-    // — the pre-split auto-select retry no longer exists on the platform
-    // (research.md R1). Replaced by the transporter's own two actions.
+    trigger: (orderId: string) => `/dispatch/orders/${orderId}`,
+    // spec 009 T025/US1 — the transporter's own two actions.
     candidates: (orderId: string) => `/dispatch/orders/${orderId}/candidates`,
     assign: (orderId: string) => `/dispatch/orders/${orderId}/assign`,
   },
@@ -70,16 +81,59 @@ export const apiRoutes = {
     withdraw: (id: string) => `/tanks/${id}/withdraw`,
     restore: (id: string) => `/tanks/${id}/restore`,
   },
-  invoices: {
-    list: '/invoices',
-    detail: (id: string) => `/invoices/${id}`,
-    settle: (id: string) => `/invoices/${id}/settle`,
+  stations: {
+    // `/stations` (bare) is CLIENT-only; the FCA cross-owner listing needed its own path
+    // since Nest cannot bind two role-gated handlers to the same @Get() route.
+    allForCompany: '/stations/all', // Phase 6 (US3), T058
+    detail: (id: string) => `/stations/${id}`,
+    update: (id: string) => `/stations/${id}`,
   },
   files: {
+    upload: '/files', // Phase 13 (US10)
     detail: (id: string) => `/files/${id}`,
+  },
+  invoices: {
+    list: '/invoices', // Phase 9 (US6)
+    detail: (id: string) => `/invoices/${id}`,
+    settle: (id: string) => `/invoices/${id}/settle`,
   },
   notifications: {
     list: '/notifications',
     markRead: (id: string) => `/notifications/${id}/read`,
+  },
+  support: {
+    // Corrected from the placeholder `/support` — the real path is
+    // `support/requests` (`src/modules/support/support.controller.ts`).
+    list: '/support/requests', // Phase 11 (US8)
+    acknowledge: (id: string) => `/support/requests/${id}/acknowledge`, // Phase 11 (US8)
+  },
+  creditLimitRequests: {
+    list: '/credit-limit-requests', // Phase 6 (US3), FCA queue
+    resolve: (id: string) => `/credit-limit-requests/${id}/resolve`,
+  },
+  litreBalances: {
+    list: '/litre-balances', // Phase 14 (US11), FCA
+    mine: '/users/me/litre-balances', // Phase 14 (US11), CLIENT
+    correction: (id: string) => `/litre-balances/${id}/corrections`,
+  },
+  billing: {
+    commissionTermsCurrent: '/billing/commission-terms/current', // Phase 12 (US9)
+    commissionTerms: '/billing/commission-terms',
+    cashbackProgrammeCurrent: '/billing/cashback-programme/current',
+    cashbackProgramme: '/billing/cashback-programme',
+    balancesMe: '/billing/balances/me',
+    balancesForCompany: (companyId: string) => `/billing/balances/${companyId}`, // Phase 16 (US13)
+  },
+  platformAccount: {
+    movements: '/platform-account/movements', // Phase 13 (US10)
+    payments: '/platform-account/payments',
+    confirmPayment: (id: string) => `/platform-account/payments/${id}/confirm`,
+  },
+  fuelExchange: {
+    list: '/fuel-exchange/requests', // Phase 15 (US12)
+    create: '/fuel-exchange/requests',
+    detail: (id: string) => `/fuel-exchange/requests/${id}`,
+    respond: (id: string) => `/fuel-exchange/requests/${id}/respond`,
+    withdraw: (id: string) => `/fuel-exchange/requests/${id}/withdraw`,
   },
 } as const;

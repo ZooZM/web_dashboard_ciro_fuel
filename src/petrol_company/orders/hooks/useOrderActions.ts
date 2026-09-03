@@ -5,6 +5,7 @@ import type {
   ApproveOrderInput,
   RejectOrderInput,
   ForceCompleteOrderInput,
+  RouteOrderInput,
 } from '@/petrol_company/orders/api/order-actions.api';
 
 function useInvalidateOrder(id: string) {
@@ -35,6 +36,22 @@ export function useForceCompleteOrder(id: string) {
   const invalidate = useInvalidateOrder(id);
   return useMutation({
     mutationFn: (input: ForceCompleteOrderInput) => orderActionsApi.forceCompleteOrder(id, input),
+    onSuccess: invalidate,
+  });
+}
+
+export function useRouteOrder(id: string) {
+  const invalidate = useInvalidateOrder(id);
+  return useMutation({
+    mutationFn: (input: RouteOrderInput) => orderActionsApi.routeOrder(id, input),
+    onSuccess: invalidate,
+  });
+}
+
+export function useRedispatchOrder(id: string) {
+  const invalidate = useInvalidateOrder(id);
+  return useMutation({
+    mutationFn: () => orderActionsApi.redispatchOrder(id),
     onSuccess: invalidate,
   });
 }

@@ -1,83 +1,83 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { FuelExchangeStats } from '@/petrol_company/fuel_exchange/components/FuelExchangeStats';
-import { FuelExchangeListItem } from '@/petrol_company/fuel_exchange/components/FuelExchangeListItem';
+import { AdminFuelExchangeListItem } from './AdminFuelExchangeListItem';
+import { useExchangeRequestsList } from '@/petrol_company/fuel_exchange/hooks/useFuelExchange';
+import { ExchangeRequestState } from '@/constants/fuel-company';
+import { useFuelCompaniesList } from '@/admin/petrol_companies/hooks/useFuelCompanies';
 
-const STAT_CARDS = [
-  {
-    title: 'طلبات قيد الانتظار',
-    value: '4',
-    icon: '/petrolCompany/requests/arrowUp.svg',
-    iconBgClass: 'bg-blue-50',
-    valueColor: 'text-slate-900',
-    titleColor: 'text-slate-500'
-  },
-  {
-    title: 'تم القبول (اليوم)',
-    value: '2',
-    icon: '/petrolCompany/requests/arrowDown.svg',
-    iconBgClass: 'bg-orange-50',
-    valueColor: 'text-slate-900',
-    titleColor: 'text-slate-500'
-  },
-  {
-    title: 'تم القبول (الشهر)',
-    value: '15',
-    icon: '/petrolCompany/requests/rightCheck.svg',
-    iconBgClass: 'bg-emerald-50',
-    valueColor: 'text-slate-900',
-    titleColor: 'text-slate-500'
-  },
-];
-
-export const MOCK_REQUESTS = [
-  { id: '1', category: 'الطلبات', code: 'REQ-2024-011', companyName: 'الطاقة الحديثة', logo: '/petrolCompany/requests/petro-aman.jpg', fuelType: 'بنزين 95', volume: '42,000', price: '2.30', total: '96,600', time: 'أمس', clock: '09:20 ص', status: 'awaiting_response' },
-  { id: '2', category: 'الطلبات', code: 'REQ-2024-012', companyName: 'الطاقة الحديثة', logo: '/petrolCompany/requests/petro-aman.jpg', fuelType: 'بنزين 91', volume: '30,000', price: '2.18', total: '65,400', time: 'أمس', clock: '10:00 ص', status: 'accepted' },
-  { id: '3', category: 'الطلبات', code: 'REQ-2024-013', companyName: 'الطاقة الحديثة', logo: '/petrolCompany/requests/petro-aman.jpg', fuelType: 'ديزل', volume: '50,000', price: '1.15', total: '57,500', time: 'أمس', clock: '11:30 ص', status: 'accepted' },
-  { id: '4', category: 'الطلبات', code: 'REQ-2024-014', companyName: 'الطاقة الحديثة', logo: '/petrolCompany/requests/petro-aman.jpg', fuelType: 'بنزين 95', volume: '20,000', price: '2.30', total: '46,000', time: 'اليوم', clock: '08:15 ص', status: 'accepted' },
-  { id: '5', category: 'الطلبات', code: 'REQ-2024-015', companyName: 'الطاقة الحديثة', logo: '/petrolCompany/requests/petro-aman.jpg', fuelType: 'بنزين 91', volume: '25,000', price: '2.18', total: '54,500', time: 'اليوم', clock: '09:45 ص', status: 'accepted' },
-  { id: '6', category: 'الطلبات', code: 'REQ-2024-016', companyName: 'الطاقة الحديثة', logo: '/petrolCompany/requests/petro-aman.jpg', fuelType: 'ديزل', volume: '40,000', price: '1.15', total: '46,000', time: 'اليوم', clock: '11:10 ص', status: 'awaiting_response' },
-];
-
+// Feature 013 T242/FR-089: real `GET /fuel-exchange/requests` (SUPER_ADMIN sees every
+// request, direction ignored — see `AdminFuelExchangeListItem.tsx`'s own comment on why
+// this screen must never be read as proof the party-set isolation mechanism works,
+// R3/quickstart 3.3). Company names for the raiser/recipient columns come from `GET
+// /companies?type=FUEL` (already fetched for the companies list, T236) — the exchange
+// list endpoint itself returns ids only.
 export function AdminFuelExchangePage() {
-  const navigate = useNavigate();
+  const { t } = useTranslation();
+  const { data, isLoading, isError, refetch } = useExchangeRequestsList('all');
+  const { data: companies } = useFuelCompaniesList();
+
+  const companyNameById = new Map((companies ?? []).map((c) => [c._id, c.name]));
+  const items = data?.items ?? [];
+  const awaitingCount = items.filter((r) => r.state === ExchangeRequestState.AWAITING_RESPONSE).length;
+  const acceptedCount = items.filter((r) => r.state === ExchangeRequestState.ACCEPTED).length;
+
+  const STAT_CARDS = [
+    {
+      title: t('fuelExchange.filterAll'),
+      value: String(items.length),
+      icon: '/petrolCompany/requests/arrowUp.svg',
+      iconBgClass: 'bg-blue-50',
+      valueColor: 'text-slate-900',
+      titleColor: 'text-slate-500',
+    },
+    {
+      title: t('fuelExchange.state.AWAITING_RESPONSE'),
+      value: String(awaitingCount),
+      icon: '/petrolCompany/requests/arrowDown.svg',
+      iconBgClass: 'bg-orange-50',
+      valueColor: 'text-slate-900',
+      titleColor: 'text-slate-500',
+    },
+    {
+      title: t('fuelExchange.state.ACCEPTED'),
+      value: String(acceptedCount),
+      icon: '/petrolCompany/requests/rightCheck.svg',
+      iconBgClass: 'bg-emerald-50',
+      valueColor: 'text-slate-900',
+      titleColor: 'text-slate-500',
+    },
+  ];
 
   return (
     <div className="w-full p-4 md:p-6 flex-1 -mt-4 bg-[#F8FAFC] min-h-full font-sans border border-[#E7E9EF] rounded-2xl" dir="rtl">
-      {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
         <div className="flex flex-col items-start text-right">
-          <h1 className="text-2xl font-black text-slate-900">تبادل الوقود بين الشركات</h1>
-          <p className="text-sm font-semibold text-slate-500 mt-1">إدارة كافة طلبات توريد الوقود بين الشركات في المنصة</p>
+          <h1 className="text-2xl font-black text-slate-900">{t('fuelExchange.title')}</h1>
+          <p className="text-sm font-semibold text-slate-500 mt-1">{t('adminCompanies.exchangeOversightSubtitle')}</p>
         </div>
       </div>
 
-      {/* Stats Cards */}
       <FuelExchangeStats cards={STAT_CARDS} />
 
-      {/* Main Content Area */}
       <div className="bg-white border border-slate-200 rounded-2xl shadow-sm p-4 md:p-6">
-
-        {/* Search */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
-          <div className="relative w-full md:max-w-xs">
-            <input
-              type="text"
-              placeholder="ابحث بكود أو إسم المالك..."
-              className="w-full pr-10 pl-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-500 placeholder:text-slate-400 shadow-sm"
-            />
-            <img src="/petrolCompany/requests/search.svg" alt="" className="w-4 h-4 absolute right-3.5 top-1/2 -translate-y-1/2 " />
+        {isLoading ? (
+          <p className="text-center text-sm text-slate-400 py-12">{t('common.loading')}</p>
+        ) : isError ? (
+          <div className="flex flex-col items-center gap-3 py-12">
+            <p className="text-sm text-red-500">{t('fuelExchange.loadError')}</p>
+            <button onClick={() => refetch()} className="text-sm font-bold text-blue-600 hover:underline">
+              {t('common.retry')}
+            </button>
           </div>
-        </div>
-
-        {/* Requests List */}
-        <div className="flex flex-col gap-4">
-          {MOCK_REQUESTS.map((req) => (
-            <div key={req.id} onClick={() => navigate(`/admin/fuel-exchange/${req.id}`)} className="cursor-pointer">
-              <FuelExchangeListItem request={req} />
-            </div>
-          ))}
-        </div>
+        ) : items.length === 0 ? (
+          <p className="text-center text-sm text-slate-400 py-12">{t('fuelExchange.empty')}</p>
+        ) : (
+          <div className="flex flex-col gap-4">
+            {items.map((req) => (
+              <AdminFuelExchangeListItem key={req._id} request={req} companyNameById={companyNameById} />
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

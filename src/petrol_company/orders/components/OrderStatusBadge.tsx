@@ -1,29 +1,34 @@
-import { OrderStatus } from '@/constants/order-status';
+import { useTranslation } from 'react-i18next';
+import { orderStatusLabelKey, orderStatusTone, type OrderStatusTone } from '@/constants/order-status';
 import { cn } from '@/lib/utils';
 
-// Feature 009 Slice 1: OrderStatus gained 4 values the transport dashboard was missing
-// (AWAITING_ROUTING, ROUTED_TO_TRANSPORT, ASSIGNED_TO_DRIVER, LOADING). This screen is not
-// otherwise touched by that feature (FR-076), so this is the minimal mechanical addition
-// needed to keep the exhaustive Record compiling — not a retrofit of this screen's design.
-const STATUS_STYLES: Record<OrderStatus, string> = {
-  [OrderStatus.PENDING_APPROVAL]: 'bg-yellow-500/15 text-yellow-700 dark:text-yellow-400',
-  [OrderStatus.APPROVED]: 'bg-blue-500/15 text-blue-700 dark:text-blue-400',
-  [OrderStatus.AWAITING_ROUTING]: 'bg-yellow-500/15 text-yellow-700 dark:text-yellow-400',
-  [OrderStatus.ROUTED_TO_TRANSPORT]: 'bg-blue-500/15 text-blue-700 dark:text-blue-400',
-  [OrderStatus.ASSIGNED_TO_DRIVER]: 'bg-blue-500/15 text-blue-700 dark:text-blue-400',
-  [OrderStatus.PENDING_PAYMENT]: 'bg-orange-500/15 text-orange-700 dark:text-orange-400',
-  [OrderStatus.LOADING]: 'bg-purple-500/15 text-purple-700 dark:text-purple-400',
-  [OrderStatus.IN_TRANSIT]: 'bg-purple-500/15 text-purple-700 dark:text-purple-400',
-  [OrderStatus.UNLOADING]: 'bg-purple-500/15 text-purple-700 dark:text-purple-400',
-  [OrderStatus.DELIVERED]: 'bg-green-500/15 text-green-700 dark:text-green-400',
-  [OrderStatus.REJECTED]: 'bg-red-500/15 text-red-700 dark:text-red-400',
-  [OrderStatus.CANCELLED]: 'bg-gray-500/15 text-gray-700 dark:text-gray-400',
+// Feature 013 T044/FR-011/R1: this file previously had its own hand-rolled status→style
+// map missing the same four stages the platform's own vocabulary was missing dashboard-
+// wide (AWAITING_ROUTING, ROUTED_TO_TRANSPORT, ASSIGNED_TO_DRIVER, LOADING), plus a
+// dead, zero-consumer `ArabicStatusBadge` matching hardcoded mock strings ('جديد',
+// 'تم الأسناد', …) — deleted outright. Now delegates to the same total, tested
+// `orderStatusTone`/`orderStatusLabelKey` functions `transport_company`'s own
+// `OrderStatusBadge` already uses, so a status this dashboard hasn't been taught yet
+// still renders, conspicuously, rather than being silently absorbed into a neighbour's
+// styling or omitted.
+const TONE_STYLES: Record<OrderStatusTone, string> = {
+  pending: 'bg-yellow-500/15 text-yellow-700 dark:text-yellow-400',
+  info: 'bg-blue-500/15 text-blue-700 dark:text-blue-400',
+  actionable: 'bg-amber-500/20 text-amber-800 dark:text-amber-400',
+  progress: 'bg-purple-500/15 text-purple-700 dark:text-purple-400',
+  success: 'bg-green-500/15 text-green-700 dark:text-green-400',
+  danger: 'bg-red-500/15 text-red-700 dark:text-red-400',
+  neutral: 'bg-gray-500/15 text-gray-700 dark:text-gray-400',
+  unknown: 'bg-red-500/10 text-red-800 border border-dashed border-red-400 dark:text-red-300',
 };
 
-export function OrderStatusBadge({ status }: { status: OrderStatus }) {
+export function OrderStatusBadge({ status }: { status: string }) {
+  const { t } = useTranslation();
+  const tone = orderStatusTone(status);
+
   return (
-    <span className={cn('inline-flex rounded-full px-2 py-0.5 text-xs font-medium', STATUS_STYLES[status])}>
-      {status.replaceAll('_', ' ')}
+    <span className={cn('inline-flex rounded-full px-2 py-0.5 text-xs font-medium', TONE_STYLES[tone])}>
+      {t(orderStatusLabelKey(status))}
     </span>
   );
 }

@@ -8,8 +8,6 @@ import { AdminProfilePermissions } from './AdminProfilePermissions';
 import { AdminProfileSecurity } from './AdminProfileSecurity';
 import { AdminProfileAdditionalData } from './AdminProfileAdditionalData';
 import { AdminChangePhoneModal } from './AdminChangePhoneModal';
-import { CashbackBanner } from '@/petrol_company/invoices/components/CashbackBanner';
-import { PlatformCommissionBanner } from '@/petrol_company/invoices/components/PlatformCommissionBanner';
 
 export function AdminProfilePage() {
   const navigate = useNavigate();
@@ -40,10 +38,11 @@ export function AdminProfilePage() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
             <div className="flex flex-col gap-6 col-span-1 lg:col-span-2">
               <AdminProfileAccountCard />
-              <div className="flex flex-col gap-0 -mt-2">
-                <PlatformCommissionBanner />
-                <CashbackBanner />
-              </div>
+              {/* Feature 013 T154/T156: `PlatformCommissionBanner`/`CashbackBanner` were
+                  dropped from the SUPER_ADMIN's own profile — both now read `GET
+                  /billing/balances/me`, which is `@Roles(FUEL_COMPANY_ADMIN)` only (the
+                  operator has no single company's balance to show), so rendering them
+                  here would 403. */}
               <AdminProfilePermissions />
             </div>
 

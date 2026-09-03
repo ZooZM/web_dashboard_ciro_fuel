@@ -1,10 +1,10 @@
 // `erasableSyntaxOnly` forbids runtime `enum` — this object+type pattern gives the same
 // call-site syntax (e.g. `OrderStatus.APPROVED`) while remaining fully erasable.
 //
-// Feature 009 Slice 1 (R3/T015): this vocabulary had 8 of the platform's 12 values — missing
-// exactly the transporter's own working range. A transport dashboard that cannot express
-// AWAITING_ROUTING, ROUTED_TO_TRANSPORT, ASSIGNED_TO_DRIVER or LOADING can only display the
-// parts of a delivery that happen before it reaches this company and after it has left.
+// Feature 013 (fuel company admin dashboard) Phase 4/T031/T032/FR-010/FR-011/R1: the
+// dashboard had 8 of the platform's 12 stages — missing exactly `AWAITING_ROUTING`,
+// `ROUTED_TO_TRANSPORT`, `ASSIGNED_TO_DRIVER` and `LOADING`. Mirrors
+// `src/common/enums/order-status.enum.ts` exactly (FR-097).
 export const OrderStatus = {
   PENDING_APPROVAL: 'PENDING_APPROVAL',
   APPROVED: 'APPROVED',
@@ -22,82 +22,77 @@ export const OrderStatus = {
 
 export type OrderStatus = (typeof OrderStatus)[keyof typeof OrderStatus];
 
-const ALL_ORDER_STATUSES: readonly OrderStatus[] = Object.values(OrderStatus);
+const KNOWN_STATUSES: ReadonlySet<string> = new Set(Object.values(OrderStatus));
 
-/**
- * Every place the dashboard names a delivery's stage MUST recognise the full twelve-value
- * vocabulary (FR-010), and a value it does not recognise MUST render as an explicit unknown,
- * never blank and never the nearest neighbour (FR-011). This is the one function every
- * stage-rendering call site goes through, so there is exactly one place that guarantee can
- * ever be violated.
- */
+/** FR-010: does the platform's current vocabulary recognise this value at all. */
 export function isKnownOrderStatus(status: string): status is OrderStatus {
-  return (ALL_ORDER_STATUSES as readonly string[]).includes(status);
+  return KNOWN_STATUSES.has(status);
 }
 
-// i18n keys — see src/lib/i18n/{en,ar}.json's `orderStatus` namespace. `unknown` is the
-// FR-011 fallback and is deliberately not one of the twelve platform values.
-export const ORDER_STATUS_LABEL_KEY: Record<OrderStatus, string> = {
-  [OrderStatus.PENDING_APPROVAL]: 'orderStatus.PENDING_APPROVAL',
-  [OrderStatus.APPROVED]: 'orderStatus.APPROVED',
-  [OrderStatus.AWAITING_ROUTING]: 'orderStatus.AWAITING_ROUTING',
-  [OrderStatus.ROUTED_TO_TRANSPORT]: 'orderStatus.ROUTED_TO_TRANSPORT',
-  [OrderStatus.ASSIGNED_TO_DRIVER]: 'orderStatus.ASSIGNED_TO_DRIVER',
-  [OrderStatus.PENDING_PAYMENT]: 'orderStatus.PENDING_PAYMENT',
-  [OrderStatus.LOADING]: 'orderStatus.LOADING',
-  [OrderStatus.IN_TRANSIT]: 'orderStatus.IN_TRANSIT',
-  [OrderStatus.UNLOADING]: 'orderStatus.UNLOADING',
-  [OrderStatus.DELIVERED]: 'orderStatus.DELIVERED',
-  [OrderStatus.REJECTED]: 'orderStatus.REJECTED',
-  [OrderStatus.CANCELLED]: 'orderStatus.CANCELLED',
+export type OrderStatusTone =
+  | 'pending'
+  | 'info'
+  | 'actionable'
+  | 'progress'
+  | 'success'
+  | 'danger'
+  | 'neutral'
+  | 'unknown';
+
+// FR-011: total over every value above, no extras — enforced by
+// tests/unit/order-status.test.ts. An unrecognised value never falls through to a
+// neighbour's styling; OrderStatusBadge.tsx keys its style table on this type precisely
+// so a status this dashboard hasn't been taught yet still renders, conspicuously, rather
+// than silently matching whatever tone happens to be defined for undefined lookups.
+export const ORDER_STATUS_TONE: Record<OrderStatus, OrderStatusTone> = {
+  PENDING_APPROVAL: 'pending',
+  APPROVED: 'info',
+  AWAITING_ROUTING: 'actionable',
+  ROUTED_TO_TRANSPORT: 'actionable',
+  ASSIGNED_TO_DRIVER: 'progress',
+  PENDING_PAYMENT: 'pending',
+  LOADING: 'progress',
+  IN_TRANSIT: 'progress',
+  UNLOADING: 'progress',
+  DELIVERED: 'success',
+  REJECTED: 'danger',
+  CANCELLED: 'neutral',
 };
 
 export const ORDER_STATUS_UNKNOWN_LABEL_KEY = 'orderStatus.unknown';
 
-/** Resolves the i18n key for a stage, falling back to the FR-011 unknown key for anything
- *  the platform sends that this dashboard's vocabulary has not (yet) been taught. */
+// FR-011: total over every value above, no extras. Leaf matches the status value itself
+// (e.g. `orderStatus.LOADING`) so a translator adding a new platform status has exactly
+// one convention to follow, verified against en/ar.json by the test suite.
+export const ORDER_STATUS_LABEL_KEY: Record<OrderStatus, string> = Object.fromEntries(
+  Object.values(OrderStatus).map((status) => [status, `orderStatus.${status}`]),
+) as Record<OrderStatus, string>;
+
+/** FR-011: an unrecognised value renders as explicit unknown, never blank, never a neighbour. */
 export function orderStatusLabelKey(status: string): string {
   return isKnownOrderStatus(status) ? ORDER_STATUS_LABEL_KEY[status] : ORDER_STATUS_UNKNOWN_LABEL_KEY;
 }
-
-// Visual treatment. `unknown` gets its own neutral-but-conspicuous tone — it must never be
-// mistaken for a recognised, healthy stage.
-export const ORDER_STATUS_TONE = {
-  [OrderStatus.PENDING_APPROVAL]: 'pending',
-  [OrderStatus.APPROVED]: 'info',
-  [OrderStatus.AWAITING_ROUTING]: 'pending',
-  [OrderStatus.ROUTED_TO_TRANSPORT]: 'actionable',
-  [OrderStatus.ASSIGNED_TO_DRIVER]: 'info',
-  [OrderStatus.PENDING_PAYMENT]: 'pending',
-  [OrderStatus.LOADING]: 'info',
-  [OrderStatus.IN_TRANSIT]: 'progress',
-  [OrderStatus.UNLOADING]: 'progress',
-  [OrderStatus.DELIVERED]: 'success',
-  [OrderStatus.REJECTED]: 'danger',
-  [OrderStatus.CANCELLED]: 'neutral',
-} as const satisfies Record<OrderStatus, string>;
-
-export type OrderStatusTone = (typeof ORDER_STATUS_TONE)[OrderStatus] | 'unknown';
 
 export function orderStatusTone(status: string): OrderStatusTone {
   return isKnownOrderStatus(status) ? ORDER_STATUS_TONE[status] : 'unknown';
 }
 
-/** Assignable = this transporter's own work queue (FR-009). Exactly one value: the moment
- *  before assignment exists. */
-export function isAssignableOrderStatus(status: OrderStatus): boolean {
+// FR-009/FR-017/data-model.md §1.2 — derived predicates, each backed by exactly one
+// platform rule rather than re-implemented per screen:
+
+/** The one status from which a transporter can be assigned (`POST /dispatch/orders/:id/assign`). */
+export function isAssignableOrderStatus(status: string): boolean {
   return status === OrderStatus.ROUTED_TO_TRANSPORT;
 }
 
-/** Trackable mirrors the platform's own `order:watch` refusal rule exactly (contracts/
- *  realtime-contract.md) — this is not a judgement the dashboard makes independently, it is
- *  a restatement of what the platform already enforces, kept here only so every screen asks
- *  the same question the same way. */
-export function isTrackableOrderStatus(status: OrderStatus): boolean {
+/** Mirrors the platform's own `order:watch` trackability rule exactly (IN_TRANSIT, UNLOADING only)
+ *  — LOADING is deliberately NOT trackable, the stage this dashboard could not previously express. */
+export function isTrackableOrderStatus(status: string): boolean {
   return status === OrderStatus.IN_TRANSIT || status === OrderStatus.UNLOADING;
 }
 
-export function isTerminalOrderStatus(status: OrderStatus): boolean {
+/** An order in one of these states will never change again. */
+export function isTerminalOrderStatus(status: string): boolean {
   return (
     status === OrderStatus.DELIVERED ||
     status === OrderStatus.REJECTED ||
@@ -112,13 +107,11 @@ export const CompanyStatus = {
 
 export type CompanyStatus = (typeof CompanyStatus)[keyof typeof CompanyStatus];
 
-// Feature 010 FR-002/FR-004: computed by the platform per candidate, never inferred
-// client-side — four values, not a boolean, because the two ineligible-but-selectable-with-
-// a-reason states (BUSY vs OFFLINE) must read distinctly, and INACTIVE is a separate,
-// never-selectable-at-all state (corrected during implementation: a suspended/deactivated
-// driver is still shown, per FR-001's "whole roster," but has no override path at all,
-// unlike BUSY/OFFLINE, and only OFFLINE actually accepts one — see the platform's own
-// dispatch.service.ts for why BUSY can never be force-assigned).
+// spec 010 (driver availability & assignment escalation) FR-002/FR-004: a computed
+// classification, never stored on `User` — mirrors
+// `src/common/enums/driver-eligibility.enum.ts` exactly. Four values, not a boolean: the
+// two ineligible-but-selectable-with-a-reason states (offline vs. already committed) are
+// shown distinctly, and INACTIVE is a separate, never-selectable-at-all state.
 export const DriverEligibility = {
   ELIGIBLE: 'ELIGIBLE',
   BUSY: 'BUSY',
@@ -128,11 +121,9 @@ export const DriverEligibility = {
 
 export type DriverEligibility = (typeof DriverEligibility)[keyof typeof DriverEligibility];
 
-// Feature 009 (found wiring the tank form, T040/FR-011): these four values did not match
-// the platform's `FuelType` enum at all — `OCTANE_98` doesn't exist on the platform, and the
-// platform's `KEROSENE` didn't exist here. An order's `fuelType` and a tank's `fuelTypes`
-// both carry the platform's literal values, so a tank's grade guard (FR-011, TANK_GRADE_
-// UNSUPPORTED) could never have matched correctly against this vocabulary.
+// Feature 013 T033/R1: this dashboard's fuel-grade constant was fabricated outright
+// (`{OCTANE_91:'91', OCTANE_95:'95', OCTANE_98:'98', DIESEL}`) against values the platform
+// has never sent. Mirrors `src/common/enums/fuel-type.enum.ts` exactly (FR-037, FR-097).
 export const FuelType = {
   DIESEL: 'DIESEL',
   PETROL_91: 'PETROL_91',
@@ -148,6 +139,17 @@ export const FUEL_TYPES: readonly FuelType[] = [
   FuelType.PETROL_95,
   FuelType.KEROSENE,
 ];
+
+// Phase 8 (US5) T094 — same leaf-matches-value convention as `ORDER_STATUS_LABEL_KEY`.
+export const FUEL_TYPE_LABEL_KEY: Record<FuelType, string> = Object.fromEntries(
+  FUEL_TYPES.map((type) => [type, `fuelType.${type}`]),
+) as Record<FuelType, string>;
+
+export function fuelTypeLabelKey(type: string): string {
+  return (FUEL_TYPES as readonly string[]).includes(type)
+    ? FUEL_TYPE_LABEL_KEY[type as FuelType]
+    : 'fuelType.unknown';
+}
 
 export type Language = 'ar' | 'en';
 export type Direction = 'rtl' | 'ltr';

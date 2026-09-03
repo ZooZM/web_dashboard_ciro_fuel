@@ -9,6 +9,23 @@ export interface OrderStatusEvent {
   overrideReason?: string;
 }
 
+// Feature 013 T042/FR-020: the four itemised components an order detail screen must
+// show (spec 005 D3/FR-011a) — was on the backend schema (`PriceBreakdown`) but absent
+// from this type entirely. Optional: orders placed before that feature have none, and
+// none is ever back-filled (research R2) — FR-020 requires omitting it, never inventing it.
+export interface PriceBreakdown {
+  fuelLineTotal: number;
+  deliveryFee: number;
+  serviceFee: number;
+  tax: number;
+  total: number;
+  unitPrice: number;
+  serviceFeePercent: number;
+  taxRatePercent: number;
+  currency: string;
+  pricedAt: string;
+}
+
 export interface DriverSummary {
   fullName: string;
   phone: string;
@@ -61,11 +78,21 @@ export interface Order {
   quantityLiters: number;
   estimatedPrice: number;
   finalPrice: number | null;
+  priceBreakdown: PriceBreakdown | null;
   deliveryAddressText: string;
   deliveryLocation: { type: 'Point'; coordinates: [number, number] } | null;
   station: StationSummary | null;
   statusHistory: OrderStatusEvent[];
   createdAt: string;
+  // Feature 013 T042: present in the real `toObject()` response for every operator/driver
+  // role (never stripped by `toRoleScopedShape`) but was missing from this type entirely —
+  // a fuel company administrator's own orders list has no other way to identify the
+  // station owner or the transporter an order is routed to.
+  clientId: string;
+  transportCompanyId: string | null;
+  // Set inside the SAME transaction that approves the order (R4 — approval issues the
+  // invoice, not delivery). Absent only before approval.
+  invoiceId: string | null;
   driverId: string | null;
   driverSummary: DriverSummary | null;
   clientSummary: ClientSummary | null;
@@ -94,6 +121,23 @@ export interface Order {
   // stripped for CLIENT server-side, deliberately: a customer has no business
   // knowing where a truck paused or why.
   stopEvents: StopEvent[];
+  // spec 013 T193/FR-073b/FR-073f: `FUEL_COMPANY_ADMIN`/`SUPER_ADMIN` only — absent (key
+  // missing, never null) for every other role and whenever no supplier invoice has been
+  // confirmed yet (SC-014c). Never the raw `supplierInvoices` array (never sent to any
+  // role, including this one) — this is the server's own shaped, single-current view.
+  supplierInvoice?: SupplierInvoiceView;
+}
+
+export interface SupplierInvoiceView {
+  fileId: string;
+  extracted: { quantityLitres?: number; fuelType?: FuelType; reference?: string; issueDate?: string } | null;
+  confirmed: { quantityLitres: number; fuelType: FuelType; reference: string; issueDate: string };
+  confirmedBy: string | null;
+  confirmedAt: string | null;
+  orderedQuantityLitres: number;
+  suppliedQuantityLitres: number;
+  proportionFulfilled: number;
+  shortfallLitres: number;
 }
 
 /**

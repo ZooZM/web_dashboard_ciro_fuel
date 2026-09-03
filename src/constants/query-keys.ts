@@ -9,8 +9,11 @@ export interface OrderListParams {
 export interface UserListParams {
   role?: 'DRIVER' | 'CLIENT';
   isActive?: boolean;
+  page?: number;
 }
 
+// Feature 013 T038/FR-097: query keys every later phase's `hooks/use*.ts` file consumes,
+// defined once here rather than as an ad hoc array literal at each `useQuery` call site.
 export const queryKeys = {
   auth: {
     me: ['auth', 'me'] as const,
@@ -19,18 +22,22 @@ export const queryKeys = {
     all: ['companies'] as const,
     detail: (id: string) => ['companies', id] as const,
     fuelPrices: (id: string) => ['companies', id, 'fuel-prices'] as const,
+    pricingConfig: (id: string) => ['companies', id, 'pricing-config'] as const, // Phase 8
+    transporters: (id: string) => ['companies', id, 'transporters'] as const, // Phase 7
+    coveredRegions: (id: string) => ['companies', id, 'covered-regions'] as const, // Phase 7
   },
   orders: {
     list: (params: OrderListParams) => ['orders', params] as const,
     detail: (id: string) => ['orders', id] as const,
     summary: (from?: string, to?: string) => ['orders', 'summary', { from, to }] as const,
+    // Phase 10 (US7) — the FUEL_COMPANY_ADMIN summary shape, keyed separately from
+    // `summary` above (the TRANSPORT_COMPANY_ADMIN one) since the two return genuinely
+    // different response shapes for the same route.
+    fuelCompanySummary: (from?: string, to?: string) =>
+      ['orders', 'summary', 'fuel-company', { from, to }] as const,
   },
   dispatch: {
     candidates: (orderId: string) => ['dispatch', 'candidates', orderId] as const,
-  },
-  users: {
-    list: (params: UserListParams) => ['users', params] as const,
-    detail: (id: string) => ['users', id] as const,
   },
   trucks: {
     all: ['trucks'] as const,
@@ -40,5 +47,43 @@ export const queryKeys = {
     all: ['tanks'] as const,
     detail: (id: string) => ['tanks', id] as const,
   },
-  notifications: (unread?: boolean) => ['notifications', { unread }] as const,
+  users: {
+    list: (params: UserListParams) => ['users', params] as const,
+    detail: (id: string) => ['users', id] as const,
+    stations: (id: string) => ['users', id, 'stations'] as const, // Phase 6
+    creditLimit: (id: string) => ['users', id, 'credit-limit'] as const, // Phase 6
+  },
+  invoices: {
+    list: (params: { method?: string; state?: string; cursor?: string }) =>
+      ['invoices', params] as const, // Phase 9
+    detail: (id: string) => ['invoices', id] as const,
+  },
+  notifications: (unread?: boolean, cursor?: string) =>
+    ['notifications', { unread, cursor }] as const,
+  support: (state?: string) => ['support', { state }] as const, // Phase 11
+  stations: {
+    all: ['stations'] as const, // Phase 6, T058
+  },
+  creditLimitRequests: {
+    list: (state?: string) => ['credit-limit-requests', { state }] as const, // Phase 6
+    mine: ['credit-limit-requests', 'mine'] as const,
+  },
+  litreBalances: {
+    list: (clientId?: string) => ['litre-balances', { clientId }] as const, // Phase 14
+    mine: ['litre-balances', 'mine'] as const,
+  },
+  billing: {
+    commissionTerms: ['billing', 'commission-terms'] as const, // Phase 12
+    cashbackProgramme: ['billing', 'cashback-programme'] as const,
+    balancesMe: ['billing', 'balances', 'me'] as const,
+  },
+  platformAccount: {
+    movements: (params: { kind?: string; state?: string; cursor?: string } = {}) =>
+      ['platform-account', 'movements', params] as const, // Phase 13
+  },
+  fuelExchange: {
+    list: (direction?: string, cursor?: string) => ['fuel-exchange', { direction, cursor }] as const, // Phase 15
+    detail: (id: string) => ['fuel-exchange', id] as const,
+    partners: ['companies', 'exchange-partners'] as const,
+  },
 } as const;

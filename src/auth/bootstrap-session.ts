@@ -1,25 +1,29 @@
+import toast from 'react-hot-toast';
 import { setOnSessionExpired } from '@/lib/api/api.client';
 import { me } from '@/auth/api/auth.api';
 import { useSessionStore } from '@/stores/session.store';
 import { isDashboardRole } from '@/constants/roles';
 import { logout as logoutRequest } from '@/auth/api/auth.api';
 import { tokenStore } from '@/lib/auth/token-store';
+import { ApiError } from '@/lib/api/api-error';
+import { SessionRevocationCause } from '@/constants/session';
+
+// Feature 013 FR-090/Edge Cases: "refused, with the reason stated rather than an empty
+// dashboard" — SIGNED_IN_ELSEWHERE/PASSWORD_RESET already have a live-session precedent
+// (spec 006); COMPANY_SUSPENDED is this feature's addition. Deliberately not shown for
+// every cause — SIGNED_IN_ELSEWHERE and PASSWORD_RESET are the user's OWN action
+// elsewhere and need no explanation on this device; a silent, unexplained sign-out for
+// those would be confusing where a stated one is not.
+const REVOCATION_MESSAGES: Partial<Record<SessionRevocationCause, string>> = {
+  [SessionRevocationCause.COMPANY_SUSPENDED]:
+    'تم تعليق حساب الشركة. يرجى التواصل مع إدارة المنصة.',
+  [SessionRevocationCause.ACCOUNT_DEACTIVATED]: 'تم إلغاء تفعيل هذا الحساب.',
+};
 
 /**
- * Feature 009 Slice 0 (T007): the demonstration bypass this function used to contain —
- *
- *   if (accessToken === 'dummy-token' && existingUser) { setSession(existingUser, accessToken); return; }
- *
- * — admitted a session fabricated by the deleted RoleSelectionPage for ANY role, with no
- * platform involved at all. It is removed, not adjusted: every session now originates from a
- * real `/auth/login` or, here, a real `/auth/me` lookup.
- *
- * Because both tokens are now held in memory only (FR-078, research.md R2), neither survives a
- * page reload — there is no httpOnly refresh cookie in this feature (plan.md Complexity
- * Tracking), so a hard reload always starts from zero and this call is expected to end in
- * `clearSession()` on one. What it still does: resolve an in-SPA-memory access token against
- * `/auth/me` (e.g. after a client-side navigation that re-invoked this), and reject a
- * CLIENT/DRIVER token outright — this surface is admin-only (FR-068).
+ * Silent refresh on app load (FR-011): the stored refresh token (feature 013 T024 — the
+ * platform reads it from the request body, not a cookie) restores the access token without
+ * a visible re-login. A CLIENT/DRIVER token is rejected — this surface is admin-only (FR-001).
  */
 export async function bootstrapSession(): Promise<void> {
   const { setSession, clearSession, setStatus } = useSessionStore.getState();
@@ -27,20 +31,26 @@ export async function bootstrapSession(): Promise<void> {
 
   try {
     const accessToken = tokenStore.get();
-    if (!accessToken) {
-      clearSession();
-      return;
-    }
 
+    // Rely on the existing token. If it's expired or missing, the interceptor
+    // will catch the 401 and attempt a refresh automatically.
     const user = await me();
 
-    if (!isDashboardRole(user.role)) {
+    if (!isDashboardRole(user.role) || !accessToken) {
       clearSession();
       return;
     }
 
     setSession(user, accessToken);
-  } catch {
+  } catch (error) {
+    // FR-090/Edge Cases: state the specific reason when the platform gave one (e.g. a
+    // suspended company), rather than silently landing on the sign-in screen.
+    if (error instanceof ApiError && error.cause) {
+      const message = REVOCATION_MESSAGES[error.cause as SessionRevocationCause];
+      if (message) {
+        toast.error(message);
+      }
+    }
     clearSession();
   }
 }

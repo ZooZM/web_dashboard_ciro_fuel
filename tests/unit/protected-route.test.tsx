@@ -91,4 +91,26 @@ describe('<ProtectedRoute> (FR-068, SC-001)', () => {
     renderProtected([Role.TRANSPORT_COMPANY_ADMIN, Role.SUPER_ADMIN]);
     expect(screen.getByText('Secret content')).toBeInTheDocument();
   });
+
+  // spec 013 T244/T245/FR-091: the entire `/admin` route tree is guarded
+  // `allow={[SUPER_ADMIN]}` alone (router.tsx) — a FUEL_COMPANY_ADMIN cannot reach it at
+  // all, which is what makes "operator-only controls absent, not disabled" true by
+  // construction for every operator-only screen this feature added (Phase 16's fuel
+  // companies list/detail, billing settings, exchange oversight): there is no shared
+  // ROUTE for a control to leak across, only a small set of purely presentational
+  // components reused by both trees (`FuelExchangeStats`, `CustomerDataCard`,
+  // `CompanyRecentTripsCard`, the four payment-form inputs, `CommissionTypeSelector`) —
+  // none of which contain any role-conditional rendering at all (verified by inspection,
+  // recorded in tasks.md's Notes). This test asserts the mechanism that makes that
+  // construction hold: a FUEL_COMPANY_ADMIN is refused the operator-only surface exactly
+  // as a DRIVER/CLIENT are refused theirs above.
+  it('a FUEL_COMPANY_ADMIN is refused the operator-only surface (T244/T245, FR-091)', () => {
+    useSessionStore.getState().setSession(
+      { id: '6', role: Role.FUEL_COMPANY_ADMIN, companyId: 'c1', fullName: 'FCA', email: 'h@i.com' },
+      'token',
+    );
+    renderProtected([Role.SUPER_ADMIN]);
+    expect(screen.getByText('Forbidden page')).toBeInTheDocument();
+    expect(screen.queryByText('Secret content')).not.toBeInTheDocument();
+  });
 });

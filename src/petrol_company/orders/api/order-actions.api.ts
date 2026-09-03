@@ -21,6 +21,10 @@ export interface ForceCompleteOrderInput {
   reason: string;
 }
 
+export interface RouteOrderInput {
+  transportCompanyId: string;
+}
+
 export async function approveOrder(id: string, input: ApproveOrderInput): Promise<Order> {
   const { data } = await apiClient.patch<Order>(apiRoutes.orders.approve(id), input);
   return data;
@@ -33,5 +37,19 @@ export async function rejectOrder(id: string, input: RejectOrderInput): Promise<
 
 export async function forceCompleteOrder(id: string, input: ForceCompleteOrderInput): Promise<Order> {
   const { data } = await apiClient.patch<Order>(apiRoutes.orders.forceComplete(id), input);
+  return data;
+}
+
+// FR-014: routes an APPROVED order to one of the administrator's affiliated transporters.
+export async function routeOrder(id: string, input: RouteOrderInput): Promise<Order> {
+  const { data } = await apiClient.patch<Order>(apiRoutes.orders.route(id), input);
+  return data;
+}
+
+// FR-015: redispatch admits FUEL_COMPANY_ADMIN and CLIENT (spec 004) — this call is the
+// FCA path; the client's own redispatch, if this dashboard ever needed it, would be a
+// separate concern entirely (a different persona's screen).
+export async function redispatchOrder(id: string): Promise<Order> {
+  const { data } = await apiClient.post<Order>(apiRoutes.orders.redispatch(id));
   return data;
 }

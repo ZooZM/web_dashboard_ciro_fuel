@@ -14,7 +14,12 @@ export function MobileOrderTrackingList({ orders }: { orders: any[] }) {
           <div className="flex items-center justify-between border-b border-slate-100 pb-3">
             <span className="text-slate-800 font-bold text-sm">{order.id}</span>
             <div className="inline-flex items-center gap-1.5 bg-[#E6F4EA] px-2.5 py-1 rounded-full">
-              <div className="w-1.5 h-1.5 rounded-full bg-[#16A34A]"></div>
+              <div className="relative flex h-1.5 w-1.5 shrink-0">
+                {order.status === 'جديد' && (
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#16A34A] opacity-75"></span>
+                )}
+                <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[#16A34A]"></span>
+              </div>
               <span className="text-[#16A34A] text-[10px] font-bold">{order.status}</span>
             </div>
           </div>

@@ -193,19 +193,31 @@ export function Sidebar() {
                 <NavItem to="/admin/transport-companies" icon="/sideBar/greyTruck.svg" label="شركات النقل" isCollapsed={isCollapsed} />
                 <NavItem to="/admin/petrol-companies" icon="/sideBar/stations.svg" label="شركات البترول" isCollapsed={isCollapsed} iconClassName="h-6 w-6" />
                 <NavItem to="/admin/invoices" icon="/sideBar/order.svg" label="الفواتير و المدفوعات" isCollapsed={isCollapsed} />
+                <NavItem to="/admin/platform-account" icon="/sideBar/Property%201=Transaction.svg" label="حساب المنصات" isCollapsed={isCollapsed} />
+                {/* Feature 013 T239/T240/FR-055/FR-056/FR-059/FR-062a/FR-062b: the operator's
+                    write surface for the platform-wide commission rate and cashback
+                    programme — absent for every fuel company admin entirely (FR-091). */}
+                <NavItem to="/admin/billing-settings" icon="/blue-percentage-icon.svg" label="إعدادات العمولة" isCollapsed={isCollapsed} />
                 <NavItem to="/admin/notifications" icon="/sideBar/notification.svg" label="الاشعارات" badge={5} isCollapsed={isCollapsed} />
               </>
             ) : user?.role === 'CLIENT' ? (
               <>
                 <NavItem to="/petrolCompany/dashboard" icon="/sideBar/home.svg" label="الرئيسية" isCollapsed={isCollapsed} />
-                <NavItem to="/petrolCompany/orders" icon="/sideBar/order.svg" label="الطلبات" badge={5} isCollapsed={isCollapsed} />
+                {/* Feature 013 T121/FR-047/FR-048: the static badge={5} on this item and
+                    the notifications item below were fabricated — no live count was ever
+                    wired to either. Removed rather than left showing a number that can
+                    never be true; a real unread count would need Sidebar to poll its own
+                    summary query, out of this phase's scope. */}
+                <NavItem to="/petrolCompany/orders" icon="/sideBar/order.svg" label="الطلبات" isCollapsed={isCollapsed} />
                 <NavItem to="/petrolCompany/tracking" icon="/sideBar/map.svg" label="تتبع الشحنات" isCollapsed={isCollapsed} />
                 <NavItem to="/petrolCompany/fuel-exchange" icon="/sideBar/fuel-exchange.svg" label="تبادل الوقود" isCollapsed={isCollapsed} />
                 <NavItem to="/petrolCompany/pricing" icon="/sideBar/fuel-pricing.svg" label="تسعير الوقود" isCollapsed={isCollapsed} />
                 <NavItem to="/petrolCompany/companies" icon="/sideBar/greyTruck.svg" label="شركات النقل" isCollapsed={isCollapsed} />
                 <NavItem to="/petrolCompany/stations" icon="/sideBar/stations.svg" label="المحطات" isCollapsed={isCollapsed} iconClassName="h-7 w-7" />
                 <NavItem to="/petrolCompany/invoices" icon="/sideBar/order.svg" label="الفواتير و المدفوعات" isCollapsed={isCollapsed} />
-                <NavItem to="/petrolCompany/notifications" icon="/sideBar/notification.svg" label="الاشعارات" badge={5} isCollapsed={isCollapsed} />
+                <NavItem to="/petrolCompany/support" icon="/petrolCompany/support.svg" label="الدعم" isCollapsed={isCollapsed} />
+                <NavItem to="/petrolCompany/PlatformAccountPage" icon="/sideBar/Property%201=Transaction.svg" label="حساب المنصة" isCollapsed={isCollapsed} />
+                <NavItem to="/petrolCompany/notifications" icon="/sideBar/notification.svg" label="الاشعارات" isCollapsed={isCollapsed} />
               </>
             ) : (
               <>

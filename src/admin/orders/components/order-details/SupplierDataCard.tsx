@@ -4,7 +4,7 @@ export function SupplierDataCard() {
       <div className="w-full flex items-center justify-between mb-8">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center shrink-0">
-            <img src="/sideBar/stations.svg" alt="" className="w-5 h-5 opacity-70" />
+            <img src="/sideBar/petroAman.svg" alt="supplier" className="w-5 h-5" />
           </div>
           <h2 className="text-xl font-black text-[#162155]">بيانات المورد</h2>
         </div>
@@ -14,7 +14,7 @@ export function SupplierDataCard() {
       </div>
       
       <div className="w-10 h-10 rounded-full flex items-center justify-center mb-4">
-        <img src="/sideBar/petroAman.svg" alt="supplier" className="w-8 h-8 opacity-90" />
+        <img src="/Admin/Brands/petroAman.jpg" alt="supplier" className="w-8 h-8 opacity-90" />
       </div>
       <span className="text-[#162155] font-black text-xl mb-1">بترو أمان</span>
       <div className="flex items-center gap-2 text-slate-500 text-sm font-bold mb-8">

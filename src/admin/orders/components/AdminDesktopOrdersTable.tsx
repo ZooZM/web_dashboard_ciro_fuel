@@ -20,6 +20,7 @@ export function AdminDesktopOrdersTable({ orders }: { orders: any[] }) {
             <TableHead className="font-bold text-slate-700 text-[12px] text-center py-3 px-2 min-w-[80px]">الحالة</TableHead>
             <TableHead className="font-bold text-slate-700 text-[12px] text-center py-3 px-2 min-w-[90px]">عمولة المنصة (ر.س)</TableHead>
             <TableHead className="font-bold text-slate-700 text-[12px] text-center py-3 pl-4 pr-2 min-w-[100px]">فاتورة الوقود (ر.س)</TableHead>
+            <TableHead className="font-bold text-slate-700 text-[12px] text-center py-3 pl-4 pr-2 min-w-[100px]">طريقة الدفع</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -100,6 +101,23 @@ export function AdminDesktopOrdersTable({ orders }: { orders: any[] }) {
               {/* فاتورة الوقود */}
               <TableCell className="align-middle text-center py-3 pl-4 pr-2">
                 <span className="text-green-600 font-black text-[12px]">{order.fuelInvoice}</span>
+              </TableCell>
+
+              {/* طريقة الدفع */}
+              <TableCell className="align-middle text-center py-3 pl-4 pr-2">
+                {order.paymentMethod === 'bank' ? (
+                  <div className="inline-flex items-center gap-1.5 bg-[#faf5ff] px-3 py-1.5 rounded-full border border-purple-100">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-[#a855f7]">
+                      <path d="M20 14H4L10 20M4 10H20L14 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                    <span className="text-[#a855f7] text-[11px] font-bold">تحويل بنكي</span>
+                  </div>
+                ) : (
+                  <div className="inline-flex items-center gap-1.5 bg-[#eff6ff] px-3 py-1.5 rounded-full border border-blue-100">
+                    <img src="/transportCompany/orderPage/orderDetails/invoice.svg" className="w-4 h-4" alt="sadad" />
+                    <span className="text-[#3b82f6] text-[11px] font-bold">سداد</span>
+                  </div>
+                )}
               </TableCell>
             </TableRow>
           ))}

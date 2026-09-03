@@ -17,8 +17,9 @@ interface SessionState {
   user: SessionUser | null;
   status: SessionStatus;
   setStatus: (status: SessionStatus) => void;
-  // refreshToken is optional only for the rehydration path (bootstrapSession's `/auth/me` call
-  // has no fresh refresh token to offer) — every real login or refresh MUST pass one (FR-078).
+  // `refreshToken` is optional: bootstrapSession()'s reload path re-establishes a session
+  // from an already-valid access token and has no new refresh token to record — the one
+  // persisted from the original login (or the last silent refresh) is still current.
   setSession: (user: SessionUser, accessToken: string, refreshToken?: string) => void;
   clearSession: () => void;
 }

@@ -1,6 +1,4 @@
 import { useNavigate } from 'react-router-dom';
-import { CompanyContactCard } from '@/petrol_company/companies/components/CompanyContactCard';
-import { CompanyRegionsCard } from '@/petrol_company/companies/components/CompanyRegionsCard';
 import { CompanyRecentTripsCard } from '@/petrol_company/companies/components/CompanyRecentTripsCard';
 import { AdminTransportCompanyInfoCard } from './AdminTransportCompanyInfoCard';
 import { AdminCompanyDriversCard } from './AdminCompanyDriversCard';
@@ -120,13 +118,17 @@ export function AdminTransportCompanyDetailsPage() {
         {/* Right Column (Wider) - Info, Regions, Drivers */}
         <div className="flex-1 w-full flex flex-col gap-6">
           <AdminTransportCompanyInfoCard />
-          <CompanyRegionsCard />
+          {/* spec 013 Phase 7 note: `CompanyRegionsCard`/`CompanyContactCard`
+              (petrol_company/companies) were made real this phase — the regions card now
+              calls `PUT /companies/:id/regions`, gated `@Roles(FUEL_COMPANY_ADMIN)`, which
+              would 403 for this SUPER_ADMIN oversight surface. Reuse removed rather than
+              left half-working; out of this feature's scope (a later operator-oversight
+              phase, 016, can build its own SUPER_ADMIN-facing read path). */}
           <AdminCompanyDriversCard />
         </div>
 
         {/* Left Column (Narrower) - Contact & Recent Trips */}
         <div className="w-full lg:w-[350px] flex flex-col gap-6 shrink-0 self-start">
-          <CompanyContactCard />
           <CompanyRecentTripsCard />
         </div>
 

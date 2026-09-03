@@ -1,89 +1,84 @@
+import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { cn } from '@/lib/utils';
+import type { Invoice } from '@/petrol_company/invoices/api/invoices.api';
 
-export function DesktopInvoicesTable({ invoices }: { invoices: any[] }) {
+// Feature 013 T103/FR-041/FR-098: wired to real `Invoice` documents. Dropped: an
+// "invoice number" (only `_id` exists), station/owner/transporter display names (a list
+// row has no batch endpoint to resolve them without N extra fetches per page), a platform
+// commission figure (invoice-level, not tracked — Phase 12 scope), "سداد/تحويل بنكي"
+// payment-method labels (fabricated; the real values are DIRECT/DEFERRED/CREDIT) and an
+// export action (no export capability exists anywhere on the platform).
+interface DesktopInvoicesTableProps {
+  invoices: Invoice[];
+  onSettle: (invoice: Invoice) => void;
+}
+
+export function DesktopInvoicesTable({ invoices, onSettle }: DesktopInvoicesTableProps) {
+  const navigate = useNavigate();
+  const { t } = useTranslation();
+
   return (
     <div className="hidden lg:block overflow-hidden w-[100%]">
       <Table>
         <TableHeader>
           <TableRow className="bg-[#f8f9fa] hover:bg-[#f8f9fa] w-full border-b border-slate-100">
-            <TableHead className="font-bold text-slate-700 text-[12px] text-right py-4 pr-6 pl-2 min-w-[100px]">رقم الفاتورة</TableHead>
-            <TableHead className="font-bold text-slate-700 text-[12px] text-right py-4 px-2 min-w-[100px]">الطلب</TableHead>
-            <TableHead className="font-bold text-slate-700 text-[12px] text-right py-4 px-2 min-w-[120px]">الناقل</TableHead>
-            <TableHead className="font-bold text-slate-700 text-[12px] text-center py-4 px-2 min-w-[160px]">المحطة</TableHead>
-            <TableHead className="font-bold text-slate-700 text-[12px] text-center py-4 px-2 min-w-[100px]">عمولة المنصة<br/><span className="text-[10px] text-slate-400 font-normal">(ر.س)</span></TableHead>
-            <TableHead className="font-bold text-slate-700 text-[12px] text-center py-4 px-2 min-w-[100px]">المبلغ<br/><span className="text-[10px] text-slate-400 font-normal">(ر.س)</span></TableHead>
-            <TableHead className="font-bold text-slate-700 text-[12px] text-center py-4 px-2 min-w-[120px]">تاريخ الإصدار</TableHead>
-            <TableHead className="font-bold text-slate-700 text-[12px] text-center py-4 px-2 min-w-[100px]">حالة</TableHead>
-            <TableHead className="font-bold text-slate-700 text-[12px] text-center py-4 pl-6 pr-2 min-w-[80px]">تصدير</TableHead>
+            <TableHead className="font-bold text-slate-700 text-[12px] text-right py-4 pr-6 pl-2 min-w-[120px]">{t('invoices.order')}</TableHead>
+            <TableHead className="font-bold text-slate-700 text-[12px] text-center py-4 px-2 min-w-[100px]">{t('invoices.amount')}<br/><span className="text-[10px] text-slate-400 font-normal">(ر.س)</span></TableHead>
+            <TableHead className="font-bold text-slate-700 text-[12px] text-center py-4 px-2 min-w-[140px]">{t('invoices.method')}</TableHead>
+            <TableHead className="font-bold text-slate-700 text-[12px] text-center py-4 px-2 min-w-[120px]">{t('invoices.issued')}</TableHead>
+            <TableHead className="font-bold text-slate-700 text-[12px] text-center py-4 px-2 min-w-[100px]">{t('orders.status')}</TableHead>
+            <TableHead className="font-bold text-slate-700 text-[12px] text-center py-4 pl-6 pr-2 min-w-[100px]">{t('invoices.action')}</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {invoices.map((invoice, idx) => (
-            <TableRow 
-              key={idx} 
-              className="hover:bg-slate-50 border-b border-slate-100 last:border-0 transition-colors"
+          {invoices.map((invoice) => (
+            <TableRow
+              key={invoice._id}
+              className="hover:bg-slate-50 border-b border-slate-100 last:border-0 transition-colors cursor-pointer"
+              onClick={() => navigate(`/petrolCompany/orders/${invoice.orderId}`)}
             >
-              {/* رقم الفاتورة */}
               <TableCell className="align-middle py-4 pr-6 pl-2">
-                <span className="text-slate-500 font-medium text-[12px] whitespace-nowrap">{invoice.invoiceNum}</span>
-              </TableCell>
-              
-              {/* الطلب */}
-              <TableCell className="align-middle py-4 px-2 text-right">
-                <span className="text-slate-500 font-medium text-[12px] whitespace-nowrap">{invoice.orderNum}</span>
-              </TableCell>
-              
-              {/* الناقل */}
-              <TableCell className="align-middle py-4 px-2 text-right">
-                <span className="text-slate-500 font-medium text-[12px] whitespace-nowrap">{invoice.company}</span>
+                <span className="text-slate-500 font-medium text-[12px] whitespace-nowrap">{invoice.orderId}</span>
               </TableCell>
 
-              {/* المحطة */}
-              <TableCell className="align-middle py-4 px-2 text-center">
-                <div className="flex flex-col items-center">
-                  <span className="text-slate-400 text-[11px] text-center max-w-[140px] leading-tight">{invoice.station}</span>
-                  <span className="text-slate-800 font-bold text-[12px] mt-0.5 text-center leading-tight">{invoice.owner}</span>
-                </div>
-              </TableCell>
-
-              {/* أجرة التوصيل */}
               <TableCell className="align-middle text-center py-4 px-2">
-                <span className="text-[#162155] font-black text-[13px]">{invoice.deliveryFee}</span>
+                <span className="text-[#162155] font-black text-[13px]">{invoice.amount.toLocaleString()}</span>
               </TableCell>
 
-              {/* المبلغ */}
               <TableCell className="align-middle text-center py-4 px-2">
-                <span className="text-[#162155] font-black text-[13px]">{invoice.amount}</span>
+                <span className="inline-flex items-center bg-[#eff6ff] px-3 py-1.5 rounded-full border border-blue-100 text-[#3b82f6] text-[11px] font-bold">
+                  {t(`invoices.methodLabel.${invoice.method}`)}
+                </span>
               </TableCell>
 
-              {/* تاريخ الإصدار */}
               <TableCell className="align-middle text-center py-4 px-2">
-                <div className="flex items-center justify-center gap-1.5" dir="ltr">
-                  <span className="text-slate-500 text-[11px] whitespace-nowrap">{invoice.issueDate}</span>
-                  <span className="text-slate-500 text-[11px] whitespace-nowrap">{invoice.issueTime}</span>
-                </div>
+                <span className="text-slate-500 text-[11px] whitespace-nowrap" dir="ltr">
+                  {new Date(invoice.createdAt).toLocaleDateString()}
+                </span>
               </TableCell>
 
-              {/* حالة */}
               <TableCell className="align-middle text-center py-4 px-2">
-                <div className="flex justify-center">
-                  {invoice.status === 'مدفوع' ? (
-                    <span className="bg-[#DCFCE7] text-[#16A34A] px-4 py-1 rounded-full text-[11px] font-bold whitespace-nowrap">
-                      مدفوع
-                    </span>
-                  ) : (
-                    <span className="bg-[#FFEDD5] text-[#EA580C] px-4 py-1 rounded-full text-[11px] font-bold whitespace-nowrap">
-                      مستحق
-                    </span>
-                  )}
-                </div>
+                <span className={cn(
+                  "px-4 py-1 rounded-full text-[11px] font-bold whitespace-nowrap",
+                  invoice.state === 'SETTLED' ? "bg-[#DCFCE7] text-[#16A34A]"
+                    : invoice.state === 'VOID' ? "bg-slate-100 text-slate-500"
+                    : "bg-[#FFEDD5] text-[#EA580C]",
+                )}>
+                  {t(`invoices.state.${invoice.state}`)}
+                </span>
               </TableCell>
 
-              {/* تصدير */}
-              <TableCell className="align-middle text-center py-4 pl-6 pr-2">
-                <button className="p-1 hover:bg-slate-100 rounded-md transition-colors">
-                  <img src="/transportCompany/invoicePage/blueDownload.svg" alt="تصدير" className="w-5 h-5" />
-                </button>
+              <TableCell className="align-middle text-center py-4 pl-6 pr-2" onClick={(e) => e.stopPropagation()}>
+                {invoice.method === 'CREDIT' && invoice.state === 'ISSUED' && (
+                  <button
+                    onClick={() => onSettle(invoice)}
+                    className="px-3 py-1.5 rounded-lg bg-blue-600 text-white text-[11px] font-bold hover:bg-blue-700 transition-colors"
+                  >
+                    {t('invoices.settle')}
+                  </button>
+                )}
               </TableCell>
             </TableRow>
           ))}

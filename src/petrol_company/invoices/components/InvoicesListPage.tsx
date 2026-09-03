@@ -1,239 +1,124 @@
 import { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import toast from 'react-hot-toast';
 import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
-import { useQuery } from '@tanstack/react-query';
-import { Skeleton } from '@/components/ui/skeleton';
 import { DesktopInvoicesTable } from './DesktopInvoicesTable';
 import { MobileInvoicesList } from './MobileInvoicesList';
-import { CashbackBanner } from './CashbackBanner';
+import { SettleInvoiceModal } from './SettleInvoiceModal';
+import { useInvoicesList } from '@/petrol_company/invoices/hooks/useInvoices';
+import type { Invoice } from '@/petrol_company/invoices/api/invoices.api';
 import { PlatformCommissionBanner } from './PlatformCommissionBanner';
+import { CashbackBanner } from './CashbackBanner';
 
-// --- Static Data ---
-const FILTERS = ['الكل', 'المدفوعة', 'المستحقة'];
+type FilterValue = 'ALL' | 'ISSUED' | 'SETTLED' | 'VOID';
+const FILTERS: FilterValue[] = ['ALL', 'ISSUED', 'SETTLED', 'VOID'];
 
-const MOCK_INVOICES = [
-  { id: '1', invoiceNum: 'INV-2024-158', orderNum: 'ORD-2024-256', company: 'شركة النقل المتحدة', station: 'جدة - طريق مكة القديم - حي البوادي', owner: 'محمد أحمد', deliveryFee: '400', amount: '1,150,000', issueDate: '06/06/2026', issueTime: '04:30 م', status: 'مدفوع' },
-  { id: '2', invoiceNum: 'INV-2024-158', orderNum: 'ORD-2024-256', company: 'شركة النقل المتحدة', station: 'جدة - طريق مكة القديم - حي البوادي', owner: 'محمد أحمد', deliveryFee: '400', amount: '1,150,000', issueDate: '06/06/2026', issueTime: '04:30 م', status: 'مدفوع' },
-  { id: '3', invoiceNum: 'INV-2024-158', orderNum: 'ORD-2024-256', company: 'شركة النقل المتحدة', station: 'جدة - طريق مكة القديم - حي البوادي', owner: 'محمد أحمد', deliveryFee: '400', amount: '1,150,000', issueDate: '06/06/2026', issueTime: '04:30 م', status: 'مستحق' },
-  { id: '4', invoiceNum: 'INV-2024-158', orderNum: 'ORD-2024-256', company: 'شركة النقل المتحدة', station: 'جدة - طريق مكة القديم - حي البوادي', owner: 'محمد أحمد', deliveryFee: '400', amount: '1,150,000', issueDate: '06/06/2026', issueTime: '04:30 م', status: 'مدفوع' },
-  { id: '5', invoiceNum: 'INV-2024-158', orderNum: 'ORD-2024-256', company: 'شركة النقل المتحدة', station: 'جدة - طريق مكة القديم - حي البوادي', owner: 'محمد أحمد', deliveryFee: '400', amount: '1,150,000', issueDate: '06/06/2026', issueTime: '04:30 م', status: 'مستحق' },
-  { id: '6', invoiceNum: 'INV-2024-158', orderNum: 'ORD-2024-256', company: 'شركة النقل المتحدة', station: 'جدة - طريق مكة القديم - حي البوادي', owner: 'محمد أحمد', deliveryFee: '400', amount: '1,150,000', issueDate: '06/06/2026', issueTime: '04:30 م', status: 'مستحق' },
-  { id: '7', invoiceNum: 'INV-2024-158', orderNum: 'ORD-2024-256', company: 'شركة النقل المتحدة', station: 'جدة - طريق مكة القديم - حي البوادي', owner: 'محمد أحمد', deliveryFee: '400', amount: '1,150,000', issueDate: '06/06/2026', issueTime: '04:30 م', status: 'مدفوع' },
-];
-
+// Feature 013 T101-T108/FR-041/FR-042/FR-043/FR-047/FR-048/FR-056: wired to `GET /invoices`,
+// cursor-paged like `OrdersListPage` (never page-number pagination — the platform never
+// returns a total). Every fabricated stat card (transfers/paid/due/commission with a
+// week-over-week trend), the two commission/cashback promo banners, the free-text search
+// (no server-side search param exists), and the export action (no export capability
+// anywhere) are gone. T108: CashbackBanner/CommissionTypeSelector/PlatformCommissionBanner
+// stayed unwired for this role in Phase 9 (T108) — Phase 12 (T154/US9) wires both to real
+// `GET /billing/*` balances, read-only for this role (T155). The previous SUPER_ADMIN mock
+// this file also served now lives at
+// `admin/petrol_companies/components/AdminInvoicesListPage.tsx` (out of this phase's scope
+// — `GET /invoices` excludes SUPER_ADMIN entirely, so sharing this component would 403).
 export function InvoicesListPage() {
-  const [activeFilter, setActiveFilter] = useState('الكل');
-  const location = useLocation();
-  const isAdmin = location.pathname.startsWith('/admin');
+  const { t } = useTranslation();
+  const [activeFilter, setActiveFilter] = useState<FilterValue>('ALL');
+  const [cursor, setCursor] = useState<string | undefined>(undefined);
+  const [settlingInvoice, setSettlingInvoice] = useState<Invoice | null>(null);
 
-  const { data: invoices = [], isLoading } = useQuery({
-    queryKey: ['invoices', activeFilter],
-    queryFn: async () => {
-      // Simulating API call for architectural demonstration
-      return new Promise<typeof MOCK_INVOICES>((resolve) => 
-        setTimeout(() => resolve(MOCK_INVOICES), 1500)
-      );
-    }
+  const { data, isLoading, isError, refetch } = useInvoicesList({
+    ...(activeFilter === 'ALL' ? {} : { state: activeFilter }),
+    ...(cursor ? { cursor } : {}),
   });
+  const invoices = data?.items ?? [];
+
+  function onFilterChange(filter: FilterValue): void {
+    setActiveFilter(filter);
+    setCursor(undefined);
+  }
 
   return (
     <div className="w-full p-4 md:p-6 flex-1 -mt-4 bg-[#F8FAFC] border border-[#E7E9EF] rounded-2xl min-h-full font-sans" dir="rtl">
-      {/* --- Header --- */}
       <div className="mb-6 flex flex-col items-start text-right">
-        <h1 className="text-2xl font-black text-slate-900">الفواتير</h1>
-        <p className="text-sm font-semibold text-slate-500 mt-1">إدارة ومتابعة كل فواتير نقل الوقود</p>
+        <h1 className="text-2xl font-black text-slate-900">{t('invoices.title')}</h1>
       </div>
 
-      {/* --- Stats Cards --- */}
-      <div className={cn("grid grid-cols-1 gap-4 mb-6", isAdmin ? "md:grid-cols-4" : "md:grid-cols-3")}>
-        {/* Card 4: Commission (Admin Only) */}
-        {isAdmin && (
-          <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm flex flex-col gap-4">
-            <div className="flex  items-start gap-4">
-              <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center shrink-0">
-                <img src="/petrolCompany/invoice/dollar.svg" alt="" />
-              </div>
-              <div className="flex flex-col gap-1">
-                <span className="text-slate-500 font-bold text-sm">العمولة</span>
-                <span className="text-[#162155] font-black text-2xl flex items-center gap-1.5">
-                  150,000 <span className="text-sm text-slate-500">ر.س</span>
-                </span>
-                <div className="flex items-center gap-1.5 text-[#16A34A]">
-                  <svg className='mt-1' width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M6 2L10 6H2L6 2Z" fill="currentColor" />
-                  </svg>
-                  <span className="text-xs font-bold text-slate-500"><span className="text-[#16A34A]">12.50%</span> من الأسبوع الماضي</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-        {/* Card 1: Paid */}
-        <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm flex flex-col gap-4">
-          <div className="flex  items-start gap-4">
-            <div className="w-12 h-12 rounded-full bg-orange-100 flex items-center justify-center shrink-0">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M20 14L4 14L10 20" stroke="#FF5810" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                <path d="M4 10H20L14 4" stroke="#FF5810" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-              </svg>
-            </div>
-            <div className="flex flex-col gap-1">
-              <span className="text-slate-500 font-bold text-sm">تحويلات</span>
-              <span className="text-[#162155] font-black text-2xl flex items-center gap-1.5">
-                230,000 <span className="text-sm text-slate-500">ر.س</span>
-              </span>
-              <div className="flex items-center gap-1.5 text-[#16A34A]">
-                <svg className='mt-1' width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M6 2L10 6H2L6 2Z" fill="currentColor" />
-                </svg>
-                <span className="text-xs font-bold text-slate-500"><span className="text-[#16A34A]">16.30%</span> من الأسبوع الماضي</span>
-              </div>
-            </div>
-          </div>
-        </div>
+      <PlatformCommissionBanner />
+      <CashbackBanner />
 
-        {/* Card 2: Paid */}
-        <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm flex flex-col gap-4">
-          <div className="flex  items-start gap-4">
-            <div className="w-12 h-12 rounded-full bg-[#E8F5E9] flex items-center justify-center shrink-0">
-              <img src="/transportCompany/invoicePage/rightCheck.svg" alt="" className="w-6 h-6 object-contain" />
-            </div>
-            <div className="flex flex-col gap-1">
-              <span className="text-slate-500 font-bold text-sm">المدفوع</span>
-              <span className="text-[#162155] font-black text-2xl flex items-center gap-1.5">
-                5,120,000 <span className="text-sm text-slate-500">ر.س</span>
-              </span>
-              <div className="flex items-center gap-1.5 text-[#16A34A]">
-                <svg className='mt-1' width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M6 2L10 6H2L6 2Z" fill="currentColor" />
-                </svg>
-                <span className="text-xs font-bold text-slate-500"><span className="text-[#16A34A]">16.30%</span> من الأسبوع الماضي</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Card 3: Due */}
-        <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm flex flex-col gap-4">
-          <div className="flex  items-start gap-4">
-            <div className="w-12 h-12 rounded-full bg-[#FFF7ED] flex items-center justify-center shrink-0">
-              <img src="/transportCompany/invoicePage/schedule.svg" alt="" className="w-6 h-6 object-contain" />
-            </div>
-            <div className="flex flex-col gap-1">
-              <span className="text-slate-500 font-bold text-sm">المستحق</span>
-              <span className="text-[#162155] font-black text-2xl flex items-center gap-1.5">
-                3,599,000 <span className="text-sm text-slate-500">ر.س</span>
-              </span>
-              <div className="flex items-center gap-1.5 text-[#16A34A]">
-                <svg className='mt-1' width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M6 2L10 6H2L6 2Z" fill="currentColor" />
-                </svg>
-                <span className="text-xs font-bold text-slate-500"><span className="text-[#16A34A]">16.30%</span> من الأسبوع الماضي</span>
-              </div>
-            </div>
-
-          </div>
-        </div>
-
-
-
-      </div>
-
-      {/* --- Promotional Banners --- */}
-      {isAdmin && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-          <CashbackBanner />
-          <PlatformCommissionBanner />
-        </div>
-      )}
-
-      {/* --- Filters Tabs --- */}
       <div className="flex items-center border border-slate-200 rounded-xl overflow-hidden w-full sm:w-fit mb-6 bg-white divide-x divide-x-reverse divide-slate-200">
         {FILTERS.map((filter) => {
           const isActive = activeFilter === filter;
+          const label = filter === 'ALL' ? t('invoices.filterAll') : t(`invoices.state.${filter}`);
           return (
             <button
               key={filter}
-              onClick={() => setActiveFilter(filter)}
+              onClick={() => onFilterChange(filter)}
               className={cn(
                 'relative flex-1 sm:flex-none px-4 sm:px-12 py-3 text-sm font-bold transition-colors whitespace-nowrap cursor-pointer text-center',
-                isActive ? 'text-[#162155]' : 'text-slate-500 hover:bg-slate-50'
+                isActive ? 'text-[#162155]' : 'text-slate-500 hover:bg-slate-50',
               )}
             >
               {isActive && (
                 <motion.div
-                  layoutId="active-tab-indicator"
+                  layoutId="active-invoice-filter-tab"
                   className="absolute inset-0 bg-[#EEF2FF] border-b-2 border-blue-600"
                   transition={{ type: 'spring', stiffness: 300, damping: 25 }}
                 />
               )}
-              <span className="relative z-10">{filter}</span>
+              <span className="relative z-10">{label}</span>
             </button>
           );
         })}
       </div>
 
-      {/* --- Main Content Section (Table & Actions) --- */}
       <div className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden pt-4 pb-0">
-
-        {/* Top: Action Bar */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4 px-4">
-
-          {/* Right Side: Arrange, Filter, Search */}
-          <div className="flex flex-wrap md:flex-nowrap items-center gap-2 md:gap-3 w-full md:w-auto">
-            {/* Arrange */}
-            <button className="flex-1 md:flex-none flex justify-center items-center gap-2 text-slate-700 px-4 py-2 rounded-xl text-sm font-bold hover:bg-slate-50 transition-colors shrink-0">
-              <img src="/transportCompany/orderPage/arrange.svg" alt="" className="w-4 h-4 hover:opacity-70" />
-              ترتيب
-            </button>
-
-            {/* Filter */}
-            <button className="flex-1 md:flex-none flex justify-center items-center gap-2 text-slate-700 px-4 py-2 rounded-xl text-sm font-bold hover:bg-slate-50 transition-colors shrink-0">
-              <img src="/transportCompany/orderPage/filter.svg" alt="" className="w-4 h-4 hover:opacity-70" />
-              تصفية
-            </button>
-
-            {/* Search */}
-            <div className="relative w-full border-r pr-4 md:w-auto flex-1 min-w-[250px] order-last md:order-none">
-              <input
-                type="text"
-                placeholder="ابحث بكود الطلب أو الشركة..."
-                className="w-full pr-8 pl-4 py-2 border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-500 placeholder:text-slate-400"
-              />
-              <img src="/transportCompany/orderPage/search.svg" alt="" className="w-4 h-4 absolute right-6 top-1/2 -translate-y-1/2 " />
-            </div>
-          </div>
-
-          {/* Left Side: Export */}
-          <button className="w-full md:w-auto flex justify-center items-center gap-2 bg-[#F0FDF4] border border-[#BBF7D0] text-[#16A34A] px-6 py-2.5 rounded-xl text-sm font-bold hover:bg-[#DCFCE7] transition-colors shrink-0">
-            <img src="/transportCompany/invoicePage/greenDownload.svg" alt="" className="w-4 h-4" />
-            تصدير
-          </button>
-
-        </div>
-
-        {/* Loading State or Data */}
         {isLoading ? (
-          <div className="p-6 space-y-4">
-            <Skeleton className="h-12 w-full" />
-            <Skeleton className="h-12 w-full" />
-            <Skeleton className="h-12 w-full" />
-            <Skeleton className="h-12 w-full" />
-            <Skeleton className="h-12 w-full" />
+          <p className="text-center text-sm text-slate-400 py-12">{t('common.loading')}</p>
+        ) : isError ? (
+          <div className="flex flex-col items-center gap-3 py-12">
+            <p className="text-sm text-red-500">{t('invoices.loadError')}</p>
+            <button onClick={() => refetch()} className="text-sm font-bold text-blue-600 hover:underline">
+              {t('common.retry')}
+            </button>
           </div>
+        ) : invoices.length === 0 ? (
+          <p className="text-center text-sm text-slate-400 py-12">{t('invoices.empty')}</p>
         ) : (
           <>
-            {/* Desktop Table View */}
-            <DesktopInvoicesTable invoices={invoices} />
-
-            {/* Mobile View: Cards layout instead of Table */}
-            <div className="px-4 pb-4 lg:px-0 lg:pb-0">
-              <MobileInvoicesList invoices={invoices} />
+            <DesktopInvoicesTable invoices={invoices} onSettle={setSettlingInvoice} />
+            <div className="px-4 pb-4 lg:hidden">
+              <MobileInvoicesList invoices={invoices} onSettle={setSettlingInvoice} />
             </div>
+            {data?.nextCursor && (
+              <div className="flex justify-center py-4 border-t border-slate-100">
+                <button
+                  onClick={() => setCursor(data.nextCursor!)}
+                  className="text-sm font-bold text-blue-600 hover:underline"
+                >
+                  {t('common.loadMore')}
+                </button>
+              </div>
+            )}
           </>
         )}
       </div>
+
+      {settlingInvoice && (
+        <SettleInvoiceModal
+          invoice={settlingInvoice}
+          onClose={() => setSettlingInvoice(null)}
+          onSettled={() => {
+            toast.success(t('invoices.settleSuccess'));
+            setSettlingInvoice(null);
+          }}
+        />
+      )}
     </div>
   );
 }

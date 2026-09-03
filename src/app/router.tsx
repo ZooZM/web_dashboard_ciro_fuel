@@ -5,6 +5,7 @@ import { Forbidden } from '@/routing/Forbidden';
 import { NotFound } from '@/routing/NotFound';
 import { AppShell } from '@/components/layout/AppShell';
 import { LoginPage } from '@/auth/components/LoginPage';
+import { VerifyPage } from '@/auth/components/VerifyPage';
 
 // Admin imports
 import { AdminDashboard } from '@/admin/dashboard/components/AdminDashboard';
@@ -22,6 +23,10 @@ import { AddTransportCompanyPage } from '@/admin/transport_companies/components/
 import { AdminTransportCompanyDetailsPage } from '@/admin/transport_companies/components/AdminTransportCompanyDetailsPage';
 import { AdminDriversPage } from '@/admin/drivers/components/AdminDriversPage';
 import { AdminDriverDetailsPage } from '@/admin/drivers/components/AdminDriverDetailsPage';
+import { AdminPlatformAccountPage } from '@/admin/petrol_companies/components/AdminPlatformAccountPage';
+import { AdminBillingSettingsPage } from '@/admin/petrol_companies/components/AdminBillingSettingsPage';
+import { AdminPaymentPage } from '@/admin/payment/components/AdminPaymentPage';
+import { AdminStationOwnerDetailsPage } from '@/admin/petrol_companies/components/AdminStationOwnerDetailsPage';
 // Transport imports
 import { TransportDashboard } from '@/transport_company/dashboard/components/TransportDashboard';
 // Petrol imports
@@ -30,22 +35,27 @@ import { OrdersListPage as PetrolOrdersListPage } from '@/petrol_company/orders/
 import { OrderDetailPage as PetrolOrderDetailPage } from '@/petrol_company/orders/components/OrderDetailPage';
 import { OrderDriverDetailsPage as PetrolOrderDriverDetailsPage } from '@/petrol_company/orders/components/order-driver-details/OrderDriverDetailsPage';
 import { NotificationsPage as PetrolNotificationsPage } from '@/petrol_company/notifications/components/NotificationsPage';
+import { SupportInboxPage } from '@/petrol_company/support/components/SupportInboxPage';
 import { ProfilePage as PetrolProfilePage } from '@/petrol_company/profile/components/ProfilePage';
 import { OrdersListPage } from '@/transport_company/orders/components/OrdersListPage';
 import { InvoicesListPage } from '@/transport_company/invoices/components/InvoicesListPage';
 import { InvoicesListPage as PetrolInvoicesListPage } from '@/petrol_company/invoices/components/InvoicesListPage';
+import { AdminInvoicesListPage } from '@/admin/petrol_companies/components/AdminInvoicesListPage';
 import { FuelExchangePage } from '@/petrol_company/fuel_exchange/components/FuelExchangePage';
 import { FuelExchangeDetailPage } from '@/petrol_company/fuel_exchange/components/FuelExchangeDetailPage';
 import { FuelPricesPage } from '@/petrol_company/fuel_prices/components/FuelPricesPage';
 import { CompaniesListPage as PetrolCompaniesListPage } from '@/petrol_company/companies/components/CompaniesListPage';
 import { CompanyDetailPage as PetrolCompanyDetailPage } from '@/petrol_company/companies/components/CompanyDetailPage';
 import { AddTransporterPage as PetrolAddTransporterPage } from '@/petrol_company/companies/components/AddTransporterPage';
+import { PlatformAccountPage } from '@/petrol_company/platform_account/components/PlatformAccountPage';
+import { PaymentPage } from '@/petrol_company/payment/components/PaymentPage';
 import { StationsPage as PetrolStationsPage } from '@/petrol_company/stations/components/StationsPage';
 import { StationOwnerDetailsPage as PetrolStationOwnerDetailsPage } from '@/petrol_company/stations/components/StationOwnerDetailsPage';
 import { StationDetailsPage as PetrolStationDetailsPage } from '@/petrol_company/stations/components/StationDetailsPage';
 import { AddStationOwnerPage as PetrolAddStationOwnerPage } from '@/petrol_company/stations/components/AddStationOwnerPage';
 import { TrackingPage } from '@/transport_company/tracking/components/TrackingPage';
 import { OrderDetailPage } from '@/transport_company/orders/components/OrderDetailPage';
+import { OrderEditPage } from '@/transport_company/orders/components/OrderEditPage';
 import { DriversPage } from '@/transport_company/drivers/components/DriversPage';
 import { AddDriverPage } from '@/transport_company/drivers/components/AddDriverPage';
 import { DriverDetailsPage } from '@/transport_company/drivers/components/driver-details/DriverDetailsPage';
@@ -66,6 +76,7 @@ import { OrderTrackingPage } from '@/pages/OrderTracking/OrderTrackingPage';
 
 export const router = createBrowserRouter([
   { path: '/', element: <LoginPage /> },
+  { path: '/verify', element: <VerifyPage /> },
   { path: '/403', element: <Forbidden /> },
 
   // Admin Routes
@@ -87,23 +98,31 @@ export const router = createBrowserRouter([
       { path: 'fuel-exchange/:id', element: <AdminFuelExchangeDetailPage /> },
       { path: 'petrol-companies', element: <AdminPetrolCompaniesPage /> },
       { path: 'petrol-companies/add', element: <AddPetrolCompanyPage /> },
-      { path: 'petrol-companies/owners/:id', element: <PetrolStationOwnerDetailsPage /> },
+      { path: 'petrol-companies/owners/:id', element: <AdminStationOwnerDetailsPage /> },
       { path: 'petrol-companies/stations/:id', element: <PetrolStationDetailsPage /> },
       { path: 'petrol-companies/:id', element: <AdminPetrolCompanyDetailsPage /> },
-      { path: 'invoices', element: <PetrolInvoicesListPage /> },
+      { path: 'invoices', element: <AdminInvoicesListPage /> },
       { path: 'transport-companies', element: <AdminTransportCompaniesPage /> },
       { path: 'transport-companies/add', element: <AddTransportCompanyPage /> },
       { path: 'transport-companies/:id', element: <AdminTransportCompanyDetailsPage /> },
       { path: 'drivers', element: <AdminDriversPage /> },
       { path: 'drivers/:id', element: <AdminDriverDetailsPage /> },
       { path: 'platform-orders', element: <PlatformOrdersPage /> },
+      { path: 'platform-account', element: <AdminPlatformAccountPage /> },
+      { path: 'billing-settings', element: <AdminBillingSettingsPage /> },
+      { path: 'payment', element: <AdminPaymentPage /> },
     ]
   },
 
   // Petrol Brand Routes
+  // Feature 013 FR-004/R1: this admitted [CLIENT, COMPANY_ADMIN] — a station owner
+  // (CLIENT) passed the guard for the screen that sets their own credit limit and
+  // prices. Every fuel company route admits FUEL_COMPANY_ADMIN only; every other
+  // role, including the platform operator, is refused before any fuel company data
+  // is requested (the operator has its own /admin surface, Story 13).
   {
     path: '/petrolCompany',
-    element: <ProtectedRoute allow={[Role.FUEL_COMPANY_ADMIN, Role.SUPER_ADMIN]}><AppShell /></ProtectedRoute>,
+    element: <ProtectedRoute allow={[Role.FUEL_COMPANY_ADMIN]}><AppShell /></ProtectedRoute>,
     children: [
       { path: '', element: <Navigate to="dashboard" replace /> },
       { path: 'dashboard', element: <PetrolDashboard /> },
@@ -113,6 +132,8 @@ export const router = createBrowserRouter([
       { path: 'tracking', element: <TrackingPage /> },
       { path: 'fuel-exchange', element: <FuelExchangePage /> },
       { path: 'fuel-exchange/:id', element: <FuelExchangeDetailPage /> },
+      { path: 'PlatformAccountPage', element: <PlatformAccountPage /> },
+      { path: 'payment', element: <PaymentPage /> },
       { path: 'pricing', element: <FuelPricesPage /> },
       { path: 'companies', element: <PetrolCompaniesListPage /> },
       { path: 'companies/add', element: <PetrolAddTransporterPage /> },
@@ -122,6 +143,7 @@ export const router = createBrowserRouter([
       { path: 'stations/owners/:id', element: <PetrolStationOwnerDetailsPage /> },
       { path: 'stations/:id', element: <PetrolStationDetailsPage /> },
       { path: 'invoices', element: <PetrolInvoicesListPage /> },
+      { path: 'support', element: <SupportInboxPage /> },
       { path: 'reports', element: <div className="p-6">Reports (Coming Soon)</div> },
       { path: 'profile', element: <PetrolProfilePage /> },
       { path: 'help', element: <HelpPage /> },
@@ -132,15 +154,20 @@ export const router = createBrowserRouter([
   },
 
   // Transportation Routes
+  // Feature 013 R1: this admitted [COMPANY_ADMIN, DRIVER, SUPER_ADMIN] — a DRIVER
+  // reached the transport admin surface. Every transport company route admits
+  // TRANSPORT_COMPANY_ADMIN only (contracts/dashboard-integration.md's guard table);
+  // the platform operator has its own /admin surface and is refused here too.
   {
     path: '/transport',
-    element: <ProtectedRoute allow={[Role.TRANSPORT_COMPANY_ADMIN, Role.SUPER_ADMIN]}><AppShell /></ProtectedRoute>,
+    element: <ProtectedRoute allow={[Role.TRANSPORT_COMPANY_ADMIN]}><AppShell /></ProtectedRoute>,
     children: [
       { path: '', element: <Navigate to="dashboard" replace /> },
       { path: 'dashboard', element: <TransportDashboard /> },
       { path: 'notifications', element: <NotificationsPage /> },
       { path: 'orders', element: <OrdersListPage /> },
       { path: 'orders/:id', element: <OrderDetailPage /> },
+      { path: 'orders/:id/edit', element: <OrderEditPage /> },
       { path: 'orders/:id/assign', element: <OrderAssignPage /> },
       { path: 'tracking', element: <TrackingPage /> },
       { path: 'delivery-areas', element: <DeliveryAreasPage /> },
@@ -149,6 +176,10 @@ export const router = createBrowserRouter([
       { path: 'drivers/add', element: <AddDriverPage /> },
       { path: 'drivers/:id', element: <DriverDetailsPage /> },
       { path: 'trucks', element: <TrucksAndTanksPage /> },
+      // No `clients` route: feature 009's own corrections record that a transport
+      // company can never have clients (role-creation + tenant isolation both
+      // forbid it) — the `transport_company/clients/` folder was deleted, but this
+      // route's import survived until T003's baseline check found it (TS2307).
       { path: 'settings', element: <SettingsPage /> },
       { path: 'profile', element: <ProfilePage /> },
       { path: 'terms', element: <TermsPage /> },

@@ -1,127 +1,114 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
 import { DesktopOrdersTable } from './DesktopOrdersTable';
 import { MobileOrdersList } from './MobileOrdersList';
-// --- Static Data ---
-const STAT_CARDS = [
-  { title: 'إجمالي الطلبات',     value: '56', icon: '/transportCompany/home/invoice.svg',    iconBgClass: 'bg-[#F3E8FF]', valueColor: 'text-[#A855F7]' },
-  { title: 'الطلبات المكتملة',   value: '38', icon: '/transportCompany/home/rightCheck.svg', iconBgClass: 'bg-[#E8F5E9]', valueColor: 'text-[#22C55E]' },
-  { title: 'الطلبات قيد التنفيذ', value: '16', icon: '/transportCompany/home/sandWatch.svg',  iconBgClass: 'bg-[#FFF7ED]', valueColor: 'text-[#F97316]' },
-  { title: 'مرفوضة',            value: '2',  icon: '/transportCompany/home/schedule.svg',   iconBgClass: 'bg-[#FEE2E2]', valueColor: 'text-[#EF4444]' },
-];
-const FILTERS = ['الكل', 'جديد', 'قيد التنفيذ', 'مكتملة', 'مرفوضة'];
+import { useOrdersList } from '@/petrol_company/orders/hooks/useOrders';
+import { OrderStatus, orderStatusLabelKey } from '@/constants/order-status';
+import type { OrderStatus as OrderStatusType } from '@/constants/order-status';
 
-const MOCK_ORDERS = [
-  { id: '256', num: 'ORD-2024-256', owner: 'محمد أحمد', station: 'جدة - الرحاب', fuel: 'بنزين 95', fuelLiters: '20,000 لتر', locationFrom: 'مستودع جدة الرئيسي', locationTo: 'جدة - طريق مكة القديم - حي البوادي', transporter: 'شركة النقل المتحدة', timeDate: 'اليوم، 04:30', timeAmPm: 'م', status: 'جديد', commission: '1,450', fuelInvoice: '210,000' },
-  { id: '255', num: 'ORD-2024-255', owner: 'محمد أحمد', station: 'جدة - الرحاب', fuel: 'بنزين 95', fuelLiters: '20,000 لتر', locationFrom: 'مستودع جدة الرئيسي', locationTo: 'جدة - طريق مكة القديم - حي البوادي', transporter: 'شركة النقل المتحدة', timeDate: 'اليوم، 04:30', timeAmPm: 'م', status: 'جديد', commission: '1,450', fuelInvoice: '210,000' },
-  { id: '254', num: 'ORD-2024-254', owner: 'محمد أحمد', station: 'جدة - الرحاب', fuel: 'بنزين 95', fuelLiters: '20,000 لتر', locationFrom: 'مستودع جدة الرئيسي', locationTo: 'جدة - طريق مكة القديم - حي البوادي', transporter: 'شركة النقل المتحدة', timeDate: 'اليوم، 04:30', timeAmPm: 'م', status: 'جديد', commission: '1,450', fuelInvoice: '210,000' },
-  { id: '253', num: 'ORD-2024-253', owner: 'محمد أحمد', station: 'جدة - الرحاب', fuel: 'بنزين 95', fuelLiters: '20,000 لتر', locationFrom: 'مستودع جدة الرئيسي', locationTo: 'جدة - طريق مكة القديم - حي البوادي', transporter: 'شركة النقل المتحدة', timeDate: 'اليوم، 04:30', timeAmPm: 'م', status: 'جديد', commission: '1,450', fuelInvoice: '210,000' },
-  { id: '252', num: 'ORD-2024-252', owner: 'محمد أحمد', station: 'جدة - الرحاب', fuel: 'بنزين 95', fuelLiters: '20,000 لتر', locationFrom: 'مستودع جدة الرئيسي', locationTo: 'جدة - طريق مكة القديم - حي البوادي', transporter: 'شركة النقل المتحدة', timeDate: 'اليوم، 04:30', timeAmPm: 'م', status: 'جديد', commission: '1,450', fuelInvoice: '210,000' },
-  { id: '251', num: 'ORD-2024-251', owner: 'محمد أحمد', station: 'جدة - الرحاب', fuel: 'بنزين 95', fuelLiters: '20,000 لتر', locationFrom: 'مستودع جدة الرئيسي', locationTo: 'جدة - طريق مكة القديم - حي البوادي', transporter: 'شركة النقل المتحدة', timeDate: 'اليوم، 04:30', timeAmPm: 'م', status: 'جديد', commission: '1,450', fuelInvoice: '210,000' },
-  { id: '250', num: 'ORD-2024-250', owner: 'محمد أحمد', station: 'جدة - الرحاب', fuel: 'بنزين 95', fuelLiters: '20,000 لتر', locationFrom: 'مستودع جدة الرئيسي', locationTo: 'جدة - طريق مكة القديم - حي البوادي', transporter: 'شركة النقل المتحدة', timeDate: 'اليوم، 04:30', timeAmPm: 'م', status: 'جديد', commission: '1,450', fuelInvoice: '210,000' },
+type FilterValue = OrderStatusType | 'ALL';
+
+// FR-010: the full platform vocabulary, not a curated subset — an administrator must be
+// able to filter by every stage the platform defines.
+const FILTERS: FilterValue[] = [
+  'ALL',
+  OrderStatus.PENDING_APPROVAL,
+  OrderStatus.APPROVED,
+  OrderStatus.AWAITING_ROUTING,
+  OrderStatus.ROUTED_TO_TRANSPORT,
+  OrderStatus.ASSIGNED_TO_DRIVER,
+  OrderStatus.LOADING,
+  OrderStatus.IN_TRANSIT,
+  OrderStatus.UNLOADING,
+  OrderStatus.DELIVERED,
+  OrderStatus.REJECTED,
+  OrderStatus.CANCELLED,
 ];
 
+// Feature 013 T044/FR-008/FR-009/FR-010/FR-047/FR-048/SC-002: wired to `GET /orders`,
+// cursor-paged (never `page`) — every hardcoded sample order and every fabricated stat
+// card is gone. No week-over-week trend, no per-order commission/invoice figure: neither
+// exists anywhere on the platform (FR-047).
 export function OrdersListPage() {
-  const [activeFilter, setActiveFilter] = useState('الكل');
+  const { t } = useTranslation();
+  const [activeFilter, setActiveFilter] = useState<FilterValue>('ALL');
+  const [cursor, setCursor] = useState<string | undefined>(undefined);
+
+  const { data, isLoading, isError, refetch } = useOrdersList({
+    ...(activeFilter === 'ALL' ? {} : { status: activeFilter }),
+    ...(cursor ? { cursor } : {}),
+  });
+  const orders = data?.items ?? [];
+
+  function onFilterChange(filter: FilterValue): void {
+    setActiveFilter(filter);
+    setCursor(undefined); // FR-009: a new filter starts a fresh page, never appends onto the old one.
+  }
 
   return (
     <div className="w-full p-4 md:p-6 flex-1 -mt-4 bg-[#F8FAFC] border border-[#E7E9EF] rounded-2xl min-h-full font-sans" dir="rtl">
-      {/* --- Header --- */}
       <div className="mb-6 flex flex-col items-start text-right">
-        <h1 className="text-2xl font-black text-slate-900">الطلبات</h1>
-        <p className="text-sm font-semibold text-slate-500 mt-1">إدارة ومتابعة كل طلبات نقل الوقود</p>
+        <h1 className="text-2xl font-black text-slate-900">{t('orders.title')}</h1>
       </div>
 
-      {/* --- Stats Cards --- */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6">
-        {STAT_CARDS.map((card, idx) => (
-          <div key={idx} className="bg-white border border-slate-200 rounded-2xl p-5 flex items-center justify-start gap-4 shadow-sm">
-            <div className={cn('w-12 h-12 flex items-center justify-center rounded-full shrink-0', card.iconBgClass)}>
-              <img src={card.icon} alt="" className="w-6 h-6 object-contain" />
-            </div>
-            <div className="flex flex-col items-start gap-1">
-              <span className="text-sm font-semibold text-slate-500">{card.title}</span>
-              <span className={cn('text-2xl font-black', card.valueColor)}>{card.value}</span>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* --- Filters Pills --- */}
-      <div className="flex items-center gap-2 bg-white w-fit rounded-full p-2 justify-center mb-4">
+      <div className="flex items-center gap-2 bg-white w-fit rounded-full p-2 justify-center mb-4 overflow-x-auto max-w-full">
         {FILTERS.map((filter) => {
           const isActive = activeFilter === filter;
+          const label = filter === 'ALL' ? t('orders.filterAll') : t(orderStatusLabelKey(filter));
           return (
             <button
               key={filter}
-              onClick={() => setActiveFilter(filter)}
+              onClick={() => onFilterChange(filter)}
               className={cn(
-                'relative px-5 py-2 text-sm font-bold rounded-full transition-colors whitespace-nowrap cursor-pointer',
-                isActive ? 'text-white' : 'text-slate-700 hover:bg-slate-50'
+                'relative px-4 py-2 text-sm font-bold rounded-full transition-colors whitespace-nowrap cursor-pointer shrink-0',
+                isActive ? 'text-white' : 'text-slate-700 hover:bg-slate-50',
               )}
             >
               {isActive && (
                 <motion.div
-                  layoutId="active-filter-pill"
+                  layoutId="active-order-filter-pill"
                   className="absolute inset-0 bg-blue-600 rounded-full shadow-sm border border-blue-600"
                   transition={{ type: 'spring', stiffness: 300, damping: 25 }}
                 />
               )}
-              <span className="relative z-10">{filter}</span>
+              <span className="relative z-10">{label}</span>
             </button>
           );
         })}
       </div>
 
-      {/* --- Main Content Section (Table & Actions) --- */}
       <div className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden pt-4 pb-0">
-        
-        {/* Top: Action Bar */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4 px-4">
-          
-          {/* Right Side: Arrange, Filter, Search */}
-          <div className="flex flex-wrap md:flex-nowrap items-center gap-2 md:gap-3 w-full md:w-auto">
-
-
-            {/* Arrange */}
-            <button className="flex-1 md:flex-none flex justify-center items-center gap-2 text-slate-700 px-4 py-2 rounded-xl text-sm font-bold hover:bg-slate-50 transition-colors shrink-0">
-              <img src="/transportCompany/orderPage/arrange.svg" alt="" className="w-4 h-4 hover:opacity-70" />
-              ترتيب
+        {isLoading ? (
+          <p className="text-center text-sm text-slate-400 py-12">{t('common.loading')}</p>
+        ) : isError ? (
+          <div className="flex flex-col items-center gap-3 py-12">
+            <p className="text-sm text-red-500">{t('orders.loadError')}</p>
+            <button onClick={() => refetch()} className="text-sm font-bold text-blue-600 hover:underline">
+              {t('common.retry')}
             </button>
-
-            {/* Filter */}
-            <button className="flex-1 md:flex-none flex justify-center items-center gap-2 text-slate-700 px-4 py-2 rounded-xl text-sm font-bold hover:bg-slate-50 transition-colors shrink-0">
-              <img src="/transportCompany/orderPage/filter.svg" alt="" className="w-4 h-4 hover:opacity-70" />
-              تصفية
-            </button>
-
-            {/* Search */}
-            <div className="relative w-full border-r pr-4 md:w-auto flex-1 min-w-[250px] order-last md:order-none">
-              <input 
-                type="text" 
-                placeholder="ابحث بكود الطلب أو الشركة..." 
-                className="w-full pr-8 pl-4 py-2 border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-500 placeholder:text-slate-400"
-              />
-              <img src="/transportCompany/orderPage/search.svg" alt="" className="w-4 h-4 absolute right-6 top-1/2 -translate-y-1/2 " />
-            </div>
           </div>
-
-          {/* Left Side: Export */}
-          <button className="w-full md:w-auto flex justify-center items-center gap-2 bg-[#F0FDF4] border border-[#BBF7D0] text-[#16A34A] px-4 py-2 rounded-xl text-sm font-bold hover:bg-[#DCFCE7] transition-colors shrink-0">
-            <img src="/transportCompany/orderPage/download.svg" alt="" className="w-4 h-4" />
-            تصدير
-          </button>
-
-        </div>
-
-        {/* Desktop Table View */}
-        <DesktopOrdersTable orders={MOCK_ORDERS} />
-
-        {/* Mobile View: Cards layout instead of Table */}
-        <div className="px-4 pb-4 lg:px-0 lg:pb-0">
-          <MobileOrdersList orders={MOCK_ORDERS} />
-        </div>
+        ) : orders.length === 0 ? (
+          <p className="text-center text-sm text-slate-400 py-12">{t('orders.empty')}</p>
+        ) : (
+          <>
+            <DesktopOrdersTable orders={orders} />
+            <div className="px-4 pb-4 lg:px-0 lg:pb-0">
+              <MobileOrdersList orders={orders} />
+            </div>
+            {data?.nextCursor && (
+              <div className="flex justify-center py-4 border-t border-slate-100">
+                <button
+                  onClick={() => setCursor(data.nextCursor!)}
+                  className="text-sm font-bold text-blue-600 hover:underline"
+                >
+                  {t('common.loadMore')}
+                </button>
+              </div>
+            )}
+          </>
+        )}
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Download, Check } from 'lucide-react';
-
+import { AramcoInvoiceCard } from './AramcoInvoiceCard';
 export function AdminLinkedInvoicesCard() {
   const [isPendingExpanded, setIsPendingExpanded] = useState(false);
   return (
@@ -181,8 +181,9 @@ export function AdminLinkedInvoicesCard() {
           </div>
 
           <div className="flex items-center gap-4">
-            <div className="bg-slate-50 w-28 h-10 rounded-2xl flex items-center justify-center">
-              <img src="/transportCompany/orderPage/orderDetails/Sadaad.png" alt="Sadaat" className="h-5 object-contain" />
+            <div className="bg-slate-50 text-slate-500 w-28 h-10 rounded-2xl flex items-center p-1">
+              <img src="/transportCompany/orderPage/orderDetails/Sadaad.png" alt="Sadaat" className="h-full object-contain shrink-0" />
+              <span className="font-bold text-sm whitespace-nowrap flex-1 text-center">سداد</span>
             </div>
             <button className="w-10 h-10 flex items-center justify-center rounded-lg bg-blue-50 hover:bg-blue-100 transition-colors shrink-0">
               <Download className="w-5 h-5 text-blue-600" />
@@ -203,14 +204,17 @@ export function AdminLinkedInvoicesCard() {
           </div>
 
           <div className="flex items-center gap-4">
-            <div className="bg-slate-50 w-28 h-10 rounded-2xl flex items-center justify-center">
-              <img src="/transportCompany/orderPage/orderDetails/Aramco.svg" alt="Aramco" className="h-5 object-contain" />
+            <div className="bg-slate-50 text-slate-500 w-28 h-10 rounded-2xl flex items-center p-1">
+              <img src="/transportCompany/orderPage/orderDetails/Aramco.svg" alt="Aramco" className="h-full object-contain shrink-0" />
+              <span className="font-bold text-sm whitespace-nowrap flex-1 text-center">أرامكو</span>
             </div>
             <button className="w-10 h-10 flex items-center justify-center rounded-lg bg-blue-50 hover:bg-blue-100 transition-colors shrink-0">
               <Download className="w-5 h-5 text-blue-600" />
             </button>
           </div>
         </div>
+
+        <AramcoInvoiceCard/>
       </div>
     </div>
   );
