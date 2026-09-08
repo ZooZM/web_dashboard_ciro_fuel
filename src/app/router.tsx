@@ -6,6 +6,10 @@ import { NotFound } from '@/routing/NotFound';
 import { AppShell } from '@/components/layout/AppShell';
 import { LoginPage } from '@/auth/components/LoginPage';
 import { VerifyPage } from '@/auth/components/VerifyPage';
+// spec 015 US7 — SMS password recovery.
+import { RecoveryRequestPage } from '@/auth/components/recovery/RequestPage';
+import { RecoveryVerifyPage } from '@/auth/components/recovery/VerifyPage';
+import { RecoveryNewPasswordPage } from '@/auth/components/recovery/NewPasswordPage';
 
 // Admin imports
 import { AdminDashboard } from '@/admin/dashboard/components/AdminDashboard';
@@ -77,6 +81,9 @@ import { OrderTrackingPage } from '@/pages/OrderTracking/OrderTrackingPage';
 export const router = createBrowserRouter([
   { path: '/', element: <LoginPage /> },
   { path: '/verify', element: <VerifyPage /> },
+  { path: '/recovery', element: <RecoveryRequestPage /> },
+  { path: '/recovery/verify', element: <RecoveryVerifyPage /> },
+  { path: '/recovery/new-password', element: <RecoveryNewPasswordPage /> },
   { path: '/403', element: <Forbidden /> },
 
   // Admin Routes

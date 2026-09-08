@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { CustomGoogleMap } from '@/components/ui/CustomGoogleMap';
+import { LocationAddress } from '@/components/ui/LocationAddress';
 import { useOrderDetailContext } from './OrderDetailContext';
 import { isTrackableOrderStatus } from '@/constants/order-status';
 
@@ -30,6 +31,10 @@ export function MapCard() {
       <div className="w-full h-[180px] bg-slate-100 rounded-xl mb-4 relative overflow-hidden border border-slate-200">
         <CustomGoogleMap center={center} className="w-full h-full object-cover" />
       </div>
+      {/* Real location only — never the fallback centre (see the petrol_company twin). */}
+      {order.deliveryLocation && (
+        <LocationAddress value={center} className="mb-4 text-sm font-bold text-slate-600" />
+      )}
       <button
         onClick={() => navigate(`/transport/tracking?orderId=${orderId}`)}
         disabled={!trackable}

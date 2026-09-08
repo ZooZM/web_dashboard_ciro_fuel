@@ -32,6 +32,44 @@
       "password": "كلمة المرور",
       "submit": "دخول",
       "invalidCredentials": "البريد الإلكتروني أو كلمة المرور غير صحيحة"
+    },
+    "signin": {
+      "welcome": "مرحباً بعودتك",
+      "phoneLabel": "رقم الجوال",
+      "sendCode": "إرسال رمز التحقق",
+      "verifyingRobot": "جارٍ التحقق من أنك لست روبوت…",
+      "rememberMe": "تذكرني",
+      "forgotPassword": "نسيت كلمة المرور؟",
+      "invalidPhone": "يرجى إدخال رقم جوال صحيح",
+      "sendCodeFailed": "تعذّر إرسال رمز التحقق. حاول مرة أخرى.",
+      "rateLimited": "محاولات كثيرة. حاول مرة أخرى بعد {{seconds}} ثانية.",
+      "enterCode": "أدخل رمز التحقق",
+      "codeSentTo": "تم إرسال رمز مكوّن من 6 أرقام إلى",
+      "changeNumber": "تغيير الرقم",
+      "resend": "إعادة الإرسال",
+      "newCodeSent": "تم إرسال رمز جديد.",
+      "resendFailed": "تعذّر إرسال رمز جديد.",
+      "codeInvalid": "الرمز غير صحيح أو منتهي الصلاحية.",
+      "signInButton": "تسجيل الدخول",
+      "noAccess": "هذا الحساب لا يملك صلاحية الوصول إلى لوحة التحكم"
+    },
+    "recovery": {
+      "title": "استعادة كلمة المرور",
+      "requestSubtitle": "أدخل رقم جوالك المسجّل وسنرسل لك رمزًا لإعادة تعيين كلمة المرور.",
+      "sendCode": "إرسال الرمز",
+      "verifyTitle": "أدخل رمز الاستعادة",
+      "verifySubtitle": "تم إرسال رمز مكوّن من 6 أرقام إلى",
+      "continue": "متابعة",
+      "newPasswordTitle": "تعيين كلمة مرور جديدة",
+      "newPasswordPlaceholder": "كلمة المرور الجديدة",
+      "confirmPlaceholder": "تأكيد كلمة المرور",
+      "save": "حفظ كلمة المرور",
+      "backToSignIn": "العودة إلى تسجيل الدخول",
+      "passwordTooShort": "كلمة المرور يجب أن تكون 8 أحرف على الأقل",
+      "passwordsMismatch": "كلمتا المرور غير متطابقتين",
+      "success": "تم تعيين كلمة المرور. سجّل الدخول بها الآن.",
+      "completeFailed": "تعذّر تعيين كلمة المرور. قد تكون الجلسة منتهية.",
+      "sendFailed": "تعذّر إرسال الرمز. حاول مرة أخرى."
     }
   },
   "nav": {
@@ -44,7 +82,64 @@
   "errors": {
     "generic": "حدث خطأ ما. الرجاء المحاولة مرة أخرى.",
     "notFound": "لم يتم العثور على المورد المطلوب.",
-    "forbidden": "غير مصرح لك بالوصول إلى هذا القسم."
+    "forbidden": "غير مصرح لك بالوصول إلى هذا القسم.",
+    "phoneNotSaudi": "أدخل رقم جوال سعودي صحيح، مثل 0512345678 أو ‎+966512345678‎.",
+    "phoneHintSaudi": "رقم جوال سعودي فقط — يبدأ بـ 05 أو ‎+9665‎"
+  },
+  "deliveryAreas": {
+    "title": "مناطق التوصيل والتسعير",
+    "subtitle": "حدّد وحدّث أسعار النقل داخل المناطق المعتمدة من شركة البترول",
+    "totalAreas": "إجمالي المناطق",
+    "avgPricePerKm": "متوسط الأجرة / كم",
+    "loadError": "تعذر تحميل مناطق التوصيل",
+    "empty": "لم تُسعّر أي منطقة بعد",
+    "emptyHint": "أضف منطقة وحدّد سعرها ليتم تسعير الطلبات داخلها",
+    "servedRegions": "المناطق المعتمدة لشركتك",
+    "noServedRegions": "لم تُسنَد لشركتك أي منطقة بعد — تتولى شركة البترول إسناد المناطق",
+    "addArea": "إضافة منطقة",
+    "region": "المنطقة",
+    "governorate": "المحافظة",
+    "wholeRegion": "المنطقة بالكامل",
+    "pricePerKm": "سعر النقل لكل كم",
+    "minPrice": "الحد الأدنى",
+    "perKm": "/ كم",
+    "minPriceLabel": "الحد الأدنى",
+    "currency": "ر.س",
+    "save": "حفظ",
+    "remove": "حذف",
+    "removeConfirm": "حذف تسعير هذه المنطقة؟ لن تُسعَّر الطلبات داخلها بعد ذلك.",
+    "saved": "تم حفظ التسعير",
+    "duplicateArea": "هذه المنطقة مُسعّرة بالفعل",
+    "priceRequired": "أدخل سعرًا صحيحًا لا يقل عن صفر",
+    "governorateSpecificNote": "تسعير المحافظة يسبق تسعير المنطقة بالكامل"
+  },
+  "map": {
+    "dialogTitle": "تحديد الموقع",
+    "chooseLocation": "حدد الموقع على الخريطة",
+    "changeLocation": "تغيير الموقع",
+    "noLocationChosen": "لم يتم تحديد موقع بعد",
+    "confirm": "تأكيد الموقع",
+    "searchPlace": "ابحث عن مكان أو عنوان",
+    "centerHint": "حرّك الخريطة حتى يقع الدبوس على الموقع المطلوب",
+    "useMyLocation": "استخدم موقعي الحالي",
+    "geolocationDenied": "تعذّر تحديد موقعك الحالي",
+    "coordinates": "الإحداثيات",
+    "address": "الموقع",
+    "resolvingAddress": "جارٍ تحديد العنوان…",
+    "latitude": "خط العرض",
+    "longitude": "خط الطول",
+    "clear": "مسح الموقع",
+    "unavailable": "الخريطة غير متاحة — أدخل الإحداثيات يدويًا"
+  },
+  "roles": {
+    "platform": "المنصة الرئيسية",
+    "fuelCompany": "شركة وقود",
+    "transportCompany": "شركة نقل",
+    "SUPER_ADMIN": "أدمن سيرو",
+    "FUEL_COMPANY_ADMIN": "مسؤول شركة الوقود",
+    "TRANSPORT_COMPANY_ADMIN": "مسؤول شركة النقل",
+    "CLIENT": "مالك محطة",
+    "DRIVER": "سائق"
   },
   "orders": {
     "title": "الطلبات",
@@ -140,7 +235,12 @@
     "noRegions": "لا توجد مناطق مخصصة بعد",
     "detail": "تفاصيل الناقل",
     "loadError": "تعذر تحميل شركات النقل",
-    "search": "ابحث بالاسم أو الكود..."
+    "search": "ابحث بالاسم أو الكود...",
+    "contactPhone": "هاتف الشركة",
+    "adminAccount": "حساب المسؤول",
+    "signInPhone": "رقم الدخول",
+    "signInPhoneHint": "هذا هو الرقم الذي يسجّل به المسؤول دخوله — وليس هاتف الشركة.",
+    "noAdmin": "لا يوجد مسؤول لهذه الشركة"
   },
   "orderStatus": {
     "PENDING_APPROVAL": "بانتظار الموافقة",
@@ -348,10 +448,22 @@
     "creditOutstanding": "مستحق على الحد الإئتماني",
     "quickActions": {
       "title": "إجراءات سريعة",
-      "viewOrders": { "title": "عرض الطلبات", "subtitle": "قائمة الطلبات كاملة" },
-      "viewInvoices": { "title": "عرض الفواتير", "subtitle": "الفواتير و المستحقات" },
-      "addTransporter": { "title": "إضافة شركة نقل", "subtitle": "إضافة ناقل جديد" },
-      "addStationOwner": { "title": "إضافة مالك محطة", "subtitle": "تسجيل مالك ومحطة جديدة" }
+      "viewOrders": {
+        "title": "عرض الطلبات",
+        "subtitle": "قائمة الطلبات كاملة"
+      },
+      "viewInvoices": {
+        "title": "عرض الفواتير",
+        "subtitle": "الفواتير و المستحقات"
+      },
+      "addTransporter": {
+        "title": "إضافة شركة نقل",
+        "subtitle": "إضافة ناقل جديد"
+      },
+      "addStationOwner": {
+        "title": "إضافة مالك محطة",
+        "subtitle": "تسجيل مالك ومحطة جديدة"
+      }
     },
     "loadError": "تعذر تحميل ملخص لوحة التحكم"
   },
@@ -411,7 +523,7 @@
     "addSubtitle": "سجل مالك محطة جديد تحت براندك - تقدر تضيف محطاته بعد إنشاء حسابه",
     "accountData": "بيانات الحساب",
     "password": "كلمة المرور المبدئية",
-    "passwordHint": "يقوم المالك بتسجيل الدخول بهذا البريد وكلمة المرور - لا يوجد تسجيل دخول برمز مؤقت على هذه المنصة.",
+    "passwordHint": "يقوم المالك بتسجيل الدخول بهذا الرقم وكلمة المرور - لا يوجد تسجيل دخول برمز مؤقت على هذه المنصة.",
     "create": "إنشاء الحساب",
     "empty": "لا يوجد ملاك محطات بعد",
     "loadError": "تعذر تحميل ملاك المحطات",
@@ -424,7 +536,18 @@
     "accountCode": "كود الحساب",
     "notEditable": "غير قابل للتعديل",
     "viewDetail": "عرض التفاصيل",
-    "search": "ابحث بكود أو اسم المالك..."
+    "search": "ابحث بكود أو اسم المالك...",
+    "passwordRule": "٨ أحرف على الأقل",
+    "errors": {
+      "fullNameRequired": "أدخل الاسم الكامل للمالك (حرفان على الأقل).",
+      "emailInvalid": "أدخل بريداً إلكترونياً صحيحاً.",
+      "passwordTooShort": "كلمة المرور المبدئية يجب ألا تقل عن ٨ أحرف.",
+      "duplicate": "يوجد حساب مسجّل بنفس رقم الجوال أو البريد الإلكتروني.",
+      "latitudeInvalid": "أدخل خط عرض صحيح بين ٩٠- و٩٠ (مثال: 24.7136).",
+      "longitudeInvalid": "أدخل خط طول صحيح بين ١٨٠- و١٨٠ (مثال: 46.6753)."
+    },
+    "firstStation": "بيانات المحطة الأولى",
+    "firstStationHint": "المنصة تُنشئ حساب المالك ومحطته الأولى معاً — يمكنك إضافة محطات أخرى بعد ذلك من صفحة المالك."
   },
   "creditLimit": {
     "title": "الحد الإئتماني",
@@ -479,19 +602,58 @@
     "loadError": "تعذر تحميل الإشعارات",
     "unreadBadge": "{{count}} غير مقروءة",
     "type": {
-      "ORDER_APPROVED_FINAL_PRICE": { "title": "تمت الموافقة على الطلب", "body": "تم تأكيد السعر النهائي لأحد الطلبات." },
-      "NO_DRIVER_AVAILABLE": { "title": "لا يوجد سائق متاح", "body": "تعذر إيجاد سائق لأحد الطلبات." },
-      "PAYMENT_TIMEOUT": { "title": "انتهت مهلة الدفع", "body": "انتهت نافذة الدفع دون تأكيد." },
-      "ORDER_ASSIGNED": { "title": "تم إسناد سائق", "body": "تم إسناد سائق لأحد الطلبات." },
-      "ORDER_STATUS_CHANGED": { "title": "تحديث حالة الطلب", "body": "تغيّرت حالة أحد الطلبات." },
-      "OTP_ISSUED": { "title": "تم إصدار رمز تحقق", "body": "تم إصدار رمز تحقق مؤقت." },
-      "PAYMENT_RECONCILIATION_REQUIRED": { "title": "دفعة تحتاج مراجعة", "body": "تحتاج إحدى الدفعات مطابقة يدوية." },
-      "ORDER_ROUTED_TO_TRANSPORT": { "title": "تم توجيه الطلب", "body": "تم توجيه أحد الطلبات لشركة نقل." },
-      "SUPPORT_REQUEST_RAISED": { "title": "طلب دعم جديد", "body": "قام أحد ملاك المحطات برفع طلب دعم." },
-      "DRIVER_STOP_DETECTED": { "title": "توقف السائق", "body": "توقفت شاحنة أحد السائقين عن الحركة." },
-      "ORDER_STOP_UNRESOLVED": { "title": "توقف بلا استجابة", "body": "لم يتم الرد على توقف تم رصده." },
-      "CREDIT_LIMIT_REQUEST_RESOLVED": { "title": "تم البت في طلب الحد الإئتماني", "body": "تم البت في طلب حد إئتماني لأحد ملاك المحطات." },
-      "unknown": { "title": "إشعار", "body": "" }
+      "ORDER_APPROVED_FINAL_PRICE": {
+        "title": "تمت الموافقة على الطلب",
+        "body": "تم تأكيد السعر النهائي لأحد الطلبات."
+      },
+      "NO_DRIVER_AVAILABLE": {
+        "title": "لا يوجد سائق متاح",
+        "body": "تعذر إيجاد سائق لأحد الطلبات."
+      },
+      "PAYMENT_TIMEOUT": {
+        "title": "انتهت مهلة الدفع",
+        "body": "انتهت نافذة الدفع دون تأكيد."
+      },
+      "ORDER_ASSIGNED": {
+        "title": "تم إسناد سائق",
+        "body": "تم إسناد سائق لأحد الطلبات."
+      },
+      "ORDER_STATUS_CHANGED": {
+        "title": "تحديث حالة الطلب",
+        "body": "تغيّرت حالة أحد الطلبات."
+      },
+      "OTP_ISSUED": {
+        "title": "تم إصدار رمز تحقق",
+        "body": "تم إصدار رمز تحقق مؤقت."
+      },
+      "PAYMENT_RECONCILIATION_REQUIRED": {
+        "title": "دفعة تحتاج مراجعة",
+        "body": "تحتاج إحدى الدفعات مطابقة يدوية."
+      },
+      "ORDER_ROUTED_TO_TRANSPORT": {
+        "title": "تم توجيه الطلب",
+        "body": "تم توجيه أحد الطلبات لشركة نقل."
+      },
+      "SUPPORT_REQUEST_RAISED": {
+        "title": "طلب دعم جديد",
+        "body": "قام أحد ملاك المحطات برفع طلب دعم."
+      },
+      "DRIVER_STOP_DETECTED": {
+        "title": "توقف السائق",
+        "body": "توقفت شاحنة أحد السائقين عن الحركة."
+      },
+      "ORDER_STOP_UNRESOLVED": {
+        "title": "توقف بلا استجابة",
+        "body": "لم يتم الرد على توقف تم رصده."
+      },
+      "CREDIT_LIMIT_REQUEST_RESOLVED": {
+        "title": "تم البت في طلب الحد الإئتماني",
+        "body": "تم البت في طلب حد إئتماني لأحد ملاك المحطات."
+      },
+      "unknown": {
+        "title": "إشعار",
+        "body": ""
+      }
     }
   },
   "support": {
@@ -631,49 +793,76 @@
   },
   "fuelExchange": {
     "title": "تبادل الوقود بين الشركات",
-    "subtitle": "طلبات توريد وقود بين شركتك وشركات البترول الشريكة الأخرى",
-    "newRequest": "طلب جديد",
-    "loadError": "تعذر تحميل طلبات التبادل",
-    "empty": "لا توجد طلبات تبادل",
+    "subtitle": "اعرض عرضًا واحدًا يصل إلى كل شركات البترول المؤهلة على المنصة",
+    "loadError": "تعذر تحميل عروض التبادل",
+    "empty": "لا توجد عروض تبادل",
     "filterAll": "الكل",
-    "filterOutgoing": "صادر",
-    "filterIncoming": "وارد",
+    "filterOutgoing": "صادرة",
+    "filterIncoming": "واردة",
     "incomingAwaiting": "واردة بانتظار الرد",
-    "outgoingAwaiting": "صادرة بانتظار الرد",
-    "acceptedRecently": "مقبولة مؤخراً",
+    "outgoingOpen": "صادرة مفتوحة",
+    "awardedThisMonth": "تم الترسية هذا الشهر",
     "fuelType": "نوع الوقود",
     "litres": "لتر",
     "unitPrice": "سعر اللتر",
     "total": "الإجمالي",
-    "recipientCompany": "الشركة المستلمة",
-    "selectCompany": "اختر شركة",
     "deliveryDate": "موعد التسليم",
     "quantity": "الكمية",
-    "deliveryPlace": "مكان التسليم",
-    "deliveryPlacePlaceholder": "مثال: مستودع جدة",
-    "estimatedTotal": "الإجمالي التقديري",
-    "sendRequest": "أرسل الطلب",
-    "formIncomplete": "أكمل جميع الحقول قبل إرسال الطلب",
-    "requestCreated": "تم إرسال طلب التبادل",
-    "requestData": "بيانات الطلب",
-    "supplier": "المورد",
-    "receiver": "المستلم",
+    "city": "المدينة",
+    "district": "الحي",
+    "locationUrl": "رابط الموقع",
+    "locationUrlPlaceholder": "https://...",
+    "notes": "ملاحظات إضافية",
+    "notesPlaceholder": "أي تفاصيل إضافية للشركة المستلمة",
+    "unverifiedLink": "رابط غير موثّق من المنصة",
+    "offerSummary": "ملخص العرض",
+    "offerSummaryValue": "{{quantity}} لتر — {{fuelType}}",
+    "offerDetails": "بيانات العرض",
+    "sendOffer": "أرسل العرض",
+    "formIncomplete": "أكمل جميع الحقول قبل إرسال العرض",
+    "invalidLocationUrl": "رابط الموقع يجب أن يبدأ بـ http أو https",
+    "offerCreated": "تم إرسال العرض إلى السوق",
+    "raisedBy": "مقدَّم من",
     "you": "أنت",
     "contactInfo": "معلومات التواصل",
     "phone": "رقم الجوال",
     "email": "البريد الإلكتروني",
     "contactCounterparty": "تواصل مع الشركة",
-    "accept": "قبول",
-    "decline": "رفض",
-    "withdraw": "سحب الطلب",
-    "accepted": "تم قبول الطلب",
-    "declined": "تم رفض الطلب",
-    "withdrawn": "تم سحب الطلب",
+    "propose": "قدّم عرضك",
+    "proposePrice": "سعر اللتر المقترح",
+    "proposeSubmit": "إرسال العرض",
+    "proposeDecline": "اعتذار عن هذا العرض",
+    "proposalSubmitted": "تم إرسال عرضك",
+    "declineConfirmed": "تم إرسال الاعتذار",
+    "withdraw": "سحب العرض",
+    "withdrawConfirm": "هل تريد سحب هذا العرض؟ سيتم إبلاغ كل من قدّم عرضًا",
+    "withdrawn": "تم سحب العرض",
+    "award": "ترسية",
+    "awardConfirm": "ترسية العرض على هذه الشركة بهذا السعر؟",
+    "awarded": "تمت ترسية العرض",
+    "proposals": "العروض المقدمة",
+    "proposalCount": "عدد العروض",
+    "declineCount": "عدد الاعتذارات",
+    "noProposalsYet": "لا توجد عروض بعد",
+    "yourProposal": "عرضك",
+    "alreadyAnswered": "لقد أجبت على هذا العرض من قبل",
+    "gradeNotSold": "شركتك لا تبيع هذا الصنف",
+    "noEligibleCompany": "لا توجد شركة أخرى على المنصة تبيع هذا الصنف",
+    "offerClosed": "هذا العرض مغلق بالفعل",
+    "deliveryInPast": "موعد التسليم يجب أن يكون في المستقبل — اختر تاريخًا ووقتًا لاحقين.",
+    "alreadyResolved": "تم البت في هذا العرض بالفعل",
+    "partyInvalid": "لا يمكن تنفيذ هذا الإجراء من شركتك",
     "state": {
-      "AWAITING_RESPONSE": "بانتظار الرد",
-      "ACCEPTED": "مقبول",
-      "DECLINED": "مرفوض",
-      "WITHDRAWN": "مسحوب"
+      "OPEN": "مفتوح",
+      "AWARDED": "تم الترسية",
+      "WITHDRAWN": "مسحوب",
+      "CLOSED_NO_AWARD": "أغلق دون ترسية"
+    },
+    "proposalState": {
+      "PROPOSED": "عرض مقدم",
+      "DECLINED": "معتذر",
+      "AWARDED": "تم الترسية",
+      "NOT_SELECTED": "لم يتم اختياره"
     }
   },
   "adminCompanies": {
@@ -692,7 +881,7 @@
     "companyName": "اسم الشركة",
     "joinedOn": "تاريخ الانضمام",
     "email": "البريد الإلكتروني",
-    "phone": "رقم الجوال",
+    "phone": "هاتف الشركة",
     "fuelGrades": "أنواع الوقود المباعة",
     "commercialRegister": "السجل التجاري",
     "onFile": "متوفر",
@@ -732,6 +921,10 @@
     "commissionUpdated": "تم تحديث نسبة العمولة",
     "cashbackUpdated": "تم تحديث برنامج الكاش باك",
     "cashbackActiveToggle": "برنامج الكاش باك مفعّل",
-    "exchangeOversightSubtitle": "كل طلبات تبادل الوقود على المنصة"
+    "exchangeOversightSubtitle": "كل عروض تبادل الوقود على المنصة",
+    "adminAccount": "حساب المسؤول",
+    "signInPhone": "رقم الدخول",
+    "signInPhoneHint": "هذا هو الرقم الذي يسجّل به المسؤول دخوله — وليس هاتف الشركة.",
+    "noAdmin": "لا يوجد مسؤول لهذه الشركة"
   }
 }

@@ -1,35 +1,125 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { MapPin } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useCreateOwner } from '@/petrol_company/stations/hooks/useOwners';
+import { ApiError } from '@/lib/api/api-error';
+import { normalizeSaudiMobile } from '@/lib/auth/phone';
+import {
+  RegionCode,
+  ALL_REGION_CODES,
+  REGION_GOVERNORATES,
+  regionLabel,
+  governorateLabel,
+} from '@/constants/regions';
+import type { GovernorateCode } from '@/constants/regions';
+import { LocationField } from '@/components/ui/LocationField';
+import { isValidLatLng } from '@/lib/maps/maps-url';
 
 // Feature 013 T074/FR-025/FR-028: wired to `POST /users` (role CLIENT). The mock's "no
-// password needed, OTP-only login" copy described a login flow this platform does not
-// have — `POST /auth/login` is the sole login route, so the admin now issues a real
-// initial password instead (`CreateUserDto` requires one, minimum 8 characters).
+// password needed, OTP-only login" copy described a flow that did not exist for this
+// role, so the admin issues a real initial password (`CreateUserDto` requires one, min 8).
+// spec 015 R11: "`POST /auth/login` is the sole login route" is no longer true in general
+// — administrators now also sign in with a mobile number and an SMS code
+// (`/auth/login/code/*`). A station owner is a CLIENT and still signs in with phone +
+// password on the mobile app, so nothing here changes.
 export function AddStationOwnerPage() {
   const navigate = useNavigate();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const createOwner = useCreateOwner();
 
   const [fullName, setFullName] = useState('');
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  // The platform creates a CLIENT and their first station in ONE call — `POST /users`
+  // refuses a CLIENT with no station — so these fields are part of onboarding, not an
+  // extra. Further stations are added from the owner-detail screen afterwards.
+  const [regionCode, setRegionCode] = useState<RegionCode>(RegionCode.RIYADH);
+  const [governorateCode, setGovernorateCode] = useState<GovernorateCode>(
+    REGION_GOVERNORATES[RegionCode.RIYADH][0]!,
+  );
+  const [stationName, setStationName] = useState('');
+  const [addressText, setAddressText] = useState('');
+  const [latitude, setLatitude] = useState('');
+  const [longitude, setLongitude] = useState('');
   const [error, setError] = useState<string | null>(null);
 
+  function onRegionChange(code: RegionCode) {
+    setRegionCode(code);
+    // Governorate must belong to the region — the platform rejects a mismatched pair
+    // ('governorateCode does not belong to regionCode'), so it is re-seeded here rather
+    // than left pointing at the previous region's first governorate.
+    setGovernorateCode(REGION_GOVERNORATES[code][0]!);
+  }
+
+  // `CreateUserDto.phone` is E.164-only. A Saudi local number typed as `05…` is what an
+  // operator actually has in front of them, so compose it here rather than refusing it.
+  //
+  // This used to compose with `toE164Saudi` ONLY when the input had no leading `+`, and
+  // validate a `+` number with the generic `looksLikeE164` — so `+12025550123` passed and
+  // became a station owner's login identifier. `normalizeSaudiMobile` is one accept-or-
+  // refuse for every form an operator types, and refuses a non-966 country code outright.
+  const phoneE164 = normalizeSaudiMobile(phone);
+  const phoneInvalid = phone.trim().length > 0 && phoneE164 === null;
+
+  // `Number('')` is 0, which is finite and in range — an empty coordinate field would
+  // otherwise validate cleanly and put the station in the Gulf of Guinea. Blank is checked
+  // before the numeric range, never folded into it.
+  const lat = latitude.trim() === '' ? NaN : Number(latitude);
+  const lng = longitude.trim() === '' ? NaN : Number(longitude);
+
+  // Every branch below used to set the SAME `errors.generic` string — "something went
+  // wrong, try again" — for four different, individually fixable problems, and the catch
+  // discarded the platform's own message on top of that. A password of 6 characters (which
+  // `CreateUserDto` refuses at `@MinLength(8)`) therefore looked identical to a server
+  // outage, and the one action that would fix it was never stated.
+  function validate(): string | null {
+    if (fullName.trim().length < 2) return t('owners.errors.fullNameRequired');
+    if (!phoneE164) return t('errors.phoneNotSaudi');
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email.trim())) return t('owners.errors.emailInvalid');
+    if (password.length < 8) return t('owners.errors.passwordTooShort');
+    if (!Number.isFinite(lat) || lat < -90 || lat > 90) return t('owners.errors.latitudeInvalid');
+    if (!Number.isFinite(lng) || lng < -180 || lng > 180) return t('owners.errors.longitudeInvalid');
+    return null;
+  }
+
   async function handleSubmit() {
-    setError(null);
-    if (!fullName.trim() || !phone.trim() || !email.trim() || password.length < 8) {
-      setError(t('errors.generic'));
-      return;
-    }
+    const invalid = validate();
+    setError(invalid);
+    // `!phoneE164` is redundant with `validate()` at runtime, but it is what narrows the
+    // nullable normalised value for the call below — never a non-null assertion, which
+    // would go stale the moment validate() stopped checking it.
+    if (invalid || !phoneE164) return;
+
     try {
-      const owner = await createOwner.mutateAsync({ fullName, phone, email, password });
+      const owner = await createOwner.mutateAsync({
+        fullName: fullName.trim(),
+        phone: phoneE164,
+        email: email.trim(),
+        password,
+        station: {
+          regionCode,
+          governorateCode,
+          latitude: lat,
+          longitude: lng,
+          name: stationName.trim() || undefined,
+          addressText: addressText.trim() || undefined,
+        },
+      });
       navigate(`/petrolCompany/stations/owners/${owner._id}`);
-    } catch {
-      toast.error(t('errors.generic'));
+    } catch (err) {
+      // 409 is the likeliest real failure here (the phone or email already belongs to an
+      // account) and is entirely actionable, so it must not be flattened into "try again".
+      const message =
+        err instanceof ApiError
+          ? err.statusCode === 409
+            ? t('owners.errors.duplicate')
+            : err.message
+          : t('errors.generic');
+      setError(message);
+      toast.error(message);
     }
   }
 
@@ -79,13 +169,25 @@ export function AddStationOwnerPage() {
               <div className="flex flex-col">
                 <label className="text-sm font-bold text-slate-700 mb-2">{t('common.phone')} <span className="text-red-500">*</span></label>
                 <input
-                  type="text"
+                  type="tel"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                   placeholder="+9665XXXXXXXX"
                   dir="ltr"
-                  className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 text-left"
+                  aria-invalid={phoneInvalid}
+                  className={`w-full px-4 py-3 bg-white border rounded-xl text-sm font-medium focus:outline-none focus:ring-1 text-left ${
+                    phoneInvalid
+                      ? 'border-red-400 focus:border-red-500 focus:ring-red-500'
+                      : 'border-slate-200 focus:border-blue-500 focus:ring-blue-500'
+                  }`}
                 />
+                {/* Stated while typing, not only on submit: the operator is looking at the
+                    field they got wrong, rather than at a summary after the form bounced. */}
+                {phoneInvalid ? (
+                  <span className="mt-2 text-xs font-bold text-red-500">{t('errors.phoneNotSaudi')}</span>
+                ) : (
+                  <span className="mt-2 text-xs font-bold text-slate-400">{t('errors.phoneHintSaudi')}</span>
+                )}
               </div>
               <div className="flex flex-col">
                 <label className="text-sm font-bold text-slate-700 mb-2">{t('common.email')} <span className="text-red-500">*</span></label>
@@ -109,7 +211,118 @@ export function AddStationOwnerPage() {
                 dir="ltr"
                 className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 text-left"
               />
-              <span className="text-[11px] font-bold text-slate-400 mt-2">{t('owners.passwordHint')}</span>
+              <span className="text-[11px] font-bold text-slate-400 mt-2">{t('owners.passwordRule')}</span>
+              <span className="text-[11px] font-bold text-slate-400 mt-1">{t('owners.passwordHint')}</span>
+            </div>
+
+            {/* First station — required by the platform at account creation, NOT an
+                optional extra: `POST /users` refuses a CLIENT that arrives without one. */}
+            <div className="h-px bg-slate-100 mt-2"></div>
+
+            <div className="flex items-center justify-start gap-2">
+              <div className="w-9 h-9 rounded-full bg-blue-50 flex items-center justify-center shrink-0">
+                <MapPin className="w-4 h-4 text-blue-600" />
+              </div>
+              <div className="flex flex-col text-right">
+                <h3 className="text-base font-black text-slate-900">{t('owners.firstStation')}</h3>
+                <span className="text-[11px] font-bold text-slate-400">{t('owners.firstStationHint')}</span>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-right">
+              <div className="flex flex-col">
+                <label className="text-sm font-bold text-slate-700 mb-2">{t('stations.region')} <span className="text-red-500">*</span></label>
+                <select
+                  value={regionCode}
+                  onChange={(e) => onRegionChange(e.target.value as RegionCode)}
+                  className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                >
+                  {ALL_REGION_CODES.map((code) => (
+                    <option key={code} value={code}>{regionLabel(code, i18n.language)}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="flex flex-col">
+                <label className="text-sm font-bold text-slate-700 mb-2">{t('stations.governorate')} <span className="text-red-500">*</span></label>
+                <select
+                  value={governorateCode}
+                  onChange={(e) => setGovernorateCode(e.target.value as GovernorateCode)}
+                  className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                >
+                  {REGION_GOVERNORATES[regionCode].map((code) => (
+                    <option key={code} value={code}>{governorateLabel(code, i18n.language)}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            {/* The same shared picker the fuel-exchange offer form uses. The two number
+                fields stay: they are what is actually stored and submitted, they remain
+                the only way to enter a coordinate read off a survey or a document, and
+                keeping them means the map is an ACCELERATOR for this required field rather
+                than a dependency it cannot be filled without. The map writes into them. */}
+            <div className="text-right">
+              <LocationField
+                value={
+                  isValidLatLng({ lat: Number(latitude), lng: Number(longitude) }) &&
+                  latitude.trim() !== '' &&
+                  longitude.trim() !== ''
+                    ? { lat: Number(latitude), lng: Number(longitude) }
+                    : null
+                }
+                onChange={(next) => {
+                  setLatitude(next ? String(next.lat.toFixed(6)) : '');
+                  setLongitude(next ? String(next.lng.toFixed(6)) : '');
+                }}
+              />
+            </div>
+
+            {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-right">
+              <div className="flex flex-col">
+                <label className="text-sm font-bold text-slate-700 mb-2">{t('stations.latitude')} <span className="text-red-500">*</span></label>
+                <input
+                  type="text"
+                  inputMode="decimal"
+                  value={latitude}
+                  onChange={(e) => setLatitude(e.target.value)}
+                  placeholder="24.7136"
+                  dir="ltr"
+                  className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 text-left"
+                />
+              </div>
+              <div className="flex flex-col">
+                <label className="text-sm font-bold text-slate-700 mb-2">{t('stations.longitude')} <span className="text-red-500">*</span></label>
+                <input
+                  type="text"
+                  inputMode="decimal"
+                  value={longitude}
+                  onChange={(e) => setLongitude(e.target.value)}
+                  placeholder="46.6753"
+                  dir="ltr"
+                  className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 text-left"
+                />
+              </div>
+            </div> */}
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-right">
+              <div className="flex flex-col">
+                <label className="text-sm font-bold text-slate-700 mb-2">{t('stations.name')}</label>
+                <input
+                  type="text"
+                  value={stationName}
+                  onChange={(e) => setStationName(e.target.value)}
+                  className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                />
+              </div>
+              <div className="flex flex-col">
+                <label className="text-sm font-bold text-slate-700 mb-2">{t('stations.addressText')}</label>
+                <input
+                  type="text"
+                  value={addressText}
+                  onChange={(e) => setAddressText(e.target.value)}
+                  className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                />
+              </div>
             </div>
 
             {error && <p className="text-sm font-bold text-red-500">{error}</p>}

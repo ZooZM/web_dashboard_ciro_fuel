@@ -43,6 +43,13 @@ const server = setupServer(
         { status: 401 },
       );
     }
+    // spec 015 FR-038/FR-041 — an already-live admin session evicted by the device cap.
+    if (auth === 'Bearer session-limit-token') {
+      return HttpResponse.json(
+        { statusCode: 401, error: 'SESSION_REVOKED', cause: 'SESSION_LIMIT_EXCEEDED', message: 'Your session has ended' },
+        { status: 401 },
+      );
+    }
     return HttpResponse.json({ statusCode: 401, message: 'Unauthorized', error: 'Unauthorized' }, { status: 401 });
   }),
   http.post(`${BASE_URL}/auth/refresh`, () =>
@@ -79,6 +86,27 @@ describe('bootstrapSession (FR-002, FR-003, FR-006)', () => {
     expect(useSessionStore.getState().user?.role).toBe(Role.FUEL_COMPANY_ADMIN);
   });
 
+  // The actual reload path, and the one nothing above exercises: every other case here
+  // pre-seeds an access token, but a real reload starts with NO access token in memory
+  // (it is never persisted — R9) and only the stored refresh token. This is what
+  // "signed in across a reload" means, and it stayed broken because it had no test.
+  it('restores the session on reload from the persisted refresh token alone, with no access token in memory (FR-011)', async () => {
+    server.use(
+      http.post(`${BASE_URL}/auth/refresh`, () =>
+        HttpResponse.json({
+          accessToken: 'valid-admin-token',
+          refreshToken: 'rotated-refresh-token',
+        }),
+      ),
+    );
+    tokenStore.setRefreshToken('stored-refresh-token');
+
+    await bootstrapSession();
+
+    expect(useSessionStore.getState().status).toBe('authenticated');
+    expect(useSessionStore.getState().user?.role).toBe(Role.FUEL_COMPANY_ADMIN);
+  });
+
   it('clears the session for a genuine but non-dashboard role (CLIENT) — FR-004 boundary', async () => {
     tokenStore.set('valid-client-token');
 
@@ -106,6 +134,18 @@ describe('bootstrapSession (FR-002, FR-003, FR-006)', () => {
 
     expect(useSessionStore.getState().status).toBe('anonymous');
     expect(toastSpy).toHaveBeenCalledWith(expect.stringContaining('تعليق'));
+    toastSpy.mockRestore();
+  });
+
+  it('states the device-limit reason (SESSION_LIMIT_EXCEEDED) rather than signing out silently (spec 015 FR-038/FR-041)', async () => {
+    wireSessionExpiry();
+    const toastSpy = vi.spyOn(toast, 'error');
+    tokenStore.set('session-limit-token');
+
+    await bootstrapSession();
+
+    expect(useSessionStore.getState().status).toBe('anonymous');
+    expect(toastSpy).toHaveBeenCalledWith(expect.stringContaining('أجهزة'));
     toastSpy.mockRestore();
   });
 

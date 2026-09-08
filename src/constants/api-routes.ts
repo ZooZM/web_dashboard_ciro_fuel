@@ -9,6 +9,13 @@ export const apiRoutes = {
     refresh: '/auth/refresh',
     me: '/auth/me',
     logout: '/auth/logout',
+    // spec 015 (dashboard auth) — passwordless administrator sign-in.
+    loginCodeRequest: '/auth/login/code/request',
+    loginCodeVerify: '/auth/login/code/verify',
+    // spec 015 US7 — SMS password recovery (existing, unchanged platform endpoints).
+    passwordResetRequest: '/auth/password-reset/request',
+    passwordResetVerify: '/auth/password-reset/verify',
+    passwordResetComplete: '/auth/password-reset/complete',
   },
   companies: {
     list: '/companies',
@@ -21,7 +28,12 @@ export const apiRoutes = {
     regions: (id: string) => `/companies/${id}/regions`, // Phase 7 (US4) — :id is the transporter
     coveredRegions: (id: string) => `/companies/${id}/covered-regions`, // Phase 7 (US4), T086b
     commissionCeiling: (id: string) => `/companies/${id}/commission-ceiling`, // Phase 12 (US9)
-    exchangePartners: '/companies/exchange-partners', // Phase 15 (US12)
+    // :id is the TRANSPORT company. GET is readable by the transporter AND its parent fuel
+    // company; PUT is TRANSPORT_COMPANY_ADMIN and self-only — a fuel company may read what
+    // its transporter charges but may never set it.
+    deliveryRates: (id: string) => `/companies/${id}/delivery-rates`,
+    // `exchangePartners` is REMOVED (feature 016, FR-040, research R10) — its only
+    // consumer was the directed model's recipient selector, which no longer exists.
   },
   users: {
     list: '/users',
@@ -129,11 +141,15 @@ export const apiRoutes = {
     payments: '/platform-account/payments',
     confirmPayment: (id: string) => `/platform-account/payments/${id}/confirm`,
   },
+  // Feature 016 (broadcast fuel exchange offers) — replaces the directed model's
+  // `/fuel-exchange/requests` entirely (FR-040); no recipient is ever named on any route.
   fuelExchange: {
-    list: '/fuel-exchange/requests', // Phase 15 (US12)
-    create: '/fuel-exchange/requests',
-    detail: (id: string) => `/fuel-exchange/requests/${id}`,
-    respond: (id: string) => `/fuel-exchange/requests/${id}/respond`,
-    withdraw: (id: string) => `/fuel-exchange/requests/${id}/withdraw`,
+    list: '/fuel-exchange/offers',
+    create: '/fuel-exchange/offers',
+    summary: '/fuel-exchange/offers/summary',
+    detail: (id: string) => `/fuel-exchange/offers/${id}`,
+    propose: (id: string) => `/fuel-exchange/offers/${id}/proposals`,
+    award: (id: string) => `/fuel-exchange/offers/${id}/award`,
+    withdraw: (id: string) => `/fuel-exchange/offers/${id}/withdraw`,
   },
 } as const;

@@ -3,6 +3,8 @@ import { useTranslation } from 'react-i18next';
 import toast from 'react-hot-toast';
 import { cn } from '@/lib/utils';
 import { ChevronDown, MapPin, Plus, X } from 'lucide-react';
+import { LocationField } from '@/components/ui/LocationField';
+import { isValidLatLng } from '@/lib/maps/maps-url';
 import {
   useOwnerStations,
   useCreateStation,
@@ -166,6 +168,23 @@ export function StationsBlock({ ownerId }: { ownerId: string }) {
                 <ChevronDown className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-blue-600" />
               </div>
             </div>
+          </div>
+
+          {/* Same shared picker as the add-owner form and the fuel-exchange offer. */}
+          <div className="text-right">
+            <LocationField
+              value={
+                latitude.trim() !== '' &&
+                longitude.trim() !== '' &&
+                isValidLatLng({ lat: Number(latitude), lng: Number(longitude) })
+                  ? { lat: Number(latitude), lng: Number(longitude) }
+                  : null
+              }
+              onChange={(next) => {
+                setLatitude(next ? String(next.lat.toFixed(6)) : '');
+                setLongitude(next ? String(next.lng.toFixed(6)) : '');
+              }}
+            />
           </div>
 
           <div className="grid grid-cols-2 gap-4">

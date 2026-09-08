@@ -1,4 +1,6 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { AdminCompanyAdminCard } from '@/admin/petrol_companies/components/AdminCompanyAdminCard';
+import { Role } from '@/constants/roles';
 import { CompanyRecentTripsCard } from '@/petrol_company/companies/components/CompanyRecentTripsCard';
 import { AdminTransportCompanyInfoCard } from './AdminTransportCompanyInfoCard';
 import { AdminCompanyDriversCard } from './AdminCompanyDriversCard';
@@ -8,6 +10,11 @@ import { cn } from '@/lib/utils';
 
 export function AdminTransportCompanyDetailsPage() {
   const navigate = useNavigate();
+  // The rest of this screen is still the unwired mock feature 009 disclosed (the company
+  // name, rating and info card are all literals). The route param IS real, though, so the
+  // administrator card below shows this company's genuine sign-in account — the one thing
+  // an operator cannot find anywhere else in the dashboard.
+  const { id: companyId } = useParams<{ id: string }>();
   const [isActive, setIsActive] = useState(true);
 
 
@@ -118,6 +125,9 @@ export function AdminTransportCompanyDetailsPage() {
         {/* Right Column (Wider) - Info, Regions, Drivers */}
         <div className="flex-1 w-full flex flex-col gap-6">
           <AdminTransportCompanyInfoCard />
+          {companyId && (
+            <AdminCompanyAdminCard companyId={companyId} role={Role.TRANSPORT_COMPANY_ADMIN} />
+          )}
           {/* spec 013 Phase 7 note: `CompanyRegionsCard`/`CompanyContactCard`
               (petrol_company/companies) were made real this phase — the regions card now
               calls `PUT /companies/:id/regions`, gated `@Roles(FUEL_COMPANY_ADMIN)`, which

@@ -1,5 +1,6 @@
 import { apiClient } from '@/lib/api/api.client';
 import { apiRoutes } from '@/constants/api-routes';
+import type { GovernorateCode, RegionCode } from '@/constants/regions';
 
 // spec 013: `GET /users/:id` — role-agnostic, tenant-isolated by `User`'s own
 // `markTenantScoped` marker (a cross-tenant id 404s automatically). Used here for a
@@ -32,23 +33,53 @@ export async function listOwners(): Promise<UserSummary[]> {
   return data;
 }
 
+export interface CreateOwnerStationInput {
+  regionCode: RegionCode;
+  governorateCode: GovernorateCode;
+  latitude: number;
+  longitude: number;
+  name?: string;
+  addressText?: string;
+}
+
 export interface CreateOwnerInput {
   fullName: string;
   email: string;
   phone: string;
   password: string;
+  /**
+   * REQUIRED by the platform, not optional convenience: `UsersController.create` refuses a
+   * CLIENT with no station outright — "station is required for CLIENT accounts" (400) — and
+   * this screen omitted it entirely, so onboarding an owner could never once have succeeded.
+   * The account and its first station are one transaction server-side; further stations are
+   * added afterwards from the owner-detail screen (`POST /users/:id/stations`).
+   */
+  station: CreateOwnerStationInput;
 }
 
 // FR-025/FR-028: onboarding a station owner is `POST /users` with role CLIENT — the
 // same endpoint client self-registration never uses (an admin-provisioned account has no
 // self-registration path at all, spec 004). `CreateUserDto` requires a password (min 8
-// chars) issued by the admin here; there is no OTP-only login on this platform (`POST
-// /auth/login` is the sole login route) — Figma's mock described a passwordless OTP flow
-// this platform does not have, and the form was corrected to collect one instead.
+// chars) issued by the admin here.
+//
+// spec 015 R11: an earlier version of this comment said "`POST /auth/login` is the sole
+// login route" — that is no longer true. Administrators now also sign in with a mobile
+// number and an SMS code (`/auth/login/code/*`). A station owner is a CLIENT, though, and
+// still signs in with phone + password on the mobile app, so this flow is unaffected.
 export async function createOwner(input: CreateOwnerInput): Promise<UserSummary> {
+  const { station, ...account } = input;
   const { data } = await apiClient.post<UserSummary>(apiRoutes.users.create, {
     role: 'CLIENT',
-    ...input,
+    ...account,
+    // `StationDto` takes a nested `location: { latitude, longitude }`, the same
+    // `GeoPointDto` `POST /users/:id/stations` uses — never two flat coordinate fields.
+    station: {
+      regionCode: station.regionCode,
+      governorateCode: station.governorateCode,
+      location: { latitude: station.latitude, longitude: station.longitude },
+      ...(station.name ? { name: station.name } : {}),
+      ...(station.addressText ? { addressText: station.addressText } : {}),
+    },
   });
   return data;
 }

@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { CustomGoogleMap } from '@/components/ui/CustomGoogleMap';
+import { LocationAddress } from '@/components/ui/LocationAddress';
 import { useAssignment } from './AssignmentContext';
 
 const FALLBACK_CENTER = { lat: 24.7136, lng: 46.6753 };
@@ -19,6 +20,10 @@ export function AssignMapCard() {
       <div className="flex-1 w-full rounded-xl overflow-hidden border border-slate-200 relative min-h-[250px]">
         <CustomGoogleMap center={center} className="w-full h-full object-cover" />
       </div>
+      {/* Real location only — never the fallback centre. */}
+      {order?.deliveryLocation && (
+        <LocationAddress value={center} className="text-sm font-bold text-slate-600" />
+      )}
     </div>
   );
 }

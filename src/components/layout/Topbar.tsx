@@ -1,14 +1,16 @@
 import { useSession } from '@/stores/session.store';
 import { useLayoutStore } from '@/stores/layout.store';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useSessionIdentity } from '@/hooks/useSessionIdentity';
+import { Role } from '@/constants/roles';
+import { useNavigate } from 'react-router-dom';
 import { useState, useRef, useEffect } from 'react';
 import { User, Globe, Info, ChevronLeft, ChevronUp, LifeBuoy } from 'lucide-react';
 
 export function Topbar() {
   const { user } = useSession();
+  const { fullName, roleLabel } = useSessionIdentity();
   const { toggleSidebar } = useLayoutStore();
   const navigate = useNavigate();
-  const location = useLocation();
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isLangOpen, setIsLangOpen] = useState(false);
@@ -24,9 +26,16 @@ export function Topbar() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  let basePath = '/transport';
-  if (location.pathname.startsWith('/admin')) basePath = '/admin';
-  else if (location.pathname.startsWith('/petrolCompany')) basePath = '/petrolCompany';
+  // The ROLE decides which surface these links belong to, not the current URL: the old
+  // form defaulted to '/transport' for anything that was not /admin or /petrolCompany, so
+  // a fuel company administrator on any unprefixed path (e.g. /order-tracking) was sent to
+  // a surface their own route guard refuses. Path only breaks ties inside a role.
+  const ROLE_BASE_PATH: Partial<Record<Role, string>> = {
+    [Role.SUPER_ADMIN]: '/admin',
+    [Role.FUEL_COMPANY_ADMIN]: '/petrolCompany',
+    [Role.TRANSPORT_COMPANY_ADMIN]: '/transport',
+  };
+  const basePath = (user?.role && ROLE_BASE_PATH[user.role]) ?? '/';
 
   return (
 
@@ -74,8 +83,11 @@ export function Topbar() {
           >
             <img src="/topBar/profilePic.jpg" alt="Avatar" className="h-8 w-8 md:h-10 md:w-10 rounded-full object-cover border-2 border-white shadow-sm shrink-0" />
             <div className="hidden sm:flex flex-col text-right" dir="rtl">
-              <span className="text-sm font-bold text-slate-800">{user?.role === 'SUPER_ADMIN' ? 'حسين السيد' : user?.fullName || 'أحمد السبيعي'}</span>
-              <span className="text-[10px] text-slate-500">{user?.role === 'SUPER_ADMIN' ? 'أدمن سيرو' : 'مدير عمليات'}</span>
+              {/* Both lines were hard-coded: a fabricated name for the operator, and
+                  the job title 'مدير عمليات' for EVERY other role — which is what a fuel
+                  company administrator was shown in their own account card. */}
+              <span className="text-sm font-bold text-slate-800">{fullName || '—'}</span>
+              <span className="text-[10px] text-slate-500">{roleLabel}</span>
             </div>
             <img src="/topBar/chevronDown.svg" alt="Menu" className={`hidden sm:block h-3 w-3 object-contain group-hover:opacity-80 transition-all ${isDropdownOpen ? 'rotate-180' : ''}`} />
           </div>

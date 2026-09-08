@@ -1,25 +1,26 @@
 import { useTranslation } from 'react-i18next';
 import { FuelExchangeStats } from '@/petrol_company/fuel_exchange/components/FuelExchangeStats';
 import { AdminFuelExchangeListItem } from './AdminFuelExchangeListItem';
-import { useExchangeRequestsList } from '@/petrol_company/fuel_exchange/hooks/useFuelExchange';
-import { ExchangeRequestState } from '@/constants/fuel-company';
-import { useFuelCompaniesList } from '@/admin/petrol_companies/hooks/useFuelCompanies';
+import { useOffersList } from '@/petrol_company/fuel_exchange/hooks/useFuelExchange';
+import { ExchangeOfferState } from '@/constants/fuel-company';
 
-// Feature 013 T242/FR-089: real `GET /fuel-exchange/requests` (SUPER_ADMIN sees every
-// request, direction ignored — see `AdminFuelExchangeListItem.tsx`'s own comment on why
-// this screen must never be read as proof the party-set isolation mechanism works,
-// R3/quickstart 3.3). Company names for the raiser/recipient columns come from `GET
-// /companies?type=FUEL` (already fetched for the companies list, T236) — the exchange
-// list endpoint itself returns ids only.
+/**
+ * spec 016 (broadcast fuel exchange offers) T100/FR-023 — real `GET /fuel-exchange/offers`
+ * (`SUPER_ADMIN` bypasses the isolation plugin entirely and sees every offer, direction
+ * ignored server-side — see `AdminFuelExchangeListItem.tsx`'s own comment on why this
+ * screen must never be read as proof the isolation mechanism works). `GET
+ * /fuel-exchange/offers/summary` is FCA-only (a fuel company's own scoped counts have no
+ * meaning for a platform operator with no company of its own), so these three cards are
+ * counted from the loaded page — the same limitation the directed-model version had,
+ * acceptable for oversight rather than billing.
+ */
 export function AdminFuelExchangePage() {
   const { t } = useTranslation();
-  const { data, isLoading, isError, refetch } = useExchangeRequestsList('all');
-  const { data: companies } = useFuelCompaniesList();
+  const { data, isLoading, isError, refetch } = useOffersList('all');
 
-  const companyNameById = new Map((companies ?? []).map((c) => [c._id, c.name]));
   const items = data?.items ?? [];
-  const awaitingCount = items.filter((r) => r.state === ExchangeRequestState.AWAITING_RESPONSE).length;
-  const acceptedCount = items.filter((r) => r.state === ExchangeRequestState.ACCEPTED).length;
+  const openCount = items.filter((o) => o.state === ExchangeOfferState.OPEN).length;
+  const awardedCount = items.filter((o) => o.state === ExchangeOfferState.AWARDED).length;
 
   const STAT_CARDS = [
     {
@@ -31,16 +32,16 @@ export function AdminFuelExchangePage() {
       titleColor: 'text-slate-500',
     },
     {
-      title: t('fuelExchange.state.AWAITING_RESPONSE'),
-      value: String(awaitingCount),
+      title: t('fuelExchange.state.OPEN'),
+      value: String(openCount),
       icon: '/petrolCompany/requests/arrowDown.svg',
       iconBgClass: 'bg-orange-50',
       valueColor: 'text-slate-900',
       titleColor: 'text-slate-500',
     },
     {
-      title: t('fuelExchange.state.ACCEPTED'),
-      value: String(acceptedCount),
+      title: t('fuelExchange.state.AWARDED'),
+      value: String(awardedCount),
       icon: '/petrolCompany/requests/rightCheck.svg',
       iconBgClass: 'bg-emerald-50',
       valueColor: 'text-slate-900',
@@ -65,7 +66,7 @@ export function AdminFuelExchangePage() {
         ) : isError ? (
           <div className="flex flex-col items-center gap-3 py-12">
             <p className="text-sm text-red-500">{t('fuelExchange.loadError')}</p>
-            <button onClick={() => refetch()} className="text-sm font-bold text-blue-600 hover:underline">
+            <button onClick={() => void refetch()} className="text-sm font-bold text-blue-600 hover:underline">
               {t('common.retry')}
             </button>
           </div>
@@ -73,8 +74,8 @@ export function AdminFuelExchangePage() {
           <p className="text-center text-sm text-slate-400 py-12">{t('fuelExchange.empty')}</p>
         ) : (
           <div className="flex flex-col gap-4">
-            {items.map((req) => (
-              <AdminFuelExchangeListItem key={req._id} request={req} companyNameById={companyNameById} />
+            {items.map((offer) => (
+              <AdminFuelExchangeListItem key={offer._id} offer={offer} />
             ))}
           </div>
         )}

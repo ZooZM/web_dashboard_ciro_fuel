@@ -13,6 +13,7 @@ import {
   governorateLabel,
 } from '@/constants/regions';
 import type { GovernorateCode } from '@/constants/regions';
+import { LocationAddress } from '@/components/ui/LocationAddress';
 
 // Feature 013 T075/FR-036: no dedicated `GET /stations/:id` exists — this admin surface
 // already fetches `GET /stations/all` for the list screen, so the detail page reads from
@@ -190,13 +191,18 @@ export function StationDetailsPage() {
               <span className="text-sm font-bold text-slate-400 mb-2">{t('stations.addressText')}</span>
               <span className="text-base font-black text-slate-900">{station.addressText || '—'}</span>
             </div>
-            <div className="flex flex-col items-start">
-              <span className="text-sm font-bold text-slate-400 mb-2">{t('stations.latitude')}</span>
-              <span className="text-base font-black text-slate-900" dir="ltr">{station.location.coordinates[1]}</span>
-            </div>
-            <div className="flex flex-col items-start">
-              <span className="text-sm font-bold text-slate-400 mb-2">{t('stations.longitude')}</span>
-              <span className="text-base font-black text-slate-900" dir="ltr">{station.location.coordinates[0]}</span>
+            {/* Was two cells of raw decimals. The stored value is unchanged — GeoJSON
+                [lng, lat] on the station — but nobody reading this page was ever served by
+                seeing it. The exact pair is still one hover away, in the title. */}
+            <div className="flex flex-col items-start md:col-span-2">
+              <span className="text-sm font-bold text-slate-400 mb-2">{t('map.address')}</span>
+              <LocationAddress
+                value={{
+                  lat: station.location.coordinates[1],
+                  lng: station.location.coordinates[0],
+                }}
+                className="text-base font-black text-slate-900"
+              />
             </div>
           </div>
         </div>

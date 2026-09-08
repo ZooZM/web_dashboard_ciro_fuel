@@ -24,7 +24,7 @@ export function CompanyContactCard({ company }: { company: Transporter }) {
 
       <div className="flex flex-col gap-4 mb-6">
         <div className="flex flex-col items-start text-right w-full">
-          <span className="text-xs font-bold text-slate-400 mb-1 w-full">{t('common.phone')}</span>
+          <span className="text-xs font-bold text-slate-400 mb-1 w-full">{t('companies.contactPhone')}</span>
           <span className="text-sm font-black text-slate-900 w-full text-left" dir="ltr">{company.contactPhone}</span>
         </div>
         <div className="flex flex-col items-start text-right w-full">

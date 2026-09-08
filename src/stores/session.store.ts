@@ -20,7 +20,14 @@ interface SessionState {
   // `refreshToken` is optional: bootstrapSession()'s reload path re-establishes a session
   // from an already-valid access token and has no new refresh token to record — the one
   // persisted from the original login (or the last silent refresh) is still current.
-  setSession: (user: SessionUser, accessToken: string, refreshToken?: string) => void;
+  // spec 015 R9: `remember` chooses where the refresh token persists — localStorage
+  // (survives a browser restart) vs sessionStorage (this tab only).
+  setSession: (
+    user: SessionUser,
+    accessToken: string,
+    refreshToken?: string,
+    remember?: boolean,
+  ) => void;
   clearSession: () => void;
 }
 
@@ -30,10 +37,10 @@ export const useSessionStore = create<SessionState>()(
       user: null,
       status: 'booting',
       setStatus: (status) => set({ status }),
-      setSession: (user, accessToken, refreshToken) => {
+      setSession: (user, accessToken, refreshToken, remember) => {
         tokenStore.set(accessToken);
         if (refreshToken) {
-          tokenStore.setRefreshToken(refreshToken);
+          tokenStore.setRefreshToken(refreshToken, remember);
         }
         set({ user, status: 'authenticated' });
       },

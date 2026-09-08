@@ -25,6 +25,7 @@ export const queryKeys = {
     pricingConfig: (id: string) => ['companies', id, 'pricing-config'] as const, // Phase 8
     transporters: (id: string) => ['companies', id, 'transporters'] as const, // Phase 7
     coveredRegions: (id: string) => ['companies', id, 'covered-regions'] as const, // Phase 7
+    deliveryRates: (id: string) => ['companies', id, 'delivery-rates'] as const,
   },
   orders: {
     list: (params: OrderListParams) => ['orders', params] as const,
@@ -50,6 +51,9 @@ export const queryKeys = {
   users: {
     list: (params: UserListParams) => ['users', params] as const,
     detail: (id: string) => ['users', id] as const,
+    // The administrator account(s) of one company — SUPER_ADMIN only in practice, since
+    // the tenant plugin overwrites `companyId` for every other role.
+    companyAdmins: (companyId: string) => ['users', 'company-admins', companyId] as const,
     stations: (id: string) => ['users', id, 'stations'] as const, // Phase 6
     creditLimit: (id: string) => ['users', id, 'credit-limit'] as const, // Phase 6
   },
@@ -82,8 +86,11 @@ export const queryKeys = {
       ['platform-account', 'movements', params] as const, // Phase 13
   },
   fuelExchange: {
-    list: (direction?: string, cursor?: string) => ['fuel-exchange', { direction, cursor }] as const, // Phase 15
+    // Feature 016 (broadcast fuel exchange offers) — `partners` is gone with the
+    // recipient selector it fed (FR-040, research R10); `summary` is new (research R9).
+    list: (direction?: string, state?: string, cursor?: string) =>
+      ['fuel-exchange', { direction, state, cursor }] as const,
     detail: (id: string) => ['fuel-exchange', id] as const,
-    partners: ['companies', 'exchange-partners'] as const,
+    summary: ['fuel-exchange', 'summary'] as const,
   },
 } as const;

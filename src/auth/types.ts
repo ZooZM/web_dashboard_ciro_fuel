@@ -30,3 +30,52 @@ export interface RefreshResponse {
   // until the ORIGINAL refresh token from login expires.
   refreshToken: string;
 }
+
+// ── spec 015 (dashboard auth) — passwordless administrator sign-in ──────────
+
+/** A solved proof-of-work challenge, attached to a code re-request (FR-023). */
+export interface LoginChallengeSolution {
+  seed: string;
+  nonce: string;
+}
+
+export interface RequestLoginCodeInput {
+  /** E.164 — the screen displays `05…` but must send `+9665…`. */
+  phone: string;
+  challenge?: LoginChallengeSolution;
+}
+
+export interface RequestLoginCodeResponse {
+  expiresInMinutes: number;
+  attemptsAllowed: number;
+}
+
+export interface VerifyLoginCodeInput {
+  phone: string;
+  /** Exactly 6 digits (FR-012 / FR-043). */
+  code: string;
+}
+
+/** The `400 CHALLENGE_REQUIRED` body — the client solves and resubmits (FR-023). */
+export interface ChallengeRequiredBody {
+  error: 'CHALLENGE_REQUIRED';
+  challenge: { seed: string; difficultyBits: number };
+  message: string;
+}
+
+// ── spec 015 US7 — SMS password recovery ───────────────────────────────────
+
+export interface PasswordResetRequestInput {
+  phone: string;
+}
+export interface PasswordResetVerifyInput {
+  phone: string;
+  code: string;
+}
+export interface PasswordResetVerifyResponse {
+  resetToken: string;
+}
+export interface PasswordResetCompleteInput {
+  resetToken: string;
+  newPassword: string;
+}

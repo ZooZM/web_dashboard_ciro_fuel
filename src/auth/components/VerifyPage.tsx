@@ -1,25 +1,36 @@
 import { useState, useEffect, useRef } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useLogin } from '@/auth/hooks/useLogin';
 import { Button } from '@/components/ui/button';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { toast } from '@/lib/toast/toast';
+import { useRequestLoginCode, useVerifyLoginCode } from '@/auth/hooks/useLoginCode';
+import { ApiError } from '@/lib/api/api-error';
+
+const CODE_LENGTH = 6; // FR-043 — OtpPrimitivesService.generateCode() is 6-digit
+const RESEND_SECONDS = 45;
 
 export function VerifyPage() {
-  const { t } = useTranslation();
-  const loginMutation = useLogin();
   const navigate = useNavigate();
   const location = useLocation();
 
-  const phone = location.state?.phone || '';
+  const phone: string = location.state?.phone || '';
+  const remember: boolean = location.state?.remember ?? false;
 
-  const [otp, setOtp] = useState(['', '', '', '']);
-  const [timeLeft, setTimeLeft] = useState(45);
+  const verifyCode = useVerifyLoginCode();
+  const resendCode = useRequestLoginCode();
+
+  const [otp, setOtp] = useState<string[]>(Array(CODE_LENGTH).fill(''));
+  const [timeLeft, setTimeLeft] = useState(RESEND_SECONDS);
   const otpRefs = useRef<(HTMLInputElement | null)[]>([]);
+
+  // A missing phone means the user reached /verify directly — send them back
+  // to enter one (replaces the two dead demo navigations that used to be here).
+  useEffect(() => {
+    if (!phone) navigate('/', { replace: true });
+  }, [phone, navigate]);
 
   useEffect(() => {
     if (timeLeft > 0) {
-      const timer = setInterval(() => setTimeLeft((prev) => prev - 1), 1000);
+      const timer = setInterval(() => setTimeLeft((p) => p - 1), 1000);
       return () => clearInterval(timer);
     }
   }, [timeLeft]);
@@ -27,36 +38,53 @@ export function VerifyPage() {
   const handleVerifyCode = (e: React.FormEvent) => {
     e.preventDefault();
     const code = otp.join('');
+    if (code.length !== CODE_LENGTH) return;
 
-    // Default fallback routing for dev
-    if (!phone && !code) {
-      navigate('/select-role');
-      return;
-    }
-
-    loginMutation.mutate(
+    verifyCode.mutate(
+      { phone, code, remember },
       {
-        email: phone,
-        password: code, // Using otp as password to reuse the existing mutation
-      },
-      {
-        onError: () => {
-          toast.error(t('auth.login.invalidCredentials') || 'Invalid credentials');
+        onError: (err) => {
+          if (err instanceof ApiError && err.error === 'LOGIN_RATE_LIMITED') {
+            const wait = err.retryAfterSeconds ?? 60;
+            toast.error(`محاولات كثيرة. حاول مرة أخرى بعد ${wait} ثانية.`);
+            return;
+          }
+          // FR-034: ONE message for every failure state (wrong / expired /
+          // superseded / attempt-locked) — no attempt counter.
+          toast.error('الرمز غير صحيح أو منتهي الصلاحية.');
+          setOtp(Array(CODE_LENGTH).fill(''));
+          otpRefs.current[0]?.focus();
         },
-      }
+      },
     );
+  };
+
+  const handleResend = () => {
+    if (timeLeft > 0 || resendCode.isPending) return;
+    resendCode.mutate(phone, {
+      onSuccess: () => {
+        setTimeLeft(RESEND_SECONDS);
+        toast.success('تم إرسال رمز جديد.');
+      },
+      onError: (err) => {
+        if (err instanceof ApiError && err.error === 'LOGIN_RATE_LIMITED') {
+          const wait = err.retryAfterSeconds ?? 60;
+          setTimeLeft(wait);
+          toast.error(`محاولات كثيرة. حاول مرة أخرى بعد ${wait} ثانية.`);
+          return;
+        }
+        toast.error('تعذّر إرسال رمز جديد.');
+      },
+    });
   };
 
   const handleOtpChange = (index: number, value: string) => {
     if (value.length > 1) value = value.slice(-1);
+    if (value && !/\d/.test(value)) return;
     const newOtp = [...otp];
     newOtp[index] = value;
     setOtp(newOtp);
-
-    // Auto focus next
-    if (value && index < 3) {
-      otpRefs.current[index + 1]?.focus();
-    }
+    if (value && index < CODE_LENGTH - 1) otpRefs.current[index + 1]?.focus();
   };
 
   const handleOtpKeyDown = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -64,6 +92,8 @@ export function VerifyPage() {
       otpRefs.current[index - 1]?.focus();
     }
   };
+
+  const busy = verifyCode.isPending || resendCode.isPending;
 
   return (
     <div
@@ -83,16 +113,16 @@ export function VerifyPage() {
             <div className="text-center">
               <h1 className="text-2xl font-bold text-slate-800">أدخل رمز التحقق</h1>
               <p className="text-sm text-slate-500 mt-2 leading-relaxed">
-                تم إرسال رمز مكون من 4 أرقام إلى
+                تم إرسال رمز مكون من 6 أرقام إلى
                 <br />
-                <span className="font-bold text-slate-800 inline-block mx-1" dir="ltr">+966 {phone || '5X XXX XXXX'}</span>
-                <button type="button" onClick={() => navigate('/role-selection')} className="text-[#F97316] hover:text-orange-600 font-medium text-xs mr-2">تغيير الرقم</button>
+                <span className="font-bold text-slate-800 inline-block mx-1" dir="ltr">{phone || '+9665X XXX XXXX'}</span>
+                <button type="button" onClick={() => navigate('/', { replace: true })} className="text-[#F97316] hover:text-orange-600 font-medium text-xs mr-2">تغيير الرقم</button>
               </p>
             </div>
           </div>
 
           <form onSubmit={handleVerifyCode} className="flex flex-col gap-4 w-full mt-2">
-            <div className="flex justify-center gap-3 w-full my-2" dir="ltr">
+            <div className="flex justify-center gap-2 w-full my-2" dir="ltr">
               {otp.map((digit, index) => (
                 <div key={index} className="relative">
                   <input
@@ -103,7 +133,7 @@ export function VerifyPage() {
                     value={digit}
                     onChange={(e) => handleOtpChange(index, e.target.value)}
                     onKeyDown={(e) => handleOtpKeyDown(index, e)}
-                    className="w-12 h-14 text-center text-xl font-bold bg-white border border-slate-200 rounded-2xl focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-all shadow-sm text-slate-800"
+                    className="w-11 h-14 text-center text-xl font-bold bg-white border border-slate-200 rounded-2xl focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-all shadow-sm text-slate-800"
                   />
                   {digit && <div className="absolute bottom-3 left-1/2 -translate-x-1/2 w-1 h-1 bg-blue-500 rounded-full" />}
                 </div>
@@ -115,8 +145,8 @@ export function VerifyPage() {
                 لم يصلك الرمز؟{' '}
                 <button
                   type="button"
-                  disabled={timeLeft > 0}
-                  onClick={() => setTimeLeft(45)}
+                  disabled={timeLeft > 0 || resendCode.isPending}
+                  onClick={handleResend}
                   className={`font-semibold  ${timeLeft > 0 ? '  cursor-not-allowed' : 'cursor-pointer text-blue-500 hover:text-blue-400'}`}
                 >
                   إعادة الإرسال {timeLeft > 0 && `خلال 00:${timeLeft.toString().padStart(2, '0')}`}
@@ -126,7 +156,7 @@ export function VerifyPage() {
 
             <Button
               type="submit"
-              disabled={loginMutation.isPending}
+              disabled={busy}
               className="w-full h-14 rounded-2xl bg-[#2563EB] hover:bg-blue-700 text-white font-bold text-base shadow-lg shadow-blue-500/30 transition-all flex items-center justify-center gap-2 mt-2"
             >
               <img src="/signIn/logout.svg" alt="Login" className="w-5 h-5 object-contain ml-1" />

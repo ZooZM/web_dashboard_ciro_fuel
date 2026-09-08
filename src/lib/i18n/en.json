@@ -32,6 +32,44 @@
       "password": "Password",
       "submit": "Sign in",
       "invalidCredentials": "Invalid email or password"
+    },
+    "signin": {
+      "welcome": "Welcome back",
+      "phoneLabel": "Mobile number",
+      "sendCode": "Send verification code",
+      "verifyingRobot": "Verifying you're not a robot…",
+      "rememberMe": "Remember me",
+      "forgotPassword": "Forgot password?",
+      "invalidPhone": "Please enter a valid mobile number",
+      "sendCodeFailed": "Could not send the code. Please try again.",
+      "rateLimited": "Too many attempts. Try again in {{seconds}} seconds.",
+      "enterCode": "Enter the verification code",
+      "codeSentTo": "A 6-digit code was sent to",
+      "changeNumber": "Change number",
+      "resend": "Resend",
+      "newCodeSent": "A new code was sent.",
+      "resendFailed": "Could not send a new code.",
+      "codeInvalid": "The code is incorrect or has expired.",
+      "signInButton": "Sign in",
+      "noAccess": "This account does not have access to the dashboard"
+    },
+    "recovery": {
+      "title": "Password recovery",
+      "requestSubtitle": "Enter your registered mobile number and we'll send a reset code.",
+      "sendCode": "Send code",
+      "verifyTitle": "Enter the recovery code",
+      "verifySubtitle": "A 6-digit code was sent to",
+      "continue": "Continue",
+      "newPasswordTitle": "Set a new password",
+      "newPasswordPlaceholder": "New password",
+      "confirmPlaceholder": "Confirm password",
+      "save": "Save password",
+      "backToSignIn": "Back to sign in",
+      "passwordTooShort": "Password must be at least 8 characters",
+      "passwordsMismatch": "Passwords do not match",
+      "success": "Password set. Sign in with it now.",
+      "completeFailed": "Could not set the password. The session may have expired.",
+      "sendFailed": "Could not send the code. Please try again."
     }
   },
   "nav": {
@@ -44,7 +82,64 @@
   "errors": {
     "generic": "Something went wrong. Please try again.",
     "notFound": "The requested resource could not be found.",
-    "forbidden": "You are not authorized to access this area."
+    "forbidden": "You are not authorized to access this area.",
+    "phoneNotSaudi": "Enter a valid Saudi mobile number, e.g. 0512345678 or +966512345678.",
+    "phoneHintSaudi": "Saudi mobile numbers only — starting 05 or +9665"
+  },
+  "deliveryAreas": {
+    "title": "Delivery areas & pricing",
+    "subtitle": "Set and update transport prices within the areas approved by your fuel company",
+    "totalAreas": "Total areas",
+    "avgPricePerKm": "Average fare / km",
+    "loadError": "Could not load delivery areas",
+    "empty": "No area priced yet",
+    "emptyHint": "Add an area and set its price so orders inside it can be quoted",
+    "servedRegions": "Regions assigned to your company",
+    "noServedRegions": "No region has been assigned to your company yet — the fuel company assigns regions",
+    "addArea": "Add area",
+    "region": "Region",
+    "governorate": "Governorate",
+    "wholeRegion": "Whole region",
+    "pricePerKm": "Transport price per km",
+    "minPrice": "Minimum",
+    "perKm": "/ km",
+    "minPriceLabel": "Minimum",
+    "currency": "SAR",
+    "save": "Save",
+    "remove": "Remove",
+    "removeConfirm": "Remove pricing for this area? Orders inside it will no longer be quoted.",
+    "saved": "Pricing saved",
+    "duplicateArea": "This area is already priced",
+    "priceRequired": "Enter a valid price of zero or more",
+    "governorateSpecificNote": "A governorate price takes precedence over its whole-region price"
+  },
+  "map": {
+    "dialogTitle": "Pick a location",
+    "chooseLocation": "Choose location on map",
+    "changeLocation": "Change location",
+    "noLocationChosen": "No location chosen yet",
+    "confirm": "Confirm location",
+    "searchPlace": "Search for a place or address",
+    "centerHint": "Drag the map until the pin sits on the exact location",
+    "useMyLocation": "Use my current location",
+    "geolocationDenied": "Could not determine your current location",
+    "coordinates": "Coordinates",
+    "address": "Location",
+    "resolvingAddress": "Resolving address…",
+    "latitude": "Latitude",
+    "longitude": "Longitude",
+    "clear": "Clear location",
+    "unavailable": "Map unavailable — enter the coordinates manually"
+  },
+  "roles": {
+    "platform": "Platform operator",
+    "fuelCompany": "Fuel company",
+    "transportCompany": "Transport company",
+    "SUPER_ADMIN": "CIRO admin",
+    "FUEL_COMPANY_ADMIN": "Fuel company admin",
+    "TRANSPORT_COMPANY_ADMIN": "Transport company admin",
+    "CLIENT": "Station owner",
+    "DRIVER": "Driver"
   },
   "orders": {
     "title": "Orders",
@@ -140,7 +235,12 @@
     "noRegions": "No regions assigned yet",
     "detail": "Transporter details",
     "loadError": "Could not load transporters",
-    "search": "Search by name or code..."
+    "search": "Search by name or code...",
+    "contactPhone": "Company phone",
+    "adminAccount": "Administrator account",
+    "signInPhone": "Sign-in number",
+    "signInPhoneHint": "This is the number the administrator signs in with — not the company phone.",
+    "noAdmin": "This company has no administrator account"
   },
   "orderStatus": {
     "PENDING_APPROVAL": "Awaiting approval",
@@ -348,10 +448,22 @@
     "creditOutstanding": "Outstanding on credit",
     "quickActions": {
       "title": "Quick actions",
-      "viewOrders": { "title": "View orders", "subtitle": "The full order queue" },
-      "viewInvoices": { "title": "View invoices", "subtitle": "Invoices and dues" },
-      "addTransporter": { "title": "Add a transporter", "subtitle": "Onboard a new transport company" },
-      "addStationOwner": { "title": "Add a station owner", "subtitle": "Register a new owner and station" }
+      "viewOrders": {
+        "title": "View orders",
+        "subtitle": "The full order queue"
+      },
+      "viewInvoices": {
+        "title": "View invoices",
+        "subtitle": "Invoices and dues"
+      },
+      "addTransporter": {
+        "title": "Add a transporter",
+        "subtitle": "Onboard a new transport company"
+      },
+      "addStationOwner": {
+        "title": "Add a station owner",
+        "subtitle": "Register a new owner and station"
+      }
     },
     "loadError": "Could not load the dashboard summary"
   },
@@ -424,7 +536,18 @@
     "accountCode": "Account code",
     "notEditable": "Not editable",
     "viewDetail": "View details",
-    "search": "Search by name or code..."
+    "search": "Search by name or code...",
+    "passwordRule": "At least 8 characters",
+    "errors": {
+      "fullNameRequired": "Enter the owner's full name (at least 2 characters).",
+      "emailInvalid": "Enter a valid email address.",
+      "passwordTooShort": "The initial password must be at least 8 characters.",
+      "duplicate": "An account already exists with this mobile number or email.",
+      "latitudeInvalid": "Enter a valid latitude between -90 and 90 (e.g. 24.7136).",
+      "longitudeInvalid": "Enter a valid longitude between -180 and 180 (e.g. 46.6753)."
+    },
+    "firstStation": "First station",
+    "firstStationHint": "The platform creates the owner account and their first station together — add further stations afterwards from the owner page."
   },
   "creditLimit": {
     "title": "Credit limit",
@@ -479,19 +602,58 @@
     "loadError": "Could not load notifications",
     "unreadBadge": "{{count}} unread",
     "type": {
-      "ORDER_APPROVED_FINAL_PRICE": { "title": "Order approved", "body": "An order's final price was confirmed." },
-      "NO_DRIVER_AVAILABLE": { "title": "No driver available", "body": "No driver could be found for an order." },
-      "PAYMENT_TIMEOUT": { "title": "Payment timed out", "body": "A payment window closed without confirmation." },
-      "ORDER_ASSIGNED": { "title": "Driver assigned", "body": "A driver was assigned to an order." },
-      "ORDER_STATUS_CHANGED": { "title": "Order updated", "body": "An order's status changed." },
-      "OTP_ISSUED": { "title": "Verification code issued", "body": "A one-time code was issued." },
-      "PAYMENT_RECONCILIATION_REQUIRED": { "title": "Payment needs review", "body": "A payment requires manual reconciliation." },
-      "ORDER_ROUTED_TO_TRANSPORT": { "title": "Order routed", "body": "An order was routed to a transporter." },
-      "SUPPORT_REQUEST_RAISED": { "title": "New support request", "body": "A station owner raised a support request." },
-      "DRIVER_STOP_DETECTED": { "title": "Driver stopped", "body": "A driver's truck has not moved for a while." },
-      "ORDER_STOP_UNRESOLVED": { "title": "Stop unresolved", "body": "A detected stop went unanswered." },
-      "CREDIT_LIMIT_REQUEST_RESOLVED": { "title": "Credit limit request resolved", "body": "A station owner's credit limit request was resolved." },
-      "unknown": { "title": "Notification", "body": "" }
+      "ORDER_APPROVED_FINAL_PRICE": {
+        "title": "Order approved",
+        "body": "An order's final price was confirmed."
+      },
+      "NO_DRIVER_AVAILABLE": {
+        "title": "No driver available",
+        "body": "No driver could be found for an order."
+      },
+      "PAYMENT_TIMEOUT": {
+        "title": "Payment timed out",
+        "body": "A payment window closed without confirmation."
+      },
+      "ORDER_ASSIGNED": {
+        "title": "Driver assigned",
+        "body": "A driver was assigned to an order."
+      },
+      "ORDER_STATUS_CHANGED": {
+        "title": "Order updated",
+        "body": "An order's status changed."
+      },
+      "OTP_ISSUED": {
+        "title": "Verification code issued",
+        "body": "A one-time code was issued."
+      },
+      "PAYMENT_RECONCILIATION_REQUIRED": {
+        "title": "Payment needs review",
+        "body": "A payment requires manual reconciliation."
+      },
+      "ORDER_ROUTED_TO_TRANSPORT": {
+        "title": "Order routed",
+        "body": "An order was routed to a transporter."
+      },
+      "SUPPORT_REQUEST_RAISED": {
+        "title": "New support request",
+        "body": "A station owner raised a support request."
+      },
+      "DRIVER_STOP_DETECTED": {
+        "title": "Driver stopped",
+        "body": "A driver's truck has not moved for a while."
+      },
+      "ORDER_STOP_UNRESOLVED": {
+        "title": "Stop unresolved",
+        "body": "A detected stop went unanswered."
+      },
+      "CREDIT_LIMIT_REQUEST_RESOLVED": {
+        "title": "Credit limit request resolved",
+        "body": "A station owner's credit limit request was resolved."
+      },
+      "unknown": {
+        "title": "Notification",
+        "body": ""
+      }
     }
   },
   "support": {
@@ -631,49 +793,76 @@
   },
   "fuelExchange": {
     "title": "Fuel exchange between companies",
-    "subtitle": "Fuel supply requests between your company and partner fuel companies",
-    "newRequest": "New request",
-    "loadError": "Failed to load exchange requests",
-    "empty": "No exchange requests",
+    "subtitle": "Raise one offer that reaches every eligible fuel company on the platform",
+    "loadError": "Failed to load exchange offers",
+    "empty": "No exchange offers",
     "filterAll": "All",
     "filterOutgoing": "Outgoing",
     "filterIncoming": "Incoming",
     "incomingAwaiting": "Incoming awaiting response",
-    "outgoingAwaiting": "Outgoing awaiting response",
-    "acceptedRecently": "Recently accepted",
+    "outgoingOpen": "Outgoing open",
+    "awardedThisMonth": "Awarded this month",
     "fuelType": "Fuel grade",
     "litres": "litres",
     "unitPrice": "Price per litre",
     "total": "Total",
-    "recipientCompany": "Recipient company",
-    "selectCompany": "Select a company",
     "deliveryDate": "Delivery date",
     "quantity": "Quantity",
-    "deliveryPlace": "Delivery place",
-    "deliveryPlacePlaceholder": "e.g. Jeddah warehouse",
-    "estimatedTotal": "Estimated total",
-    "sendRequest": "Send request",
-    "formIncomplete": "Fill in every field before sending the request",
-    "requestCreated": "Exchange request sent",
-    "requestData": "Request details",
-    "supplier": "Supplier",
-    "receiver": "Receiver",
+    "city": "City",
+    "district": "Neighbourhood",
+    "locationUrl": "Location link",
+    "locationUrlPlaceholder": "https://...",
+    "notes": "Additional notes",
+    "notesPlaceholder": "Any extra detail for the receiving company",
+    "unverifiedLink": "Link not verified by the platform",
+    "offerSummary": "Offer summary",
+    "offerSummaryValue": "{{quantity}} litres — {{fuelType}}",
+    "offerDetails": "Offer details",
+    "sendOffer": "Send offer",
+    "formIncomplete": "Fill in every field before sending the offer",
+    "invalidLocationUrl": "The location link must start with http or https",
+    "offerCreated": "Offer sent to the market",
+    "raisedBy": "Raised by",
     "you": "You",
     "contactInfo": "Contact information",
     "phone": "Phone",
     "email": "Email",
     "contactCounterparty": "Contact this company",
-    "accept": "Accept",
-    "decline": "Decline",
-    "withdraw": "Withdraw",
-    "accepted": "Request accepted",
-    "declined": "Request declined",
-    "withdrawn": "Request withdrawn",
+    "propose": "Submit your offer",
+    "proposePrice": "Proposed price per litre",
+    "proposeSubmit": "Submit offer",
+    "proposeDecline": "Decline this offer",
+    "proposalSubmitted": "Your offer was submitted",
+    "declineConfirmed": "Decline sent",
+    "withdraw": "Withdraw offer",
+    "withdrawConfirm": "Withdraw this offer? Every company that proposed will be notified",
+    "withdrawn": "Offer withdrawn",
+    "award": "Award",
+    "awardConfirm": "Award this offer to this company at this price?",
+    "awarded": "Offer awarded",
+    "proposals": "Proposals received",
+    "proposalCount": "Number of proposals",
+    "declineCount": "Number of declines",
+    "noProposalsYet": "No proposals yet",
+    "yourProposal": "Your proposal",
+    "alreadyAnswered": "You have already answered this offer",
+    "gradeNotSold": "Your company does not sell this grade",
+    "noEligibleCompany": "No other company on the platform sells this grade",
+    "offerClosed": "This offer is already closed",
+    "deliveryInPast": "The delivery date must be in the future — pick a later date and time.",
+    "alreadyResolved": "This offer has already been resolved",
+    "partyInvalid": "Your company cannot perform this action",
     "state": {
-      "AWAITING_RESPONSE": "Awaiting response",
-      "ACCEPTED": "Accepted",
+      "OPEN": "Open",
+      "AWARDED": "Awarded",
+      "WITHDRAWN": "Withdrawn",
+      "CLOSED_NO_AWARD": "Closed without award"
+    },
+    "proposalState": {
+      "PROPOSED": "Proposed",
       "DECLINED": "Declined",
-      "WITHDRAWN": "Withdrawn"
+      "AWARDED": "Awarded",
+      "NOT_SELECTED": "Not selected"
     }
   },
   "adminCompanies": {
@@ -692,7 +881,7 @@
     "companyName": "Company name",
     "joinedOn": "Joined on",
     "email": "Email",
-    "phone": "Phone",
+    "phone": "Company phone",
     "fuelGrades": "Fuel grades sold",
     "commercialRegister": "Commercial register",
     "onFile": "On file",
@@ -732,6 +921,10 @@
     "commissionUpdated": "Commission rate updated",
     "cashbackUpdated": "Cashback programme updated",
     "cashbackActiveToggle": "Cashback programme active",
-    "exchangeOversightSubtitle": "Every fuel exchange request on the platform"
+    "exchangeOversightSubtitle": "Every fuel exchange offer on the platform",
+    "adminAccount": "Administrator account",
+    "signInPhone": "Sign-in number",
+    "signInPhoneHint": "This is the number the administrator signs in with — not the company phone.",
+    "noAdmin": "This company has no administrator account"
   }
 }

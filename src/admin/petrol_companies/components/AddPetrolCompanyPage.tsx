@@ -4,13 +4,19 @@ import { useTranslation } from 'react-i18next';
 import toast from 'react-hot-toast';
 import { useOnboardFuelCompany } from '@/admin/petrol_companies/hooks/useFuelCompanies';
 import { ApiError } from '@/lib/api/api-error';
+import { normalizeSaudiMobile } from '@/lib/auth/phone';
 
 // Feature 013 T237/FR-088: raises a real `POST /companies` (multipart, `type: FUEL`
 // implicit server-side) creating the company AND its first administrator atomically.
 // The previous mock's "city/headquarters" field and free-text notes have no backing
-// field on `Company` and are dropped; the sidebar's OTP-login explainer was factually
-// wrong for this role (a FUEL_COMPANY_ADMIN signs in with email+password, not phone+OTP
-// — that flow belongs to the DRIVER app) and is corrected to describe the real flow.
+// field on `Company` and are dropped.
+//
+// spec 015 R11: an earlier version of this comment claimed a FUEL_COMPANY_ADMIN "signs
+// in with email+password, not phone+OTP". That is now false. After spec 015 an
+// administrator signs in EITHER with their mobile number and an SMS code OR with their
+// email and password (`CreateFuelCompanyDto` still requires a password, min 8 — Q2 chose
+// coexistence). The admin phone is now a login identifier and must be a valid E.164
+// number.
 export function AddPetrolCompanyPage() {
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -25,8 +31,22 @@ export function AddPetrolCompanyPage() {
   const [adminPassword, setAdminPassword] = useState('');
   const [commercialRegister, setCommercialRegister] = useState<File | null>(null);
 
+  // spec 015 R5/T101 — the admin phone is a LOGIN IDENTIFIER, so it must be a real Saudi
+  // mobile, not merely well-formed E.164. `looksLikeE164` accepted any country
+  // (`+12025550123` among them) for a field whose placeholder has always read
+  // `+9665XXXXXXXX`; normalising also means an operator may type `05…` and have it
+  // composed, which this form previously refused outright.
+  const adminPhoneE164 = normalizeSaudiMobile(adminPhone);
+  const adminPhoneInvalid = adminPhone.trim().length > 0 && adminPhoneE164 === null;
+
   const canSubmit =
-    name.trim() && contactEmail.trim() && contactPhone.trim() && adminFullName.trim() && adminEmail.trim() && adminPhone.trim() && adminPassword.length >= 8;
+    name.trim() &&
+    contactEmail.trim() &&
+    contactPhone.trim() &&
+    adminFullName.trim() &&
+    adminEmail.trim() &&
+    adminPhoneE164 !== null &&
+    adminPassword.length >= 8;
 
   async function handleSubmit() {
     if (!canSubmit) {
@@ -40,7 +60,8 @@ export function AddPetrolCompanyPage() {
         contactPhone: contactPhone.trim(),
         adminFullName: adminFullName.trim(),
         adminEmail: adminEmail.trim(),
-        adminPhone: adminPhone.trim(),
+        // The NORMALISED value — an operator who typed `0512345678` must not send that.
+        adminPhone: adminPhoneE164 ?? adminPhone.trim(),
         adminPassword,
         commercialRegister: commercialRegister ?? undefined,
       });
@@ -113,7 +134,12 @@ export function AddPetrolCompanyPage() {
               </div>
               <div className="flex flex-col">
                 <label className="text-sm font-bold text-slate-700 mb-2">{t('adminCompanies.adminPhone')} <span className="text-red-500">*</span></label>
-                <input value={adminPhone} onChange={(e) => setAdminPhone(e.target.value)} type="text" placeholder="+9665XXXXXXXX" dir="ltr" className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 text-left" />
+                <input value={adminPhone} onChange={(e) => setAdminPhone(e.target.value)} type="tel" placeholder="+9665XXXXXXXX" dir="ltr" aria-invalid={adminPhoneInvalid} className={`w-full px-4 py-3 bg-white border rounded-xl text-sm font-medium focus:outline-none focus:ring-1 text-left ${adminPhoneInvalid ? 'border-red-400 focus:border-red-500 focus:ring-red-500' : 'border-slate-200 focus:border-blue-500 focus:ring-blue-500'}`} />
+                {adminPhoneInvalid ? (
+                  <span className="mt-2 text-xs font-bold text-red-500">{t('errors.phoneNotSaudi')}</span>
+                ) : (
+                  <span className="mt-2 text-xs font-bold text-slate-400">{t('errors.phoneHintSaudi')}</span>
+                )}
               </div>
             </div>
 

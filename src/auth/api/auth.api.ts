@@ -1,6 +1,17 @@
 import { apiClient } from '@/lib/api/api.client';
 import { apiRoutes } from '@/constants/api-routes';
-import type { LoginInput, LoginResponse, AuthUserDto } from '@/auth/types';
+import type {
+  LoginInput,
+  LoginResponse,
+  AuthUserDto,
+  RequestLoginCodeInput,
+  RequestLoginCodeResponse,
+  VerifyLoginCodeInput,
+  PasswordResetRequestInput,
+  PasswordResetVerifyInput,
+  PasswordResetVerifyResponse,
+  PasswordResetCompleteInput,
+} from '@/auth/types';
 
 export async function login(input: LoginInput): Promise<LoginResponse> {
   const { data } = await apiClient.post<LoginResponse>(apiRoutes.auth.login, input);
@@ -21,4 +32,47 @@ export async function me(): Promise<AuthUserDto> {
 
 export async function logout(): Promise<void> {
   await apiClient.post(apiRoutes.auth.logout);
+}
+
+// ── spec 015 (dashboard auth) — passwordless administrator sign-in ──────────
+
+/**
+ * FR-015 — this 202 is identical for every outcome. A `400 CHALLENGE_REQUIRED`
+ * or `429 LOGIN_RATE_LIMITED` surfaces as an {@link ApiError} the caller
+ * inspects; the neutral 202 is the only success path.
+ */
+export async function requestLoginCode(
+  input: RequestLoginCodeInput,
+): Promise<RequestLoginCodeResponse> {
+  const { data } = await apiClient.post<RequestLoginCodeResponse>(
+    apiRoutes.auth.loginCodeRequest,
+    input,
+  );
+  return data;
+}
+
+/** Response shape is byte-identical to {@link login} (FR-016); tokens carry `sid`. */
+export async function verifyLoginCode(input: VerifyLoginCodeInput): Promise<LoginResponse> {
+  const { data } = await apiClient.post<LoginResponse>(apiRoutes.auth.loginCodeVerify, input);
+  return data;
+}
+
+// ── spec 015 US7 — SMS password recovery (existing platform endpoints) ──────
+
+export async function requestPasswordReset(input: PasswordResetRequestInput): Promise<void> {
+  await apiClient.post(apiRoutes.auth.passwordResetRequest, input);
+}
+
+export async function verifyPasswordResetCode(
+  input: PasswordResetVerifyInput,
+): Promise<PasswordResetVerifyResponse> {
+  const { data } = await apiClient.post<PasswordResetVerifyResponse>(
+    apiRoutes.auth.passwordResetVerify,
+    input,
+  );
+  return data;
+}
+
+export async function completePasswordReset(input: PasswordResetCompleteInput): Promise<void> {
+  await apiClient.post(apiRoutes.auth.passwordResetComplete, input);
 }

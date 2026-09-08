@@ -1,5 +1,6 @@
-import { GoogleMap, useJsApiLoader, Marker } from '@react-google-maps/api';
+import { GoogleMap, Marker } from '@react-google-maps/api';
 import { Skeleton } from './skeleton';
+import { useGoogleMaps } from './useGoogleMaps';
 import { useMemo } from 'react';
 
 interface CustomGoogleMapProps {
@@ -19,10 +20,9 @@ export function CustomGoogleMap({
   onLoad,
   options
 }: CustomGoogleMapProps) {
-  const { isLoaded } = useJsApiLoader({
-    id: 'google-map-script',
-    googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY || '',
-  });
+  // Shared loader (`useGoogleMaps`) rather than a local `useJsApiLoader`: the picker needs
+  // the `places` library, and two loaders sharing an id but disagreeing on options throw.
+  const { isLoaded } = useGoogleMaps();
 
   const mapContainerStyle = useMemo(() => ({
     width: '100%',

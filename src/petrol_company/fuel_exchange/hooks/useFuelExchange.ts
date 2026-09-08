@@ -1,27 +1,30 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { queryKeys } from '@/constants/query-keys';
 import * as fuelExchangeApi from '@/petrol_company/fuel_exchange/api/fuel-exchange.api';
-import type { CreateExchangeRequestInput, ExchangeDirection } from '@/petrol_company/fuel_exchange/api/fuel-exchange.api';
+import type { CreateOfferInput, ProposeInput } from '@/petrol_company/fuel_exchange/api/fuel-exchange.api';
+import type { ExchangeDirection, ExchangeOfferState } from '@/constants/fuel-company';
 
-export function useExchangeRequestsList(direction: ExchangeDirection, cursor?: string) {
+export function useOffersList(direction: ExchangeDirection, state?: ExchangeOfferState, cursor?: string) {
   return useQuery({
-    queryKey: queryKeys.fuelExchange.list(direction, cursor),
-    queryFn: () => fuelExchangeApi.listExchangeRequests(direction, cursor),
+    queryKey: queryKeys.fuelExchange.list(direction, state, cursor),
+    queryFn: () => fuelExchangeApi.listOffers(direction, state, cursor),
   });
 }
 
-export function useExchangeRequestDetail(id: string) {
+export function useOffer(id: string) {
   return useQuery({
     queryKey: queryKeys.fuelExchange.detail(id),
-    queryFn: () => fuelExchangeApi.getExchangeRequest(id),
+    queryFn: () => fuelExchangeApi.getOffer(id),
     enabled: Boolean(id),
   });
 }
 
-export function useExchangePartners() {
+// research R9 — replaces counting the loaded page of two list queries; the platform has
+// no other way to answer "how many, across the WHOLE scoped set".
+export function useOfferSummary() {
   return useQuery({
-    queryKey: queryKeys.fuelExchange.partners,
-    queryFn: () => fuelExchangeApi.listExchangePartners(),
+    queryKey: queryKeys.fuelExchange.summary,
+    queryFn: () => fuelExchangeApi.getOfferSummary(),
   });
 }
 
@@ -30,26 +33,34 @@ function useInvalidateExchange() {
   return () => void queryClient.invalidateQueries({ queryKey: ['fuel-exchange'] });
 }
 
-export function useCreateExchangeRequest() {
+export function useCreateOffer() {
   const invalidate = useInvalidateExchange();
   return useMutation({
-    mutationFn: (input: CreateExchangeRequestInput) => fuelExchangeApi.createExchangeRequest(input),
+    mutationFn: (input: CreateOfferInput) => fuelExchangeApi.createOffer(input),
     onSuccess: invalidate,
   });
 }
 
-export function useRespondToExchangeRequest(id: string) {
+export function useProposeOnOffer(id: string) {
   const invalidate = useInvalidateExchange();
   return useMutation({
-    mutationFn: (accept: boolean) => fuelExchangeApi.respondToExchangeRequest(id, accept),
+    mutationFn: (input: ProposeInput) => fuelExchangeApi.proposeOnOffer(id, input),
     onSuccess: invalidate,
   });
 }
 
-export function useWithdrawExchangeRequest(id: string) {
+export function useAwardOffer(id: string) {
   const invalidate = useInvalidateExchange();
   return useMutation({
-    mutationFn: () => fuelExchangeApi.withdrawExchangeRequest(id),
+    mutationFn: (proposalId: string) => fuelExchangeApi.awardOffer(id, proposalId),
+    onSuccess: invalidate,
+  });
+}
+
+export function useWithdrawOffer(id: string) {
+  const invalidate = useInvalidateExchange();
+  return useMutation({
+    mutationFn: () => fuelExchangeApi.withdrawOffer(id),
     onSuccess: invalidate,
   });
 }

@@ -1,3 +1,5 @@
+import { AdminCompanyAdminCard } from './AdminCompanyAdminCard';
+import { Role } from '@/constants/roles';
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -227,6 +229,7 @@ export function AdminPetrolCompanyDetailsPage() {
       <div className="flex flex-col lg:flex-row gap-6 items-start pb-6">
         <div className="flex-1 w-full flex flex-col gap-6">
           <AdminPetrolCompanyInfoCard company={company} />
+          <AdminCompanyAdminCard companyId={company._id} role={Role.FUEL_COMPANY_ADMIN} />
 
           <div className="bg-white border border-[#E7E9EF] rounded-2xl p-6 shadow-sm flex flex-col">
             <h3 className="text-base font-black text-[#162155] mb-4">{t('adminCompanies.stationOwners')}</h3>

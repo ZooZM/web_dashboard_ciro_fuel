@@ -2,90 +2,126 @@ import { apiClient } from '@/lib/api/api.client';
 import { apiRoutes } from '@/constants/api-routes';
 import type { CursorPage } from '@/lib/api/pagination';
 import type { FuelType } from '@/constants/order-status';
+import type { GovernorateCode } from '@/constants/regions';
+import type { ExchangeDirection, ExchangeOfferState, ProposalOutcome } from '@/constants/fuel-company';
 
-export const ExchangeRequestState = {
-  AWAITING_RESPONSE: 'AWAITING_RESPONSE',
-  ACCEPTED: 'ACCEPTED',
-  DECLINED: 'DECLINED',
-  WITHDRAWN: 'WITHDRAWN',
-} as const;
-export type ExchangeRequestState = (typeof ExchangeRequestState)[keyof typeof ExchangeRequestState];
+export type { ExchangeDirection };
 
-export type ExchangeDirection = 'incoming' | 'outgoing' | 'all';
+export interface CompanyContact {
+  name: string;
+  contactEmail: string;
+  contactPhone: string;
+}
 
-export interface ExchangeRequest {
+// Feature 016 (broadcast fuel exchange offers) — replaces feature 014's directed
+// `ExchangeRequest`/`ExchangeRequestDetail` shapes entirely (FR-040). No `unitPrice` on
+// the offer itself anywhere (FR-005a) — price lives only on a proposal, and only once
+// one exists. Every field beyond the terms/destination is VIEWER-SHAPED by the backend
+// (`contracts/rest-api-delta.md`'s own table) — this type reflects that by making every
+// disclosure-gated field optional, never by stripping anything client-side.
+export interface OfferListItem {
   _id: string;
-  partyCompanyIds: string[];
+  openToMarket: boolean;
   raisedByCompanyId: string;
-  recipientCompanyId: string;
-  raisedByUserId: string;
+  raisedByCompanyName: string;
   fuelType: FuelType;
   quantityLitres: number;
-  unitPrice: number;
-  currency: string;
   deliveryAt: string;
-  deliveryPlaceText: string;
-  state: ExchangeRequestState;
-  resolvedBy: string | null;
-  resolvedAt: string | null;
+  city: GovernorateCode;
+  district?: string;
+  locationUrl?: string;
+  notes?: string;
+  state: ExchangeOfferState;
   createdAt: string;
+  updatedAt: string;
+  // Present only when the viewer is the raiser, the awarded company, or SUPER_ADMIN
+  // (FR-014c, FR-015) — absence IS "no price agreed", never a fabricated zero.
+  awardedCompanyId?: string;
+  agreedUnitPrice?: number;
+  agreedTotal?: number;
+  agreedQuantityLitres?: number;
+  currency?: string;
+  // Present only when the viewer raised this offer (FR-021a) — two counts, never one,
+  // so "no answers yet" is distinguishable from "everybody said no".
+  proposalCount?: number;
+  declineCount?: number;
 }
 
-export interface ExchangeRequestDetail extends ExchangeRequest {
-  counterparty: { _id: string; name: string; contactEmail: string; contactPhone: string };
-}
-
-export interface ExchangePartner {
+export interface OfferProposal {
   _id: string;
-  name: string;
+  // Absent on a DECLINED proposal shown to the raiser (FR-021) — the raw id is exactly
+  // as identifying as a name, so it is withheld along with `company`, never merely
+  // the contact details.
+  proposingCompanyId?: string;
+  outcome: ProposalOutcome;
+  unitPrice?: number;
+  currency?: string;
+  total?: number;
+  respondedAt: string;
+  company?: CompanyContact;
 }
 
-// Feature 013 T230/FR-078/FR-079/FR-084: `direction` is the platform's own
-// incoming/outgoing/all split — never computed client-side from `raisedByCompanyId`
-// (the backend already derives it against the viewer, FR-079).
-export async function listExchangeRequests(
+export interface OfferDetail extends OfferListItem {
+  raiserContact?: CompanyContact; // the awarded company alone (FR-019a)
+  proposals?: OfferProposal[]; // the raiser (or SUPER_ADMIN) alone (FR-020)
+  myProposal?: OfferProposal; // a genuine recipient's own answer, if any
+}
+
+export interface OfferSummary {
+  incomingAwaitingAnswer: number;
+  outgoingOpen: number;
+  awardedThisMonth: number;
+}
+
+export interface CreateOfferInput {
+  fuelType: FuelType;
+  quantityLitres: number;
+  deliveryAt: string;
+  city: GovernorateCode;
+  district?: string;
+  locationUrl?: string;
+  notes?: string;
+}
+
+export type ProposeInput = { unitPrice: number } | { decline: true };
+
+export async function listOffers(
   direction: ExchangeDirection,
+  state?: ExchangeOfferState,
   cursor?: string,
-): Promise<CursorPage<ExchangeRequest>> {
-  const { data } = await apiClient.get<CursorPage<ExchangeRequest>>(apiRoutes.fuelExchange.list, {
-    params: { direction, ...(cursor ? { cursor } : {}) },
+): Promise<CursorPage<OfferListItem>> {
+  const { data } = await apiClient.get<CursorPage<OfferListItem>>(apiRoutes.fuelExchange.list, {
+    params: { direction, ...(state ? { state } : {}), ...(cursor ? { cursor } : {}) },
   });
   return data;
 }
 
-export async function getExchangeRequest(id: string): Promise<ExchangeRequestDetail> {
-  const { data } = await apiClient.get<ExchangeRequestDetail>(apiRoutes.fuelExchange.detail(id));
+export async function getOffer(id: string): Promise<OfferDetail> {
+  const { data } = await apiClient.get<OfferDetail>(apiRoutes.fuelExchange.detail(id));
   return data;
 }
 
-export interface CreateExchangeRequestInput {
-  recipientCompanyId: string;
-  fuelType: FuelType;
-  quantityLitres: number;
-  unitPrice: number;
-  deliveryAt: string;
-  deliveryPlaceText: string;
-}
-
-export async function createExchangeRequest(input: CreateExchangeRequestInput): Promise<ExchangeRequest> {
-  const { data } = await apiClient.post<ExchangeRequest>(apiRoutes.fuelExchange.create, input);
+export async function getOfferSummary(): Promise<OfferSummary> {
+  const { data } = await apiClient.get<OfferSummary>(apiRoutes.fuelExchange.summary);
   return data;
 }
 
-export async function respondToExchangeRequest(id: string, accept: boolean): Promise<ExchangeRequest> {
-  const { data } = await apiClient.patch<ExchangeRequest>(apiRoutes.fuelExchange.respond(id), { accept });
+export async function createOffer(input: CreateOfferInput): Promise<OfferDetail> {
+  const { data } = await apiClient.post<OfferDetail>(apiRoutes.fuelExchange.create, input);
   return data;
 }
 
-export async function withdrawExchangeRequest(id: string): Promise<ExchangeRequest> {
-  const { data } = await apiClient.patch<ExchangeRequest>(apiRoutes.fuelExchange.withdraw(id), {});
+export async function proposeOnOffer(id: string, input: ProposeInput): Promise<OfferProposal> {
+  const { data } = await apiClient.post<OfferProposal>(apiRoutes.fuelExchange.propose(id), input);
   return data;
 }
 
-// T232/FR-078: the only way this role can discover a counterparty — `GET /companies`
-// itself narrows a FUEL_COMPANY_ADMIN to their own company (a different, pre-existing
-// contract this feature does not change).
-export async function listExchangePartners(): Promise<ExchangePartner[]> {
-  const { data } = await apiClient.get<ExchangePartner[]>(apiRoutes.companies.exchangePartners);
+export async function awardOffer(id: string, proposalId: string): Promise<OfferDetail> {
+  const { data } = await apiClient.post<OfferDetail>(apiRoutes.fuelExchange.award(id), { proposalId });
+  return data;
+}
+
+export async function withdrawOffer(id: string): Promise<OfferDetail> {
+  const { data } = await apiClient.patch<OfferDetail>(apiRoutes.fuelExchange.withdraw(id), {});
   return data;
 }

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useCreateDriver } from '@/transport_company/drivers/hooks/useDrivers';
 import { toast } from '@/lib/toast/toast';
+import { normalizeSaudiMobile } from '@/lib/auth/phone';
 
 /**
  * Feature 009 Phase 6/T090: previously every field here was unwired — no state, no
@@ -13,9 +14,6 @@ import { toast } from '@/lib/toast/toast';
  * email + password, not a phone OTP (no such admin-created-account flow exists on the
  * platform).
  */
-/** Mirrors the platform's E164_PATTERN exactly (`src/common/constants/phone.ts`). */
-const E164 = /^\+[1-9]\d{7,14}$/;
-
 export function AddDriverPage(): React.JSX.Element {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -32,9 +30,11 @@ export function AddDriverPage(): React.JSX.Element {
   }
 
   function onSubmit(): void {
-    if (!canSubmit) return;
+    // `!phoneE164` is redundant with `canSubmit` at runtime, but it is what narrows the
+    // nullable normalised value below — never a non-null assertion.
+    if (!canSubmit || !phoneE164) return;
     createDriver.mutate(
-      { fullName: fullName.trim(), email: email.trim(), phone: phone.trim(), password },
+      { fullName: fullName.trim(), email: email.trim(), phone: phoneE164, password },
       {
         onSuccess: goBack,
         onError: () => toast.error(t('drivers.createError')),
@@ -46,10 +46,15 @@ export function AddDriverPage(): React.JSX.Element {
   // locally-formatted number reached `CreateUserDto` (which requires the
   // country prefix) and came back as a generic createError toast naming no
   // field — the operator had no way to tell which of four inputs was wrong.
-  const phoneValid = E164.test(phone.trim());
-  const phoneInvalid = phone.trim().length > 0 && !phoneValid;
+  //
+  // The local E164 regex this used mirrored the PLATFORM's pattern, which is deliberately
+  // country-agnostic — right for the server, wrong for a Saudi-only fleet: `+12025550123`
+  // satisfied it. Normalising here also lets an operator type `05…`, which the regex
+  // refused outright even though it is the form printed on every driver's own documents.
+  const phoneE164 = normalizeSaudiMobile(phone);
+  const phoneInvalid = phone.trim().length > 0 && phoneE164 === null;
   const canSubmit = Boolean(
-    fullName.trim() && email.trim() && phoneValid && password.length >= 8,
+    fullName.trim() && email.trim() && phoneE164 && password.length >= 8,
   );
 
   return (
@@ -114,10 +119,10 @@ export function AddDriverPage(): React.JSX.Element {
                       : 'border-slate-200 focus:border-blue-500 focus:ring-blue-500'
                   }`}
                 />
-                {phoneInvalid && (
-                  <span className="mt-1.5 text-xs font-bold text-red-500" dir="ltr">
-                    +9665XXXXXXXX
-                  </span>
+                {phoneInvalid ? (
+                  <span className="mt-1.5 text-xs font-bold text-red-500">{t('errors.phoneNotSaudi')}</span>
+                ) : (
+                  <span className="mt-1.5 text-xs font-bold text-slate-400">{t('errors.phoneHintSaudi')}</span>
                 )}
               </div>
             </div>

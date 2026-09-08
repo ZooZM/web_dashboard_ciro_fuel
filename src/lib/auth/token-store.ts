@@ -1,43 +1,99 @@
-// Access token: the header comment here has long claimed "in-memory only — never written
-// to localStorage" (FR-011a) while the code below actually persists it — this file's real
-// behaviour, not its own header, is what every consumer has always relied on. Left as-is;
-// changing the access token's persistence is a separate, larger decision than this feature.
-let accessToken: string | null = localStorage.getItem('accessToken') || null;
+// spec 015 (dashboard auth) research R9 — the two storage decisions are INVERTED from
+// what shipped before:
+//
+//   Access token  → MEMORY ONLY. Never written to localStorage. Used on every request;
+//                   keeping the short-lived credential out of storage is the honest
+//                   trade-off in a SPA that holds tokens in JS at all (both are reachable
+//                   by XSS; the httpOnly-cookie design that would change that is out of
+//                   scope because it would alter both Flutter clients' refresh path).
+//   Refresh token → PERSISTED. `localStorage` when "remember me" was checked, otherwise
+//                   `sessionStorage`. This is the long-lived, more powerful credential —
+//                   and persisting it is what makes a browser reload after the access
+//                   token has expired restore the session silently instead of throwing
+//                   the administrator back to sign-in, now at the cost of an SMS
+//                   (the FR-060 fix).
+//
+// Every read is wrapped: a browser with site data blocked (or a private window that
+// throws on access) degrades to memory-only rather than throwing at module load.
 
-// Refresh token: Feature 013 T024/tests/unit/api-client.refresh.test.ts. The platform's
-// `POST /auth/refresh` takes the refresh token in the request BODY (`RefreshTokenDto`), not
-// an httpOnly cookie — before this task nothing in this codebase captured or sent one at
-// all (`grep -r "refreshToken" src/` was empty), so `/auth/refresh` had never worked.
-// Deliberately TRUE in-memory only, unlike the access token above: a refresh token is
-// longer-lived and more powerful, and the existing pre-written test suite's own comment
-// ("the memory-only store starts empty on every reload") is explicit that it must not
-// survive a reload. The consequence is accepted: a reload after the access token has
-// already expired forces a fresh login rather than a silent refresh — the safer failure
-// mode given the httpOnly-cookie design (spec 003) remains out of scope.
-let refreshToken: string | null = null;
+const REFRESH_KEY = 'ciro.refreshToken';
+
+function safeGet(store: Storage | undefined, key: string): string | null {
+  try {
+    return store?.getItem(key) ?? null;
+  } catch {
+    return null;
+  }
+}
+function safeSet(store: Storage | undefined, key: string, value: string): void {
+  try {
+    store?.setItem(key, value);
+  } catch {
+    /* site data blocked — the in-memory copy still serves this tab */
+  }
+}
+function safeRemove(store: Storage | undefined, key: string): void {
+  try {
+    store?.removeItem(key);
+  } catch {
+    /* ignore */
+  }
+}
+
+const ls = typeof window !== 'undefined' ? window.localStorage : undefined;
+const ss = typeof window !== 'undefined' ? window.sessionStorage : undefined;
+
+// The pre-R9 world persisted an access token here — clear it once.
+safeRemove(ls, 'accessToken');
+
+let accessToken: string | null = null;
+
+// On load, prefer localStorage (remember-me) then sessionStorage.
+let refreshToken: string | null = safeGet(ls, REFRESH_KEY);
+let rememberMe = refreshToken !== null;
+if (refreshToken === null) {
+  refreshToken = safeGet(ss, REFRESH_KEY);
+}
 
 export const tokenStore = {
   get(): string | null {
     return accessToken;
   },
   set(token: string | null): void {
-    accessToken = token;
-    if (token) {
-      localStorage.setItem('accessToken', token);
-    } else {
-      localStorage.removeItem('accessToken');
-    }
+    accessToken = token; // memory only — no persistence
   },
   getRefreshToken(): string | null {
     return refreshToken;
   },
-  setRefreshToken(token: string | null): void {
+  /**
+   * `remember` chooses the persistence scope and is remembered for later
+   * writes: the response interceptor rotates the refresh token on every call
+   * with no `remember` argument and must keep the same scope.
+   */
+  setRefreshToken(token: string | null, remember?: boolean): void {
+    if (remember !== undefined) {
+      rememberMe = remember;
+    }
     refreshToken = token;
+    if (token === null) {
+      safeRemove(ls, REFRESH_KEY);
+      safeRemove(ss, REFRESH_KEY);
+      return;
+    }
+    if (rememberMe) {
+      safeSet(ls, REFRESH_KEY, token);
+      safeRemove(ss, REFRESH_KEY);
+    } else {
+      safeSet(ss, REFRESH_KEY, token);
+      safeRemove(ls, REFRESH_KEY);
+    }
   },
-  /** Resets both tokens — used on sign-out and by tests between cases. */
+  /** Resets both tokens in every store — used on sign-out and by tests between cases. */
   clear(): void {
     accessToken = null;
     refreshToken = null;
-    localStorage.removeItem('accessToken');
+    safeRemove(ls, REFRESH_KEY);
+    safeRemove(ss, REFRESH_KEY);
+    safeRemove(ls, 'accessToken');
   },
 };

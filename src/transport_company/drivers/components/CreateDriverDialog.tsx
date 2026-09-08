@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useTranslation } from 'react-i18next';
 import { useCreateDriver } from '@/transport_company/drivers/hooks/useDrivers';
+import { isSaudiMobile, normalizeSaudiMobile } from '@/lib/auth/phone';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { FormField } from '@/components/ui/form';
@@ -16,17 +17,21 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 
-// `phone` mirrors the platform's E164_PATTERN exactly. Validated here and not
-// merely on the server because `CreateUserDto` refuses anything without the
-// country prefix: a locally-formatted number (0551234567) passed a `min(6)`
-// check, reached the API and came back as an unattributed 400, leaving the
+// `phone` is validated here and not merely on the server because `CreateUserDto` refuses
+// anything without the country prefix: a locally-formatted number (0551234567) passed a
+// `min(6)` check, reached the API and came back as an unattributed 400, leaving the
 // operator to guess which of four fields the server disliked.
-const E164 = /^\+[1-9]\d{7,14}$/;
-
+//
+// It used to mirror the platform's `E164_PATTERN`, which is deliberately country-agnostic
+// — correct for the server, wrong for a Saudi-only fleet, since `+12025550123` satisfied
+// it and would have become a driver's record. `isSaudiMobile` also ACCEPTS `05…`, the form
+// printed on the driver's own documents, which the old pattern refused outright; the
+// normalisation to E.164 happens at submit rather than as a schema `.transform`, which
+// would split the schema's input and output types and break `useForm`'s typing.
 const createDriverSchema = z.object({
   fullName: z.string().min(2),
   email: z.string().email(),
-  phone: z.string().regex(E164, '+9665XXXXXXXX'),
+  phone: z.string().refine(isSaudiMobile, { message: '+9665XXXXXXXX' }),
   password: z.string().min(8),
 });
 
@@ -44,7 +49,11 @@ export function CreateDriverDialog() {
   const form = useForm<FormValues>({ resolver: zodResolver(createDriverSchema) });
 
   const onSubmit = form.handleSubmit((values) => {
-    createDriver.mutate(values, { onSuccess: () => setOpen(false) });
+    // Unreachable — the schema already refused anything `normalizeSaudiMobile` rejects.
+    // It is here to narrow the value, never a non-null assertion.
+    const phone = normalizeSaudiMobile(values.phone);
+    if (!phone) return;
+    createDriver.mutate({ ...values, phone }, { onSuccess: () => setOpen(false) });
   });
 
   return (

@@ -46,15 +46,13 @@ afterEach(() => {
 afterAll(() => server.close());
 
 describe('single-flight refresh (FR-007/FR-008)', () => {
-  it('refreshes exactly once when N concurrent requests all hit an expired token', async () => {
+  it('refreshes exactly once for a burst of >=5 concurrent requests, and all then succeed (SC-015, spec 015 FR-055)', async () => {
     tokenStore.set('expired-token');
     tokenStore.setRefreshToken('current-refresh-token');
 
-    const results = await Promise.all([
-      apiClient.get('/protected'),
-      apiClient.get('/protected'),
-      apiClient.get('/protected'),
-    ]);
+    const results = await Promise.all(
+      Array.from({ length: 5 }, () => apiClient.get('/protected')),
+    );
 
     expect(results.every((r) => r.data.ok)).toBe(true);
     expect(refreshCallCount).toBe(1);
@@ -105,9 +103,13 @@ describe('single-flight refresh (FR-007/FR-008)', () => {
     expect(onSessionExpired).toHaveBeenCalledTimes(1);
   });
 
-  it('fails fast with no network call when no refresh token is held', async () => {
+  it('fails fast with no network call when no refresh token is held at all', async () => {
     tokenStore.set('expired-token');
-    // Deliberately no setRefreshToken — the memory-only store starts empty on every reload.
+    // Deliberately no setRefreshToken. spec 015 R9: the refresh token is now PERSISTED
+    // (localStorage/sessionStorage per remember-me), not memory-only — so a reload with a
+    // still-valid refresh token silently restores the session (the FR-060 fix,
+    // token-store.test.ts). This case is the genuine "no credential anywhere" one:
+    // never logged in on this browser, or signed out.
 
     await expect(apiClient.get('/protected')).rejects.toBeTruthy();
     expect(refreshCallCount).toBe(0);

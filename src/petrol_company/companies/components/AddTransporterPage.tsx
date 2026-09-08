@@ -4,6 +4,8 @@ import { useTranslation } from 'react-i18next';
 import toast from 'react-hot-toast';
 import { useSessionStore } from '@/stores/session.store';
 import { useOnboardTransporter } from '@/petrol_company/companies/hooks/useTransporters';
+import { ApiError } from '@/lib/api/api-error';
+import { normalizeSaudiMobile } from '@/lib/auth/phone';
 
 // Feature 013 T085/FR-034: wired to `POST /companies/:id/transporters`
 // (`CreateTransportCompanyDto`). Two things the mock modelled were dropped outright rather
@@ -11,9 +13,13 @@ import { useOnboardTransporter } from '@/petrol_company/companies/hooks/useTrans
 // `createTransportCompany` always creates a brand-new company+admin, never links an
 // existing one) and a commercial-register/city/job-title set of fields
 // `CreateTransportCompanyDto`'s own comment says a transporter's onboarding does not
-// collect (unlike a Fuel Company's). The "no password, OTP-only login" copy is corrected
-// the same way `AddStationOwnerPage` was — `POST /auth/login` is the platform's only
-// login route and `CreateTransportCompanyDto.adminPassword` is required (min 8 chars).
+// collect (unlike a Fuel Company's).
+//
+// spec 015 R11: an earlier version of this comment said "`POST /auth/login` is the
+// platform's only login route". That is no longer true — after spec 015 an administrator
+// signs in EITHER with mobile number + SMS code OR with email + password.
+// `CreateTransportCompanyDto.adminPassword` is still required (min 8, Q2 coexistence),
+// and the admin phone is now a login identifier that must be a valid E.164 number.
 export function AddTransporterPage() {
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -29,33 +35,62 @@ export function AddTransporterPage() {
   const [adminPassword, setAdminPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
 
-  async function handleSubmit() {
-    setError(null);
+  // Both numbers go through `normalizeSaudiMobile`, the same accept-or-refuse
+  // `AddStationOwnerPage` uses: it takes every form an operator actually types
+  // (`0512345678`, `966…`, `+9665…`, with any spacing) and refuses a non-966 country code
+  // outright rather than coercing it into a plausible-looking number nobody entered.
+  const phoneE164 = normalizeSaudiMobile(contactPhone);
+  const phoneInvalid = contactPhone.trim().length > 0 && phoneE164 === null;
+  const adminPhoneE164 = normalizeSaudiMobile(adminPhone);
+  const adminPhoneInvalid = adminPhone.trim().length > 0 && adminPhoneE164 === null;
+
+  // A blanket `errors.generic` for every branch made a mistyped mobile — the one failure
+  // an operator can actually fix from this screen — indistinguishable from a server
+  // outage. The phone branch names itself, as it does on the station-owner form.
+  function validate(): string | null {
     if (
       !name.trim() ||
       !contactEmail.trim() ||
-      !contactPhone.trim() ||
       !adminFullName.trim() ||
       !adminEmail.trim() ||
-      !adminPhone.trim() ||
       adminPassword.length < 8
     ) {
-      setError(t('errors.generic'));
-      return;
+      return t('errors.generic');
     }
+    // spec 015 R5/T101 — the admin phone is a LOGIN IDENTIFIER, so it must be a real
+    // Saudi mobile, not merely well-formed E.164 (which accepted any country).
+    if (!phoneE164 || !adminPhoneE164) return t('errors.phoneNotSaudi');
+    return null;
+  }
+
+  async function handleSubmit() {
+    const invalid = validate();
+    setError(invalid);
+    // `!phoneE164 || !adminPhoneE164` is redundant with `validate()` at runtime, but it is
+    // what narrows the nullable normalised values for the call below — never a non-null
+    // assertion, which would go stale the moment validate() stopped checking them.
+    if (invalid || !phoneE164 || !adminPhoneE164) return;
+
     try {
       const result = await onboardTransporter.mutateAsync({
         name,
         contactEmail,
-        contactPhone,
+        contactPhone: phoneE164,
         adminFullName,
         adminEmail,
-        adminPhone,
+        adminPhone: adminPhoneE164,
         adminPassword,
       });
       navigate(`/petrolCompany/companies/${result.company._id}`);
-    } catch {
-      toast.error(t('errors.generic'));
+    } catch (err) {
+      // A 409 here is the likeliest real failure and names its own cause — the platform
+      // says which field clashed ("A company with this name already exists", "This email
+      // is already registered", "This phone number is already registered") because the
+      // operator cannot pick a different one otherwise. Flattening all three into
+      // `errors.generic` left them retrying the same name against a name collision.
+      const message = err instanceof ApiError ? err.message : t('errors.generic');
+      setError(message);
+      toast.error(message);
     }
   }
 
@@ -106,13 +141,25 @@ export function AddTransporterPage() {
               <div className="flex flex-col">
                 <label className="text-sm font-bold text-slate-700 mb-2">{t('common.phone')} <span className="text-red-500">*</span></label>
                 <input
-                  type="text"
+                  type="tel"
                   value={contactPhone}
                   onChange={(e) => setContactPhone(e.target.value)}
                   placeholder="+9665XXXXXXXX"
                   dir="ltr"
-                  className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 text-left"
+                  aria-invalid={phoneInvalid}
+                  className={`w-full px-4 py-3 bg-white border rounded-xl text-sm font-medium focus:outline-none focus:ring-1 text-left ${
+                    phoneInvalid
+                      ? 'border-red-400 focus:border-red-500 focus:ring-red-500'
+                      : 'border-slate-200 focus:border-blue-500 focus:ring-blue-500'
+                  }`}
                 />
+                {/* Stated while typing, not only on submit: the operator is looking at the
+                    field they got wrong, rather than at a summary after the form bounced. */}
+                {phoneInvalid ? (
+                  <span className="mt-2 text-xs font-bold text-red-500">{t('errors.phoneNotSaudi')}</span>
+                ) : (
+                  <span className="mt-2 text-xs font-bold text-slate-400">{t('errors.phoneHintSaudi')}</span>
+                )}
               </div>
               <div className="flex flex-col">
                 <label className="text-sm font-bold text-slate-700 mb-2">{t('common.email')} <span className="text-red-500">*</span></label>
@@ -144,13 +191,23 @@ export function AddTransporterPage() {
               <div className="flex flex-col">
                 <label className="text-sm font-bold text-slate-700 mb-2">{t('companies.adminPhone')} <span className="text-red-500">*</span></label>
                 <input
-                  type="text"
+                  type="tel"
                   value={adminPhone}
                   onChange={(e) => setAdminPhone(e.target.value)}
                   placeholder="+9665XXXXXXXX"
                   dir="ltr"
-                  className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 text-left"
+                  aria-invalid={adminPhoneInvalid}
+                  className={`w-full px-4 py-3 bg-white border rounded-xl text-sm font-medium focus:outline-none focus:ring-1 text-left ${
+                    adminPhoneInvalid
+                      ? 'border-red-400 focus:border-red-500 focus:ring-red-500'
+                      : 'border-slate-200 focus:border-blue-500 focus:ring-blue-500'
+                  }`}
                 />
+                {adminPhoneInvalid ? (
+                  <span className="mt-2 text-xs font-bold text-red-500">{t('errors.phoneNotSaudi')}</span>
+                ) : (
+                  <span className="mt-2 text-xs font-bold text-slate-400">{t('errors.phoneHintSaudi')}</span>
+                )}
               </div>
             </div>
 
@@ -223,7 +280,7 @@ export function AddTransporterPage() {
 
               <div className="flex items-center justify-between">
                 <span className="text-sm font-black text-slate-900" dir="ltr">{contactPhone || '—'}</span>
-                <span className="text-xs font-bold text-slate-400">{t('common.phone')}</span>
+                <span className="text-xs font-bold text-slate-400">{t('companies.contactPhone')}</span>
               </div>
 
               <div className="h-px bg-slate-100 w-full"></div>
