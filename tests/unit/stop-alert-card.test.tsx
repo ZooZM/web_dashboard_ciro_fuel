@@ -140,6 +140,31 @@ describe('StopAlertCard (spec 011 US4)', () => {
     expect(screen.getByText(i18n.t('stopAlert.reason.REST_OR_PRAYER'))).toBeTruthy();
   });
 
+  it('feature 013 US5a: shows a BLOCKED report with the driver’s reason and NOT the awaiting-answer treatment', () => {
+    mockContext.order = orderWith([
+      stop({
+        origin: StopOrigin.BLOCKED,
+        reason: StopReason.ROAD_CLOSURE,
+        reasonText: 'Bridge closed, no diversion signposted',
+        reasonGivenAt: new Date().toISOString(),
+        escalatedAt: new Date().toISOString(),
+        resolvedAt: null,
+      }),
+    ]);
+    render(<StopAlertCard />);
+    // Distinct from "asked and said nothing" (escalated) and from "said in
+    // advance" (declared) — FR-039a's distinguishability.
+    expect(screen.getByText(i18n.t('stopAlert.state.blocked'))).toBeTruthy();
+    expect(screen.queryByText(i18n.t('stopAlert.state.waiting'))).toBeNull();
+    expect(screen.queryByText(i18n.t('stopAlert.state.answered'))).toBeNull();
+    expect(screen.queryByText(i18n.t('stopAlert.noResponse'))).toBeNull();
+    // The driver's stated reason is shown directly.
+    expect(screen.getByText(i18n.t('stopAlert.reason.ROAD_CLOSURE'))).toBeTruthy();
+    expect(screen.getByText(/Bridge closed, no diversion signposted/)).toBeTruthy();
+    // Still resolvable via the existing control.
+    expect(screen.getByText(i18n.t('stopAlert.markHandled'))).toBeTruthy();
+  });
+
   it('shows a handled detected stop as resolved, with no action left on it', () => {
     mockContext.order = orderWith([
       stop({ escalatedAt: new Date().toISOString(), resolvedAt: new Date().toISOString(), resolvedBy: 'admin-1' }),

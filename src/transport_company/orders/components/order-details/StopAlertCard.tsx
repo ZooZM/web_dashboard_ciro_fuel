@@ -83,6 +83,9 @@ function StopRow({
     answered: 'border-slate-200 bg-white',
     escalated: 'border-red-300 bg-red-50',
     waiting: 'border-amber-300 bg-amber-50',
+    // feature 013 US5a: a call for help, already escalated — read as
+    // urgently as a stop that went unanswered, never as merely pending.
+    blocked: 'border-red-300 bg-red-50',
   }[state];
 
   return (
@@ -116,6 +119,13 @@ function StopRow({
         <span className="text-sm text-red-700">{t('stopAlert.noResponse')}</span>
       )}
 
+      {/* feature 013 US5a: the driver asked for help — distinct from
+          "asked and said nothing" (escalated) and from "said in advance"
+          (declared). The driver's reason is rendered by the block above. */}
+      {state === 'blocked' && (
+        <span className="text-sm text-red-700">{t('stopAlert.driverBlocked')}</span>
+      )}
+
       {!stop.resolvedAt && (
         <Button onClick={onResolve} disabled={resolving} className="self-start mt-1">
           {t('stopAlert.markHandled')}
@@ -140,9 +150,14 @@ function StopRow({
  */
 export function stopState(
   stop: StopEvent,
-): 'resolved' | 'declared' | 'answered' | 'escalated' | 'waiting' {
+): 'resolved' | 'declared' | 'answered' | 'escalated' | 'waiting' | 'blocked' {
   if (stop.resolvedAt && stop.origin !== StopOrigin.DECLARED) return 'resolved';
   if (stop.origin === StopOrigin.DECLARED) return 'declared';
+  // feature 013 US5a: checked before `answered`/`escalated` — a blocked
+  // report arrives with `reasonGivenAt` AND `escalatedAt` both set, so it
+  // would otherwise read as an ordinary answered stop and lose the
+  // distinguishability FR-039a requires.
+  if (stop.origin === StopOrigin.BLOCKED) return 'blocked';
   if (stop.reasonGivenAt) return 'answered';
   if (stop.escalatedAt) return 'escalated';
   return 'waiting';

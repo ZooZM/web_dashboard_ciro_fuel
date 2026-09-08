@@ -13,6 +13,14 @@ export const StopOrigin = {
   DETECTED: 'DETECTED',
   /** The driver said so before anyone asked. */
   DECLARED: 'DECLARED',
+  /**
+   * feature 013 US5a: the driver reported they cannot reach the destination
+   * and is asking for help. Always arrives with a reason and with
+   * `escalatedAt` set — it was escalated at creation, no response window —
+   * so the card shows the driver's reason directly and never an "awaiting
+   * the driver's answer" treatment.
+   */
+  BLOCKED: 'BLOCKED',
 } as const;
 export type StopOrigin = (typeof StopOrigin)[keyof typeof StopOrigin];
 

@@ -501,7 +501,8 @@
       "escalated": "Stopped — the driver has not responded",
       "answered": "Stopped — the driver explained",
       "declared": "Planned stop — the driver told us in advance",
-      "resolved": "Handled"
+      "resolved": "Handled",
+      "blocked": "Driver cannot reach the destination"
     },
     "noResponse": "The driver was asked why they stopped and did not reply within the response window.",
     "expectedDuration": "Expected to last about {{minutes}} minutes",
@@ -926,5 +927,7 @@
     "signInPhone": "Sign-in number",
     "signInPhoneHint": "This is the number the administrator signs in with — not the company phone.",
     "noAdmin": "This company has no administrator account"
+    },
+    "driverBlocked": "The driver reported this and asked for help — the transport office has been notified."
   }
-}
+
