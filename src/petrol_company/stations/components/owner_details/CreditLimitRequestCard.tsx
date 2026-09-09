@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import toast from 'react-hot-toast';
+import { apiErrorMessage } from '@/lib/api/api-error';
 import { Plus, Minus, X, Check } from 'lucide-react';
 import {
   useCreditLimitRequests,
@@ -35,8 +36,8 @@ export function CreditLimitRequestCard({ ownerId }: { ownerId: string }) {
       await resolve.mutateAsync({ id: request!._id, input: { accept: true, grantedAmount } });
       toast.success(t('creditLimitRequests.resolveSuccess'));
       setMode('idle');
-    } catch {
-      toast.error(t('errors.generic'));
+    } catch (err) {
+      toast.error(apiErrorMessage(err, t('errors.generic')));
     }
   }
 
@@ -44,8 +45,8 @@ export function CreditLimitRequestCard({ ownerId }: { ownerId: string }) {
     try {
       await resolve.mutateAsync({ id: request!._id, input: { accept: false } });
       toast.success(t('creditLimitRequests.resolveSuccess'));
-    } catch {
-      toast.error(t('errors.generic'));
+    } catch (err) {
+      toast.error(apiErrorMessage(err, t('errors.generic')));
     }
   }
 

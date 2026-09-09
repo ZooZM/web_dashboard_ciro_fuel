@@ -1,5 +1,6 @@
 import { useSession } from '@/stores/session.store';
 import { useLayoutStore } from '@/stores/layout.store';
+import { useLanguageStore } from '@/stores/language.store';
 import { useSessionIdentity } from '@/hooks/useSessionIdentity';
 import { Role } from '@/constants/roles';
 import { useNavigate } from 'react-router-dom';
@@ -11,6 +12,11 @@ export function Topbar() {
   const { fullName, roleLabel } = useSessionIdentity();
   const { toggleSidebar } = useLayoutStore();
   const navigate = useNavigate();
+  // The two buttons in the language submenu below were markup only — no onClick at all,
+  // with "selected" hardcoded onto the Arabic one. The store, i18n and the RTL sync were
+  // all already working; nothing was ever calling them from here.
+  const language = useLanguageStore((s) => s.language);
+  const setLanguage = useLanguageStore((s) => s.setLanguage);
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isLangOpen, setIsLangOpen] = useState(false);
@@ -114,20 +120,56 @@ export function Topbar() {
                     <span className="text-sm font-bold text-slate-700">اللغة</span>
                   </div>
                   <div className="flex items-center gap-1 text-slate-400 group-hover:text-slate-500 transition-colors">
-                    <span className="text-xs font-bold">عربي</span>
+                    <span className="text-xs font-bold">{language === 'ar' ? 'عربي' : 'English'}</span>
                     {isLangOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
                   </div>
                 </button>
 
                 {isLangOpen && (
                   <div className="flex flex-col gap-2 p-2 mx-1 mt-1 bg-slate-100/50 rounded-xl">
-                    <button className="flex items-center justify-between px-4 py-2 border border-slate-200 rounded-lg bg-white hover:bg-slate-50 transition-colors">
-                      <span className="text-sm font-bold text-[#162155]">English</span>
-                      <div className="w-2 h-2 rounded-full bg-slate-400" />
+                    <button
+                      onClick={() => setLanguage('en')}
+                      aria-pressed={language === 'en'}
+                      className={`flex items-center justify-between px-4 py-2 border rounded-lg transition-colors ${
+                        language === 'en'
+                          ? 'border-blue-500 bg-blue-50/50 hover:bg-blue-50'
+                          : 'border-slate-200 bg-white hover:bg-slate-50'
+                      }`}
+                    >
+                      <span
+                        className={`text-sm font-bold ${
+                          language === 'en' ? 'text-blue-700' : 'text-[#162155]'
+                        }`}
+                      >
+                        English
+                      </span>
+                      <div
+                        className={`w-2 h-2 rounded-full ${
+                          language === 'en' ? 'bg-blue-600' : 'bg-slate-400'
+                        }`}
+                      />
                     </button>
-                    <button className="flex items-center justify-between px-4 py-2 border border-blue-500 rounded-lg bg-blue-50/50 hover:bg-blue-50 transition-colors">
-                      <span className="text-sm font-bold text-blue-700">اللغة العربية</span>
-                      <div className="w-2 h-2 rounded-full bg-blue-600" />
+                    <button
+                      onClick={() => setLanguage('ar')}
+                      aria-pressed={language === 'ar'}
+                      className={`flex items-center justify-between px-4 py-2 border rounded-lg transition-colors ${
+                        language === 'ar'
+                          ? 'border-blue-500 bg-blue-50/50 hover:bg-blue-50'
+                          : 'border-slate-200 bg-white hover:bg-slate-50'
+                      }`}
+                    >
+                      <span
+                        className={`text-sm font-bold ${
+                          language === 'ar' ? 'text-blue-700' : 'text-[#162155]'
+                        }`}
+                      >
+                        اللغة العربية
+                      </span>
+                      <div
+                        className={`w-2 h-2 rounded-full ${
+                          language === 'ar' ? 'bg-blue-600' : 'bg-slate-400'
+                        }`}
+                      />
                     </button>
                   </div>
                 )}

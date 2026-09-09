@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import toast from 'react-hot-toast';
+import { apiErrorMessage } from '@/lib/api/api-error';
 import { cn } from '@/lib/utils';
 import { ChevronDown, MapPin, Plus, X } from 'lucide-react';
 import { LocationField } from '@/components/ui/LocationField';
@@ -68,8 +69,8 @@ export function StationsBlock({ ownerId }: { ownerId: string }) {
       setAddressText('');
       setLatitude('');
       setLongitude('');
-    } catch {
-      toast.error(t('errors.generic'));
+    } catch (err) {
+      toast.error(apiErrorMessage(err, t('errors.generic')));
     }
   }
 
@@ -78,8 +79,8 @@ export function StationsBlock({ ownerId }: { ownerId: string }) {
     try {
       await removeStation.mutateAsync(id);
       toast.success(t('stations.removeSuccess'));
-    } catch {
-      toast.error(t('errors.generic'));
+    } catch (err) {
+      toast.error(apiErrorMessage(err, t('errors.generic')));
     }
   }
 

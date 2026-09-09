@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import toast from 'react-hot-toast';
 import { useSessionStore } from '@/stores/session.store';
 import { useOnboardTransporter } from '@/petrol_company/companies/hooks/useTransporters';
-import { ApiError } from '@/lib/api/api-error';
+import { apiErrorMessage } from '@/lib/api/api-error';
 import { normalizeSaudiMobile } from '@/lib/auth/phone';
 
 // Feature 013 T085/FR-034: wired to `POST /companies/:id/transporters`
@@ -88,7 +88,7 @@ export function AddTransporterPage() {
       // is already registered", "This phone number is already registered") because the
       // operator cannot pick a different one otherwise. Flattening all three into
       // `errors.generic` left them retrying the same name against a name collision.
-      const message = err instanceof ApiError ? err.message : t('errors.generic');
+      const message = apiErrorMessage(err, t('errors.generic'));
       setError(message);
       toast.error(message);
     }

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useCreateDriver } from '@/transport_company/drivers/hooks/useDrivers';
 import { toast } from '@/lib/toast/toast';
+import { apiErrorMessage } from '@/lib/api/api-error';
 import { normalizeSaudiMobile } from '@/lib/auth/phone';
 
 /**
@@ -37,7 +38,14 @@ export function AddDriverPage(): React.JSX.Element {
       { fullName: fullName.trim(), email: email.trim(), phone: phoneE164, password },
       {
         onSuccess: goBack,
-        onError: () => toast.error(t('drivers.createError')),
+        // The comment below describes this exact trap for the phone-FORMAT case and closed
+        // it by validating locally — but the other half stayed generic: a 409 means the
+        // email or the phone already belongs to an account, and the platform names which
+        // ("This phone number is already registered" / "This email is already registered").
+        // Flattening that into `drivers.createError` left the operator guessing between
+        // two fields with nothing on screen to tell them apart.
+        onError: (err) =>
+          toast.error(apiErrorMessage(err, t('drivers.createError'))),
       },
     );
   }

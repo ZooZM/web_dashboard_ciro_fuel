@@ -1,7 +1,7 @@
 import { ChevronRight } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useOrderDetailContext } from './OrderDetailContext';
-import { isAssignableOrderStatus, OrderStatus } from '@/constants/order-status';
+import { OrderStatus } from '@/constants/order-status';
 import { ApproveOrderDialog } from '../ApproveOrderDialog';
 import { RejectOrderDialog } from '../RejectOrderDialog';
 import { RouteOrderDialog } from '../RouteOrderDialog';
@@ -16,7 +16,13 @@ export function OrderHeader() {
   const { order, orderId } = useOrderDetailContext();
 
   const canApproveOrReject = order?.status === OrderStatus.PENDING_APPROVAL;
-  const canRoute = order ? isAssignableOrderStatus(order.status) : false;
+  // `PATCH /orders/:id/route` accepts AWAITING_ROUTING and nothing else. This used to ask
+  // `isAssignableOrderStatus`, which is the DRIVER-assignment rule (ROUTED_TO_TRANSPORT —
+  // a transport-company action, on a different endpoint), so the gate was wrong in both
+  // directions at once: hidden at AWAITING_ROUTING, the one stage manual routing exists
+  // for, which left FR-014's "the fuel company must choose" unreachable from this screen;
+  // and offered at ROUTED_TO_TRANSPORT, where it can only ever 409.
+  const canRoute = order?.status === OrderStatus.AWAITING_ROUTING;
   const canForceComplete =
     order &&
     order.status !== OrderStatus.DELIVERED &&

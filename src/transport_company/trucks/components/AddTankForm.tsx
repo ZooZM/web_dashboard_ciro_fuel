@@ -4,6 +4,7 @@ import { useCreateTank } from '@/transport_company/trucks/hooks/useTanks';
 import { FUEL_TYPES, type FuelType } from '@/constants/order-status';
 import type { TankMaterial } from '@/transport_company/trucks/types';
 import { toast } from '@/lib/toast/toast';
+import { apiErrorMessage } from '@/lib/api/api-error';
 import { cn } from '@/lib/utils';
 
 interface AddTankFormProps {
@@ -38,7 +39,9 @@ export function AddTankForm({ onCancel, entityName }: AddTankFormProps) {
       { code: code.trim(), material, maxCapacityLiters: capacity, fuelTypes },
       {
         onSuccess: onCancel,
-        onError: () => toast.error(t('trucks.duplicateTankCode')),
+        // Asserted "duplicate tank code" for every failure alike — same trap as the plate
+        // above. Kept as the fallback, but never stated over the platform's own message.
+        onError: (err) => toast.error(apiErrorMessage(err, t('trucks.duplicateTankCode'))),
       },
     );
   }

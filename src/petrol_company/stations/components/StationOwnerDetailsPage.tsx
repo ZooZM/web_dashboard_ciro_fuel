@@ -1,6 +1,7 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import toast from 'react-hot-toast';
+import { apiErrorMessage } from '@/lib/api/api-error';
 import { cn } from '@/lib/utils';
 import { DueLitersBalanceCard } from './owner_details/DueLitersBalanceCard';
 import { CreditLimitRequestCard } from './owner_details/CreditLimitRequestCard';
@@ -27,8 +28,8 @@ export function StationOwnerDetailsPage() {
     if (!owner) return;
     try {
       await setActive.mutateAsync(!owner.isActive);
-    } catch {
-      toast.error(t('errors.generic'));
+    } catch (err) {
+      toast.error(apiErrorMessage(err, t('errors.generic')));
     }
   }
 

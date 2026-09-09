@@ -78,3 +78,24 @@ export function toApiError(error: unknown): ApiError {
 
   return new ApiError(status || 500, GENERIC_MESSAGE, 'UnknownError');
 }
+
+/**
+ * The message to show for a failed call: the platform's own when it said something
+ * specific, the screen's localized string otherwise.
+ *
+ * Screens used to write `toast.error(t('errors.generic'))` inside a bare `catch {}`, which
+ * discarded messages naming the one thing the operator had to change — "This phone number
+ * is already registered", "Credit limit exceeded: order requires X but only Y is
+ * available". Two screens did worse and asserted one specific cause ("duplicate plate")
+ * for every failure alike.
+ *
+ * `fallback` still wins over the two placeholders `toApiError` mints itself: those carry
+ * no more information than the caller's own string, and they are English, which in this
+ * Arabic-first UI is strictly worse. So a flattened 404 or a bodyless failure still reads
+ * in Arabic, while a real platform message comes through as the platform worded it.
+ */
+export function apiErrorMessage(error: unknown, fallback: string): string {
+  if (!(error instanceof ApiError)) return fallback;
+  if (error.message === GENERIC_MESSAGE || error.message === NOT_FOUND_MESSAGE) return fallback;
+  return error.message;
+}

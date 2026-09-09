@@ -4,6 +4,7 @@ import { useCreateTruck } from '@/transport_company/trucks/hooks/useTrucks';
 import { usePairCard } from '@/transport_company/trucks/hooks/usePairCard';
 import { CardCaptureField } from '@/transport_company/trucks/components/CardCaptureField';
 import { toast } from '@/lib/toast/toast';
+import { apiErrorMessage } from '@/lib/api/api-error';
 
 interface AddTruckFormProps {
   onCancel: () => void;
@@ -91,7 +92,11 @@ export function AddTruckForm({ onCancel, entityName }: AddTruckFormProps) {
       { plateNumber, model: model.trim() || undefined },
       {
         onSuccess: (truck) => setCreatedTruckId(truck.id),
-        onError: () => toast.error(t('trucks.duplicatePlate')),
+        // This asserted "duplicate plate" for EVERY failure — a validation error or an
+        // outage read as a plate collision, sending the operator to change a plate that
+        // was never the problem. A duplicate really is the likeliest cause, so it stays
+        // as the fallback, but the platform's own message wins when there is one.
+        onError: (err) => toast.error(apiErrorMessage(err, t('trucks.duplicatePlate'))),
       },
     );
   }

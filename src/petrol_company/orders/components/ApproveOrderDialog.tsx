@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import toast from 'react-hot-toast';
 import { useApproveOrder } from '@/petrol_company/orders/hooks/useOrderActions';
+import { apiErrorMessage } from '@/lib/api/api-error';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
@@ -22,7 +24,17 @@ export function ApproveOrderDialog({ orderId, estimatedPrice }: { orderId: strin
     const parsed = Number(finalPrice);
     approve.mutate(
       { finalPrice: Number.isFinite(parsed) && parsed > 0 ? parsed : undefined },
-      { onSuccess: () => setOpen(false) },
+      {
+        onSuccess: () => setOpen(false),
+        // There was no onError at all: approval could be refused for a reason the
+        // platform states precisely — a CREDIT order over the client's remaining credit,
+        // a fuel company past its commission ceiling, no warehouse for the grade, an
+        // unset or ambiguous transport price — and every one of them failed silently,
+        // leaving the dialog open with nothing said. The message names the one thing
+        // that has to change, so it is shown as-is.
+        onError: (err) =>
+          toast.error(apiErrorMessage(err, t('errors.generic'))),
+      },
     );
   }
 

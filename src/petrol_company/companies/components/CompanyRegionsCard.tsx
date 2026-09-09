@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import toast from 'react-hot-toast';
+import { apiErrorMessage } from '@/lib/api/api-error';
 import { X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAssignTransporterRegions } from '@/petrol_company/companies/hooks/useTransporters';
@@ -26,16 +27,16 @@ export function CompanyRegionsCard({ company }: { company: Transporter }) {
       await assignRegions.mutateAsync([...company.servedRegions, selected]);
       setSelected('');
       setIsAdding(false);
-    } catch {
-      toast.error(t('errors.generic'));
+    } catch (err) {
+      toast.error(apiErrorMessage(err, t('errors.generic')));
     }
   }
 
   async function handleRemove(code: RegionCode) {
     try {
       await assignRegions.mutateAsync(company.servedRegions.filter((r) => r !== code));
-    } catch {
-      toast.error(t('errors.generic'));
+    } catch (err) {
+      toast.error(apiErrorMessage(err, t('errors.generic')));
     }
   }
 

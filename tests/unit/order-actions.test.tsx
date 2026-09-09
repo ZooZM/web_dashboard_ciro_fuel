@@ -57,11 +57,20 @@ describe('OrderHeader action gating (FR-017, FR-018)', () => {
     expect(screen.queryByText('Route to transporter')).not.toBeInTheDocument();
   });
 
-  it('offers route only when the order is ROUTED_TO_TRANSPORT, and approve/reject are absent then', () => {
-    renderHeaderFor(OrderStatus.ROUTED_TO_TRANSPORT);
+  // This asserted ROUTED_TO_TRANSPORT, and so locked in the very defect it looked like it
+  // was guarding: `PATCH /orders/:id/route` accepts AWAITING_ROUTING alone, and an
+  // already-routed order 409s. The stage the button belongs on is the one where routing
+  // did NOT resolve itself.
+  it('offers route only when the order is AWAITING_ROUTING, and approve/reject are absent then', () => {
+    renderHeaderFor(OrderStatus.AWAITING_ROUTING);
     expect(screen.getByText('Route to transporter')).toBeInTheDocument();
     expect(screen.queryByText('Approve')).not.toBeInTheDocument();
     expect(screen.queryByText('Reject')).not.toBeInTheDocument();
+  });
+
+  it('does NOT offer route on an already-routed order — that call can only 409', () => {
+    renderHeaderFor(OrderStatus.ROUTED_TO_TRANSPORT);
+    expect(screen.queryByText('Route to transporter')).not.toBeInTheDocument();
   });
 
   it('offers no action at all on a terminal order (DELIVERED)', () => {

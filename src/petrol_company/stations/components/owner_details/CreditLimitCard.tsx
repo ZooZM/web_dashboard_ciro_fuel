@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import toast from 'react-hot-toast';
+import { apiErrorMessage } from '@/lib/api/api-error';
 import { Plus, Minus, X, Check } from 'lucide-react';
 import { useCreditStanding, useSetCreditLimit } from '@/petrol_company/stations/hooks/useOwners';
 
@@ -30,8 +31,8 @@ export function CreditLimitCard({ ownerId }: { ownerId: string }) {
       await setCreditLimit.mutateAsync(editingLimit);
       toast.success(t('creditLimit.updateSuccess'));
       setIsEditing(false);
-    } catch {
-      toast.error(t('errors.generic'));
+    } catch (err) {
+      toast.error(apiErrorMessage(err, t('errors.generic')));
     }
   }
 

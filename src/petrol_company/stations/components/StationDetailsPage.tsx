@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import toast from 'react-hot-toast';
+import { apiErrorMessage } from '@/lib/api/api-error';
 import { cn } from '@/lib/utils';
 import { useAllStations, useUpdateStation, useRemoveStation } from '@/petrol_company/stations/hooks/useStations';
 import { useOwnerDetail } from '@/petrol_company/stations/hooks/useOwners';
@@ -55,8 +56,8 @@ export function StationDetailsPage() {
         input: { name: name.trim() || undefined, regionCode, governorateCode, addressText: addressText.trim() || undefined },
       });
       setIsEditing(false);
-    } catch {
-      toast.error(t('errors.generic'));
+    } catch (err) {
+      toast.error(apiErrorMessage(err, t('errors.generic')));
     }
   }
 
@@ -67,8 +68,8 @@ export function StationDetailsPage() {
       await removeStation.mutateAsync(station._id);
       toast.success(t('stations.removeSuccess'));
       navigate('/petrolCompany/stations');
-    } catch {
-      toast.error(t('errors.generic'));
+    } catch (err) {
+      toast.error(apiErrorMessage(err, t('errors.generic')));
     }
   }
 
