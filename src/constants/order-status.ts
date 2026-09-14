@@ -107,6 +107,16 @@ export const CompanyStatus = {
 
 export type CompanyStatus = (typeof CompanyStatus)[keyof typeof CompanyStatus];
 
+// spec 017 (operator dashboard) T008a — mirrors `src/common/enums/company-type.enum.ts`.
+// `GET /companies?type=` finally reads this value (research R2); before, the string
+// literal 'FUEL' sat inline at the one call site that sent it and the platform ignored it.
+export const CompanyType = {
+  FUEL: 'FUEL',
+  TRANSPORT: 'TRANSPORT',
+} as const;
+
+export type CompanyType = (typeof CompanyType)[keyof typeof CompanyType];
+
 // spec 010 (driver availability & assignment escalation) FR-002/FR-004: a computed
 // classification, never stored on `User` — mirrors
 // `src/common/enums/driver-eligibility.enum.ts` exactly. Four values, not a boolean: the
@@ -158,4 +168,90 @@ export const DEFAULT_LANGUAGE: Language = 'ar';
 
 export function directionForLanguage(language: Language): Direction {
   return language === 'ar' ? 'rtl' : 'ltr';
+}
+
+// ---------------------------------------------------------------------------
+// spec 017 (operator dashboard) — the six working buckets the operator's order
+// screens group the platform's twelve states into (FR-023a).
+//
+// Mirrors `src/common/constants/order-status-buckets.ts` in the backend
+// exactly, including the mapping: the bucket a row falls into is the
+// PLATFORM's answer (the list is filtered server-side by `?bucket=`), and this
+// copy exists so a label, a filter chip and a chart segment are never a literal
+// string at the point of use (Constitution I). The backend's own exhaustiveness
+// test is what guarantees the mapping stays total; this one is asserted against
+// `OrderStatus` by `tests/unit/order-status.test.ts`.
+// ---------------------------------------------------------------------------
+
+export const OrderStatusBucket = {
+  NEW: 'NEW',
+  IN_PROGRESS: 'IN_PROGRESS',
+  COMPLETED: 'COMPLETED',
+  REJECTED: 'REJECTED',
+  CANCELLED: 'CANCELLED',
+  // The one state that cannot progress without a human (FR-023c). Never folded
+  // into NEW, and REJECTED/CANCELLED are never summed into one figure in the UI
+  // (FR-023b) — different actors, different acts.
+  NEEDS_ATTENTION: 'NEEDS_ATTENTION',
+} as const;
+
+export type OrderStatusBucket = (typeof OrderStatusBucket)[keyof typeof OrderStatusBucket];
+
+export const ORDER_STATUS_BUCKETS: Record<OrderStatusBucket, readonly OrderStatus[]> = {
+  NEW: [
+    OrderStatus.PENDING_APPROVAL,
+    OrderStatus.APPROVED,
+    OrderStatus.ROUTED_TO_TRANSPORT,
+    OrderStatus.PENDING_PAYMENT,
+  ],
+  IN_PROGRESS: [
+    OrderStatus.ASSIGNED_TO_DRIVER,
+    OrderStatus.LOADING,
+    OrderStatus.IN_TRANSIT,
+    OrderStatus.UNLOADING,
+  ],
+  COMPLETED: [OrderStatus.DELIVERED],
+  REJECTED: [OrderStatus.REJECTED],
+  CANCELLED: [OrderStatus.CANCELLED],
+  NEEDS_ATTENTION: [OrderStatus.AWAITING_ROUTING],
+};
+
+const KNOWN_BUCKETS: ReadonlySet<string> = new Set(Object.values(OrderStatusBucket));
+
+export function isKnownOrderStatusBucket(bucket: string): bucket is OrderStatusBucket {
+  return KNOWN_BUCKETS.has(bucket);
+}
+
+export const ORDER_STATUS_BUCKET_UNKNOWN_LABEL_KEY = 'orderBucket.unknown';
+
+// Same convention as ORDER_STATUS_LABEL_KEY: the leaf is the bucket value, so a
+// translator adding a bucket has exactly one rule to follow and key parity is
+// checkable against en/ar.json.
+export const ORDER_STATUS_BUCKET_LABEL_KEY: Record<OrderStatusBucket, string> =
+  Object.fromEntries(
+    Object.values(OrderStatusBucket).map((bucket) => [bucket, `orderBucket.${bucket}`]),
+  ) as Record<OrderStatusBucket, string>;
+
+export function orderStatusBucketLabelKey(bucket: string): string {
+  return isKnownOrderStatusBucket(bucket)
+    ? ORDER_STATUS_BUCKET_LABEL_KEY[bucket]
+    : ORDER_STATUS_BUCKET_UNKNOWN_LABEL_KEY;
+}
+
+// Reuses the status tone vocabulary so a bucket chip and the status badges
+// inside it cannot disagree about what "needs attention" looks like.
+export const ORDER_STATUS_BUCKET_TONE: Record<OrderStatusBucket, OrderStatusTone> = {
+  NEW: 'info',
+  IN_PROGRESS: 'progress',
+  COMPLETED: 'success',
+  REJECTED: 'danger',
+  CANCELLED: 'neutral',
+  NEEDS_ATTENTION: 'actionable',
+};
+
+/** The bucket one status falls into, or `undefined` if the vocabulary has drifted. */
+export function bucketForOrderStatus(status: string): OrderStatusBucket | undefined {
+  return (Object.keys(ORDER_STATUS_BUCKETS) as OrderStatusBucket[]).find((bucket) =>
+    (ORDER_STATUS_BUCKETS[bucket] as readonly string[]).includes(status),
+  );
 }

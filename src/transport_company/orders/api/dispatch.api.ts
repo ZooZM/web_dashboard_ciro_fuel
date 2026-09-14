@@ -17,7 +17,10 @@ export interface Candidate {
   fullName: string;
   phone: string;
   distanceMeters?: number;
-  suggestedTruck: { _id: string; plateNumber: string } | null;
+  // `id`, matching `GET /trucks` and `GET /tanks`: the platform maps this
+  // through the same safe truck shape as every other truck it returns, which
+  // is also what stops it carrying the vehicle's NFC card id and QR token.
+  suggestedTruck: { id: string; plateNumber: string } | null;
   eligibility: DriverEligibility;
   lastSeenAt: string | null;
 }

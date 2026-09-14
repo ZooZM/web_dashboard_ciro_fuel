@@ -1,123 +1,133 @@
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Shield } from 'lucide-react';
+import { OrderStatusBadge } from '@/transport_company/orders/components/OrderStatusBadge';
+import type { Order } from '@/transport_company/orders/types';
 
-export function AdminDesktopOrdersTable({ orders }: { orders: any[] }) {
+/**
+ * spec 017 (operator dashboard) T057/T060/FR-017 — one row per order, on live
+ * fields.
+ *
+ * **The platform-commission column is REMOVED** (FR-022, FR-024, FR-078, and
+ * recorded in this feature's Removals table). `Order` carries no commission
+ * field of any kind: the platform records commission as `COMMISSION_CHARGED`
+ * movements on a COMPANY ledger, sourced from an invoice, never from an order.
+ * So FR-022's "where the platform records one" is never satisfied for an order,
+ * and the element is always absent — a determinate outcome rather than a
+ * runtime condition, which is why the column is deleted rather than
+ * conditionally hidden.
+ *
+ * The mock's separate `paymentMethod` badge column goes too: the value it
+ * rendered was an index parity (`index % 2`), not a field.
+ */
+export function AdminDesktopOrdersTable({ orders }: { orders: Order[] }) {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   return (
     <div className="hidden lg:block overflow-hidden w-[100%]">
       <Table>
         <TableHeader>
           <TableRow className="bg-[#f8f9fa] hover:bg-[#f8f9fa] w-full">
-            <TableHead className="font-bold text-slate-700 text-[12px] text-right py-3 pr-4 pl-2 min-w-[90px]">رقم الطلب</TableHead>
-            <TableHead className="font-bold text-slate-700 text-[12px] text-right py-3 px-2 min-w-[140px]">الشركة</TableHead>
-            <TableHead className="font-bold text-slate-700 text-[12px] text-right py-3 px-2 min-w-[100px]">المالك</TableHead>
-            <TableHead className="font-bold text-slate-700 text-[12px] text-center py-3 px-2 min-w-[100px]">الوقود / الكمية</TableHead>
-            <TableHead className="font-bold text-slate-700 text-[12px] text-center py-3 px-2 min-w-[140px]">موقع التحميل &larr; التسليم</TableHead>
-            <TableHead className="font-bold text-slate-700 text-[12px] text-center py-3 px-2 min-w-[100px]">الناقل</TableHead>
-            <TableHead className="font-bold text-slate-700 text-[12px] text-center py-3 px-2 min-w-[100px]">موعد التسليم</TableHead>
-            <TableHead className="font-bold text-slate-700 text-[12px] text-center py-3 px-2 min-w-[80px]">الحالة</TableHead>
-            <TableHead className="font-bold text-slate-700 text-[12px] text-center py-3 px-2 min-w-[90px]">عمولة المنصة (ر.س)</TableHead>
-            <TableHead className="font-bold text-slate-700 text-[12px] text-center py-3 pl-4 pr-2 min-w-[100px]">فاتورة الوقود (ر.س)</TableHead>
-            <TableHead className="font-bold text-slate-700 text-[12px] text-center py-3 pl-4 pr-2 min-w-[100px]">طريقة الدفع</TableHead>
+            <TableHead className="font-bold text-slate-700 text-[12px] text-right py-3 pr-4 pl-2 min-w-[110px]">
+              {t('adminOrders.columns.reference')}
+            </TableHead>
+            <TableHead className="font-bold text-slate-700 text-[12px] text-right py-3 px-2 min-w-[150px]">
+              {t('adminOrders.columns.client')}
+            </TableHead>
+            <TableHead className="font-bold text-slate-700 text-[12px] text-center py-3 px-2 min-w-[110px]">
+              {t('adminOrders.columns.fuelAndQuantity')}
+            </TableHead>
+            <TableHead className="font-bold text-slate-700 text-[12px] text-center py-3 px-2 min-w-[170px]">
+              {t('adminOrders.columns.destination')}
+            </TableHead>
+            <TableHead className="font-bold text-slate-700 text-[12px] text-center py-3 px-2 min-w-[110px]">
+              {t('adminOrders.columns.driver')}
+            </TableHead>
+            <TableHead className="font-bold text-slate-700 text-[12px] text-center py-3 px-2 min-w-[110px]">
+              {t('adminOrders.columns.createdAt')}
+            </TableHead>
+            <TableHead className="font-bold text-slate-700 text-[12px] text-center py-3 px-2 min-w-[90px]">
+              {t('adminOrders.columns.status')}
+            </TableHead>
+            <TableHead className="font-bold text-slate-700 text-[12px] text-center py-3 pl-4 pr-2 min-w-[110px]">
+              {t('adminOrders.columns.value')}
+            </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {orders.map((order) => (
-            <TableRow 
-              key={order.id} 
-              onClick={() => navigate(`/admin/orders/${order.id}`)}
+            <TableRow
+              key={order._id}
+              onClick={() => navigate(`/admin/orders/${order._id}`)}
               className="hover:bg-slate-50 border-b border-slate-100 last:border-0 cursor-pointer transition-colors"
             >
-              {/* رقم الطلب */}
               <TableCell className="align-middle py-3 pr-4 pl-2">
-                <span className="text-slate-800 font-bold text-[12px] whitespace-nowrap">{order.num}</span>
+                {/*
+                  `Order` has no human reference field — the identifier IS the
+                  reference, which is also why search is by identifier alone
+                  (FR-016a, research R13). Truncated with the full value on
+                  hover, so a row stays readable and the id stays copyable.
+                */}
+                <span
+                  className="text-slate-800 font-bold text-[12px] whitespace-nowrap font-mono"
+                  title={order._id}
+                >
+                  …{order._id.slice(-8)}
+                </span>
               </TableCell>
-              
-              {/* الشركة */}
+
               <TableCell className="align-middle py-3 px-2">
-                <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center bg-white shadow-sm shrink-0">
-                    <img src="/sideBar/petroAman.svg" className="w-4 h-4 opacity-90" alt="petro" />
-                  </div>
-                  <div className="flex flex-col min-w-0">
-                    <span className="text-slate-900 font-bold text-[12px] truncate">{order.company}</span>
-                    <span className="text-slate-400 text-[10px] mt-0.5 truncate max-w-[120px]">{order.companyAddress}</span>
-                  </div>
+                <div className="flex flex-col min-w-0">
+                  <span className="text-slate-900 font-bold text-[12px] truncate">
+                    {order.clientSummary?.fullName ?? '—'}
+                  </span>
+                  <span className="text-slate-400 text-[10px] mt-0.5 truncate max-w-[170px]">
+                    {order.station?.addressText || order.deliveryAddressText || '—'}
+                  </span>
                 </div>
               </TableCell>
-              
-              {/* المالك */}
-              <TableCell className="align-middle py-3 px-2">
-                <span className="text-slate-800 font-bold text-[12px] whitespace-nowrap">{order.owner}</span>
-              </TableCell>
-              
-              {/* الوقود / الكمية */}
+
               <TableCell className="align-middle text-center py-3 px-2">
                 <div className="flex flex-col items-center gap-1">
                   <span className="bg-[#FFEDD5] text-[#EA580C] px-2 py-0.5 rounded-full text-[10px] font-bold whitespace-nowrap">
-                    {order.fuel}
+                    {t(`fuelType.${order.fuelType}`)}
                   </span>
-                  <span className="text-slate-600 font-bold text-[11px] whitespace-nowrap">{order.fuelLiters}</span>
+                  <span className="text-slate-600 font-bold text-[11px] whitespace-nowrap">
+                    {order.quantityLiters.toLocaleString()} {t('common.litre')}
+                  </span>
                 </div>
               </TableCell>
 
-              {/* موقع التحميل <- التسليم */}
               <TableCell className="align-middle text-center py-3 px-2">
-                <div className="flex flex-col items-center">
-                  <span className="text-slate-800 font-bold text-[11px] text-center max-w-[120px] leading-tight">{order.locationFrom}</span>
-                  <img src="/transportCompany/orderPage/arrowDown.svg" alt="" className="w-3 h-3 my-0.5 opacity-60" />
-                  <span className="text-slate-400 text-[10px] text-center max-w-[120px] leading-tight">{order.locationTo}</span>
-                </div>
+                <span className="text-slate-800 font-bold text-[11px] max-w-[170px] leading-tight block truncate">
+                  {order.warehouseSummary?.name ?? '—'}
+                </span>
+                <span className="text-slate-400 text-[10px] max-w-[170px] leading-tight block truncate">
+                  {order.deliveryAddressText || '—'}
+                </span>
               </TableCell>
 
-              {/* الناقل */}
               <TableCell className="align-middle text-center py-3 px-2">
-                <span className="text-slate-800 font-bold text-[11px] text-center leading-tight">{order.transporter}</span>
+                <span className="text-slate-800 font-bold text-[11px] leading-tight">
+                  {order.driverSummary?.fullName ?? '—'}
+                </span>
               </TableCell>
 
-              {/* موعد التسليم */}
               <TableCell className="align-middle text-center py-3 px-2">
-                <div className="flex flex-col items-center">
-                  <span className="text-slate-800 font-bold text-[11px] whitespace-nowrap">{order.timeDate}</span>
-                  <span className="text-slate-400 text-[10px] mt-0.5 whitespace-nowrap">{order.timeAmPm}</span>
-                </div>
+                <span className="text-slate-800 font-bold text-[11px] whitespace-nowrap">
+                  {new Date(order.createdAt).toLocaleDateString()}
+                </span>
               </TableCell>
 
-              {/* الحالة */}
               <TableCell className="align-middle text-center py-3 px-2">
-                <div className="inline-flex items-center justify-center gap-1.5 bg-[#DCFCE7] px-2 py-1 rounded-full">
-                  <div className="w-1.5 h-1.5 rounded-full bg-[#16A34A]"></div>
-                  <span className="text-[#16A34A] text-[10px] font-bold whitespace-nowrap">{order.status}</span>
-                </div>
+                <OrderStatusBadge status={order.status} />
               </TableCell>
 
-              {/* عمولة المنصة */}
-              <TableCell className="align-middle text-center py-3 px-2">
-                <span className="text-blue-600 font-black text-[12px]">{order.platformCommission}</span>
-              </TableCell>
-
-              {/* فاتورة الوقود */}
               <TableCell className="align-middle text-center py-3 pl-4 pr-2">
-                <span className="text-green-600 font-black text-[12px]">{order.fuelInvoice}</span>
-              </TableCell>
-
-              {/* طريقة الدفع */}
-              <TableCell className="align-middle text-center py-3 pl-4 pr-2">
-                {order.paymentMethod === 'bank' ? (
-                  <div className="inline-flex items-center gap-1.5 bg-[#faf5ff] px-3 py-1.5 rounded-full border border-purple-100">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-[#a855f7]">
-                      <path d="M20 14H4L10 20M4 10H20L14 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                    <span className="text-[#a855f7] text-[11px] font-bold">تحويل بنكي</span>
-                  </div>
-                ) : (
-                  <div className="inline-flex items-center gap-1.5 bg-[#eff6ff] px-3 py-1.5 rounded-full border border-blue-100">
-                    <img src="/transportCompany/orderPage/orderDetails/invoice.svg" className="w-4 h-4" alt="sadad" />
-                    <span className="text-[#3b82f6] text-[11px] font-bold">سداد</span>
-                  </div>
-                )}
+                <span className="text-green-600 font-black text-[12px]">
+                  {(order.finalPrice ?? order.estimatedPrice).toLocaleString()}
+                </span>
               </TableCell>
             </TableRow>
           ))}

@@ -5,7 +5,7 @@
     "cancel": "Cancel",
     "submit": "Submit",
     "signOut": "Sign out",
-    "loading": "Loading...",
+    "loading": "Loading…",
     "retry": "Retry",
     "back": "Back",
     "language": "Language",
@@ -23,7 +23,18 @@
     "optional": "optional",
     "active": "Active",
     "inactive": "Inactive",
-    "empty": "Nothing here yet"
+    "empty": "Nothing here yet",
+    "currency": "SAR",
+    "litre": "L",
+    "search": "Search",
+    "first": "First",
+    "next": "Next",
+    "yes": "Yes",
+    "no": "No",
+    "notAvailable": "Not available",
+    "viewDetails": "View details",
+    "choose": "Choose…",
+    "saving": "Saving…"
   },
   "auth": {
     "login": {
@@ -70,7 +81,8 @@
       "success": "Password set. Sign in with it now.",
       "completeFailed": "Could not set the password. The session may have expired.",
       "sendFailed": "Could not send the code. Please try again."
-    }
+    },
+    "password": "Password"
   },
   "nav": {
     "orders": "Orders",
@@ -193,7 +205,9 @@
     "reinstate": "Reinstate",
     "suspend": "Suspend",
     "locationOnMap": "Location on the map",
-    "trackTruck": "Track the truck"
+    "trackTruck": "Track the truck",
+    "name": "Name",
+    "phone": "Phone"
   },
   "clients": {
     "title": "Clients",
@@ -236,11 +250,13 @@
     "detail": "Transporter details",
     "loadError": "Could not load transporters",
     "search": "Search by name or code...",
-    "contactPhone": "Company phone",
+    "contactPhone": "Contact phone",
     "adminAccount": "Administrator account",
     "signInPhone": "Sign-in number",
     "signInPhoneHint": "This is the number the administrator signs in with — not the company phone.",
-    "noAdmin": "This company has no administrator account"
+    "noAdmin": "This company has no administrator account",
+    "contactEmail": "Contact email",
+    "details": "Company details"
   },
   "orderStatus": {
     "PENDING_APPROVAL": "Awaiting approval",
@@ -654,8 +670,13 @@
       "unknown": {
         "title": "Notification",
         "body": ""
-      }
-    }
+      },
+      "PLATFORM_ANNOUNCEMENT": "Platform announcement"
+    },
+    "unread": "{{count}} unread",
+    "unreadOnly": "Unread only",
+    "failed": "Could not load the notifications.",
+    "markRead": "Mark read"
   },
   "support": {
     "title": "Support",
@@ -706,7 +727,10 @@
     "confirm": "Confirm",
     "changeSuccess": "Phone number changed successfully",
     "done": "Done",
-    "back": "Back"
+    "back": "Back",
+    "account": "Account",
+    "security": "Security and sign-in",
+    "failed": "Could not load your account."
   },
   "billing": {
     "commissionTitle": "Platform commission",
@@ -927,7 +951,156 @@
     "signInPhone": "Sign-in number",
     "signInPhoneHint": "This is the number the administrator signs in with — not the company phone.",
     "noAdmin": "This company has no administrator account"
+  },
+  "driverBlocked": "The driver reported this and asked for help — the transport office has been notified.",
+  "adminDashboard": {
+    "greeting": "Welcome {{name}}",
+    "subtitle": "An overview of the whole CIRO FUEL platform",
+    "loading": "Loading platform figures…",
+    "failed": "Could not load the platform figures.",
+    "quickActions": "Quick actions",
+    "defaultPeriod": "Defaulted to the current month",
+    "basisNote": "The order count covers every order raised in the period, in any state. Trading volume and litres count delivered orders only.",
+    "cards": {
+      "fuelCompanies": "Fuel companies",
+      "transportCompanies": "Transport companies",
+      "stations": "Stations",
+      "orders": "Orders in period",
+      "tradingVolume": "Trading volume",
+      "litres": "Litres moved"
     },
-    "driverBlocked": "The driver reported this and asked for help — the transport office has been notified."
+    "charts": {
+      "companies": "Companies",
+      "companyUnit": "companies",
+      "orders": "Order states",
+      "orderUnit": "orders"
+    },
+    "companyType": {
+      "FUEL": "Fuel companies",
+      "TRANSPORT": "Transport companies"
+    },
+    "actions": {
+      "invoices": "View invoices",
+      "invoicesSubtitle": "Invoices and balances",
+      "addTransporter": "Add a transport company",
+      "addTransporterSubtitle": "Onboard a new transporter",
+      "addStationOwner": "Add a station owner",
+      "addStationOwnerSubtitle": "Register an owner and station",
+      "announce": "Send an announcement",
+      "announceSubtitle": "Notify every company administrator"
+    }
+  },
+  "orderBucket": {
+    "NEW": "New",
+    "IN_PROGRESS": "In progress",
+    "COMPLETED": "Completed",
+    "REJECTED": "Rejected",
+    "CANCELLED": "Cancelled",
+    "NEEDS_ATTENTION": "Needs attention",
+    "unknown": "Unknown"
+  },
+  "adminOrders": {
+    "title": "Platform orders",
+    "subtitle": "Every order on the platform",
+    "searchLabel": "Search by order identifier",
+    "searchPlaceholder": "Enter an order identifier",
+    "searchHint": "Identifier only — this does not search company or station names.",
+    "allBuckets": "All states",
+    "loading": "Loading orders…",
+    "empty": "No matching orders.",
+    "failed": "Could not load the orders.",
+    "forceComplete": "Force complete",
+    "forceCompleteReason": "Reason (required)",
+    "forceCompleteRefused": "This order cannot be completed at its current stage.",
+    "columns": {
+      "reference": "Order id",
+      "client": "Client",
+      "fuelAndQuantity": "Fuel / quantity",
+      "destination": "Warehouse → delivery",
+      "driver": "Driver",
+      "createdAt": "Created",
+      "status": "Status",
+      "value": "Value (SAR)"
+    },
+    "total": "Total orders"
+  },
+  "driverRoster": {
+    "title": "Platform drivers",
+    "subtitle": "Every driver and who employs them",
+    "employer": "Transport company",
+    "lastTruck": "Last truck",
+    "neverDriven": "Never driven",
+    "dutyState": "Duty state",
+    "loading": "Loading drivers…",
+    "empty": "No matching drivers.",
+    "failed": "Could not load the drivers.",
+    "tabs": {
+      "ALL": "All",
+      "ACTIVE": "Active",
+      "INACTIVE": "Inactive",
+      "ON_DUTY": "On duty",
+      "OFF_DUTY": "Off duty",
+      "UNKNOWN": "Never connected"
+    }
+  },
+  "dutyState": {
+    "ON_DUTY": "On duty",
+    "OFF_DUTY": "Off duty",
+    "UNKNOWN": "Never connected"
+  },
+  "announcements": {
+    "title": "Platform announcements",
+    "compose": "Send an announcement",
+    "composeTitle": "Title",
+    "composeBody": "Message",
+    "targets": "Target companies",
+    "allCompanies": "Every active company",
+    "queued": "Queued for delivery — it will reach {{count}} administrators.",
+    "queuedNote": "Delivery runs in the background; check the log for the outcome.",
+    "failedToSend": "Could not send the announcement.",
+    "deliveries": "Deliveries",
+    "delivered": "Delivered",
+    "missed": "Missed",
+    "failureReason": {
+      "COMPANY_SUSPENDED": "Company suspended",
+      "ADMIN_DEACTIVATED": "Administrator deactivated",
+      "NO_ACTIVE_ADMIN": "No active administrator"
+    }
+  },
+  "operatorAccount": {
+    "activeSessions": "Active sessions",
+    "lastSignIn": "Last sign-in",
+    "neverSignedIn": "Never signed in",
+    "signInNumber": "Sign-in number",
+    "changePhone": "Change number",
+    "phoneInUse": "That number already belongs to another account.",
+    "verificationCode": "Verification code"
+  },
+  "cashback": {
+    "owed": "Owed to this company",
+    "payout": "Record a payout",
+    "amount": "Amount",
+    "method": "Method",
+    "reference": "Reference (required)",
+    "evidence": "Evidence document",
+    "exceedsBalance": "That is more than is currently owed.",
+    "duplicateReference": "A payout with that reference is already recorded for this company.",
+    "recorded": "Payout recorded.",
+    "direction": {
+      "INBOUND": "To the platform",
+      "OUTBOUND": "From the platform"
+    }
+  },
+  "transportCompanies": {
+    "orderVolume": "Order volume",
+    "coveredAreas": "Covered areas",
+    "parentCompany": "Parent fuel company",
+    "parentImmutable": "The parent company cannot be changed after creation.",
+    "addTitle": "Add a transport company",
+    "invalidParent": "Choose a valid fuel company.",
+    "subtitle": "The transport companies on the platform and the areas each covers",
+    "failed": "Could not load the transport companies.",
+    "empty": "No transport companies yet.",
+    "firstAdmin": "First administrator"
   }
-
+}

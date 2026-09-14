@@ -1,102 +1,67 @@
-import { useState } from 'react';
-import { useSession } from '@/stores/session.store';
-import { Check, X } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import type { OperatorAccount } from '@/admin/profile/api/operator-account.api';
 
-export function AdminProfileAccountCard() {
-  const { user } = useSession();
-  const [isEditingAccount, setIsEditingAccount] = useState(false);
+/**
+ * spec 017 (operator dashboard) T125/FR-057/FR-058/FR-059 — the operator's
+ * account, read-only.
+ *
+ * Was an edit form whose Save button closed the form and wrote nothing: there
+ * is no route for an operator to change their own name or email, so the card
+ * looked editable and was not. Shown as facts instead — the same call this
+ * whole feature keeps making, that a control over a capability the platform
+ * does not have is worse than no control.
+ *
+ * The sign-in number DOES have a change flow, and it lives beside this card in
+ * `AdminProfileSecurity`, where the verification step it actually requires can
+ * be presented properly.
+ */
+export function AdminProfileAccountCard({ account }: { account: OperatorAccount }) {
+  const { t } = useTranslation();
 
   return (
-    <div className={`bg-white border rounded-2xl p-6 shadow-sm flex flex-col gap-8 w-full relative transition-colors ${isEditingAccount ? 'border-blue-500 shadow-[0_0_0_1px_rgba(59,130,246,1)]' : 'border-[#E7E9EF]'}`}>
-      {/* Top Left Actions */}
-      {!isEditingAccount ? (
-        <button 
-          onClick={() => setIsEditingAccount(true)}
-          className="absolute top-6 left-6 w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center hover:bg-blue-100 transition-colors"
-        >
-          <img src="/transportCompany/profilePage/edit (2).svg" alt="تعديل" className="w-5 h-5 object-contain" />
-        </button>
-      ) : (
-        <div className="absolute top-6 left-6 flex items-center gap-2">
-          <button 
-            onClick={() => setIsEditingAccount(false)}
-            className="w-8 h-8 rounded-lg bg-white border border-red-200 flex items-center justify-center hover:bg-red-50 transition-colors"
-          >
-            <X className="w-4 h-4 text-red-500" />
-          </button>
-          <button 
-            onClick={() => setIsEditingAccount(false)}
-            className="flex items-center gap-1.5 px-3 h-8 rounded-lg bg-[#ECFDF5] border border-[#A7F3D0] text-[#10B981] hover:bg-green-100 transition-colors text-xs font-bold"
-          >
-            حفظ
-            <Check className="w-3.5 h-3.5" />
-          </button>
+    <div className="bg-white border border-[#E7E9EF] rounded-2xl p-6 shadow-sm flex flex-col gap-6 w-full">
+      <div className="flex items-center gap-3">
+        <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center shrink-0">
+          <img
+            src="/transportCompany/profilePage/detail.svg"
+            alt=""
+            className="w-5 h-5 object-contain"
+          />
         </div>
-      )}
-
-      {/* Header */}
-      <div className="flex items-center justify-start w-full">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center shrink-0">
-            <img src="/transportCompany/profilePage/user.svg" alt="" className="w-5 h-5 object-contain" />
-          </div>
-          <span className="text-[#162155] font-black text-lg">بيانات المسؤول</span>
-        </div>
+        <span className="text-[#162155] font-black text-lg">{t('profile.account')}</span>
       </div>
 
-      {/* Form / Grid */}
-      <div className="flex flex-col gap-6 mt-2">
-        <div className="grid grid-cols-2 gap-4 w-full">
-          {/* الاسم الكامل */}
-          <div className="flex flex-col gap-2 text-right">
-            <span className="text-[#858C95] text-xs font-bold">الاسم الكامل</span>
-            {!isEditingAccount ? (
-              <span className="text-[#162155] font-black text-sm">{user?.fullName || 'حسين السيد'}</span>
-            ) : (
-              <input 
-                type="text" 
-                defaultValue={user?.fullName || 'حسين السيد'}
-                className="w-full h-11 border border-[#E7E9EF] rounded-lg px-3 outline-none focus:border-blue-500 transition-colors text-sm font-bold text-[#162155]"
-              />
-            )}
-          </div>
-          {/* المسمى الوظيفي */}
-          <div className="flex flex-col gap-2 text-right">
-            <span className="text-[#858C95] text-xs font-bold">المسمى الوظيفي</span>
-            {!isEditingAccount ? (
-              <span className="text-[#162155] font-black text-sm">مدير العمليات</span>
-            ) : (
-              <input 
-                type="text" 
-                defaultValue="مدير العمليات"
-                className="w-full h-11 border border-[#E7E9EF] rounded-lg px-3 outline-none focus:border-blue-500 transition-colors text-sm font-bold text-[#162155]"
-              />
-            )}
-          </div>
-        </div>
+      <dl className="flex flex-col text-right">
+        <Row label={t('common.fullName')} value={account.fullName} />
+        <Row label={t('common.email')} value={account.email} ltr />
+        {/* FR-057 — the REAL number, not the mask the mock rendered. */}
+        <Row label={t('operatorAccount.signInNumber')} value={account.phone} ltr />
+        <Row
+          label={t('operatorAccount.activeSessions')}
+          value={String(account.activeSessionCount)}
+        />
+        <Row
+          label={t('operatorAccount.lastSignIn')}
+          value={
+            // `null` means genuinely never — a distinct fact from "not
+            // recorded", so it gets its own wording rather than a blank.
+            account.lastSignInAt
+              ? new Date(account.lastSignInAt).toLocaleString()
+              : t('operatorAccount.neverSignedIn')
+          }
+        />
+      </dl>
+    </div>
+  );
+}
 
-        <div className="grid grid-cols-2 gap-4 w-full">
-          {/* رقم الجوال */}
-          <div className="flex flex-col gap-2 text-right">
-            <span className="text-[#858C95] text-xs font-bold">رقم الجوال</span>
-            <span className="text-[#162155] font-black text-sm" dir="ltr">05xxxxxxxx</span>
-          </div>
-          {/* البريد الإلكتروني */}
-          <div className="flex flex-col gap-2 text-right">
-            <span className="text-[#858C95] text-xs font-bold">البريد الإلكتروني</span>
-            {!isEditingAccount ? (
-              <span className="text-[#162155] font-black text-sm">ahmed.subaie@trn.sa</span>
-            ) : (
-              <input 
-                type="text" 
-                defaultValue="ahmed.subaie@trn.sa"
-                className="w-full h-11 border border-[#E7E9EF] rounded-lg px-3 outline-none focus:border-blue-500 transition-colors text-sm font-bold text-[#162155] text-left"
-                dir="ltr"
-              />
-            )}
-          </div>
-        </div>
-      </div>
+function Row({ label, value, ltr }: { label: string; value: string; ltr?: boolean }) {
+  return (
+    <div className="flex items-center justify-between gap-4 py-3 border-b border-[#E7E9EF] last:border-0">
+      <dt className="text-xs font-bold text-[#858C95]">{label}</dt>
+      <dd className="text-sm font-black text-[#162155]" dir={ltr ? 'ltr' : undefined}>
+        {value}
+      </dd>
     </div>
   );
 }

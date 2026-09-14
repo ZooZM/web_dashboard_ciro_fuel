@@ -3,7 +3,16 @@ import { useNavigate } from 'react-router-dom';
 interface LegendItem {
   label: string;
   value: string;
+  /** A Tailwind background class, e.g. `bg-[#10B981]`. */
   color: string;
+  /**
+   * spec 017 T034 — a raw CSS colour, taking precedence over `color` when
+   * given. The operator dashboard drives its ring and its legend from ONE
+   * colour map, so the two cannot disagree about which slice is which; a
+   * Tailwind class cannot be derived from that map at runtime, because Tailwind
+   * only emits classes it can see literally in the source.
+   */
+  swatchColor?: string;
 }
 
 interface DoughnutSectionProps {
@@ -49,7 +58,10 @@ export function DoughnutSection({ title, total, label, gradient, legend, href }:
           {legend.map((item, index) => (
             <div key={index} className="flex items-center justify-between w-full">
               <div className='gap-2 flex items-center'>
-                <div className={`w-2.5 h-2.5 rounded-full ${item.color}`} />
+                <div
+                  className={`w-2.5 h-2.5 rounded-full ${item.swatchColor ? '' : item.color}`}
+                  style={item.swatchColor ? { backgroundColor: item.swatchColor } : undefined}
+                />
                 <span className="text-[11px] font-medium text-slate-500">{item.label}</span>
               </div>
               <div className="flex items-center gap-2">

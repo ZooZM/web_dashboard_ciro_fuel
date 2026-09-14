@@ -10,6 +10,12 @@ export interface UserListParams {
   role?: 'DRIVER' | 'CLIENT';
   isActive?: boolean;
   page?: number;
+  // spec 017 T071 — the operator's per-company drill-downs pass a companyId.
+  // It is load-bearing only for SUPER_ADMIN: the tenant plugin overwrites it
+  // for every other role, which is why it appears on operator screens alone.
+  // Part of the KEY because two companies' driver lists must not share a cache
+  // entry — omitting it would serve one company's drivers under another's id.
+  companyId?: string;
 }
 
 // Feature 013 T038/FR-097: query keys every later phase's `hooks/use*.ts` file consumes,
@@ -84,6 +90,28 @@ export const queryKeys = {
   platformAccount: {
     movements: (params: { kind?: string; state?: string; cursor?: string } = {}) =>
       ['platform-account', 'movements', params] as const, // Phase 13
+  },
+  // spec 017 (operator dashboard) — one key per hook this feature adds. Every key
+  // that takes a period carries `from`/`to` in its params so changing the date range
+  // refetches rather than serving the previous period from cache.
+  platform: {
+    overview: (params: { from?: string; to?: string } = {}) =>
+      ['platform', 'overview', params] as const,
+    transportCompanyVolumes: (
+      params: { companyIds: string[]; from?: string; to?: string },
+    ) => ['platform', 'transport-company-volumes', params] as const,
+  },
+  drivers: {
+    roster: (params: { isActive?: boolean; dutyState?: string; cursor?: string } = {}) =>
+      ['drivers', 'roster', params] as const,
+  },
+  announcements: {
+    list: (cursor?: string) => ['announcements', { cursor }] as const,
+    detail: (id: string) => ['announcements', id] as const,
+  },
+  operatorAccount: ['auth', 'me', 'account'] as const,
+  cashback: {
+    owed: (companyId: string) => ['platform-account', 'cashback', companyId, 'owed'] as const,
   },
   fuelExchange: {
     // Feature 016 (broadcast fuel exchange offers) — `partners` is gone with the

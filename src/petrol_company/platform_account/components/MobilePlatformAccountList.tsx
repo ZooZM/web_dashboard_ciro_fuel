@@ -24,6 +24,10 @@ export function MobilePlatformAccountList({ movements }: Props) {
       {movements.map((m) => {
         const isCommission = m.kind === AccountMovementKind.COMMISSION_CHARGED;
         const isCashback = m.kind === AccountMovementKind.CASHBACK_CREDITED;
+        // spec 017 T148/FR-064/FR-071 — a payout the PLATFORM made to this
+        // company. Without this distinction it is indistinguishable from a
+        // payment the company made: same positive amount, same row.
+        const isPayout = m.kind === AccountMovementKind.CASHBACK_PAID_OUT;
         const created = new Date(m.createdAt);
 
         return (
@@ -32,10 +36,10 @@ export function MobilePlatformAccountList({ movements }: Props) {
               <div
                 className={cn(
                   'flex items-center gap-1.5 w-fit px-2.5 py-1 rounded-md text-xs font-bold',
-                  isCommission ? 'bg-orange-50 text-orange-600' : isCashback ? 'bg-green-50 text-green-600' : 'bg-blue-50 text-blue-600',
+                  isCommission ? 'bg-orange-50 text-orange-600' : isCashback ? 'bg-green-50 text-green-600' : isPayout ? 'bg-emerald-100 text-emerald-800' : 'bg-blue-50 text-blue-600',
                 )}
               >
-                {isCommission ? t('billing.commissionTitle') : isCashback ? t('billing.cashbackTitle') : t('platformAccount.payment')}
+                {isCommission ? t('billing.commissionTitle') : isCashback ? t('billing.cashbackTitle') : isPayout ? t('cashback.direction.OUTBOUND') : t('platformAccount.payment')}
               </div>
               <span
                 className={cn(

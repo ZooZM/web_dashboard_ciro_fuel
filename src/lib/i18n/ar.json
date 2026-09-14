@@ -5,7 +5,7 @@
     "cancel": "إلغاء",
     "submit": "إرسال",
     "signOut": "تسجيل الخروج",
-    "loading": "جارٍ التحميل...",
+    "loading": "جارٍ التحميل…",
     "retry": "إعادة المحاولة",
     "back": "رجوع",
     "language": "اللغة",
@@ -23,7 +23,18 @@
     "optional": "اختياري",
     "active": "نشط",
     "inactive": "غير نشط",
-    "empty": "لا يوجد شيء هنا بعد"
+    "empty": "لا يوجد شيء هنا بعد",
+    "currency": "ر.س",
+    "litre": "لتر",
+    "search": "بحث",
+    "first": "البداية",
+    "next": "التالي",
+    "yes": "نعم",
+    "no": "لا",
+    "notAvailable": "غير متاح",
+    "viewDetails": "عرض التفاصيل",
+    "choose": "اختر…",
+    "saving": "جارٍ الحفظ…"
   },
   "auth": {
     "login": {
@@ -70,7 +81,8 @@
       "success": "تم تعيين كلمة المرور. سجّل الدخول بها الآن.",
       "completeFailed": "تعذّر تعيين كلمة المرور. قد تكون الجلسة منتهية.",
       "sendFailed": "تعذّر إرسال الرمز. حاول مرة أخرى."
-    }
+    },
+    "password": "كلمة المرور"
   },
   "nav": {
     "orders": "الطلبات",
@@ -193,7 +205,9 @@
     "reinstate": "إعادة تفعيل",
     "suspend": "إيقاف",
     "locationOnMap": "الموقع على الخريطة",
-    "trackTruck": "تتبع الشاحنة"
+    "trackTruck": "تتبع الشاحنة",
+    "name": "الاسم",
+    "phone": "رقم الجوال"
   },
   "clients": {
     "title": "العملاء",
@@ -213,8 +227,8 @@
     "title": "الشركات",
     "onboard": "إضافة شركة جديدة",
     "status": "الحالة",
-    "active": "نشطة",
-    "suspended": "موقوفة",
+    "active": "نشط",
+    "suspended": "موقوف",
     "suspend": "إيقاف",
     "activate": "تفعيل",
     "name": "اسم الشركة",
@@ -236,11 +250,13 @@
     "detail": "تفاصيل الناقل",
     "loadError": "تعذر تحميل شركات النقل",
     "search": "ابحث بالاسم أو الكود...",
-    "contactPhone": "هاتف الشركة",
+    "contactPhone": "رقم التواصل",
     "adminAccount": "حساب المسؤول",
     "signInPhone": "رقم الدخول",
     "signInPhoneHint": "هذا هو الرقم الذي يسجّل به المسؤول دخوله — وليس هاتف الشركة.",
-    "noAdmin": "لا يوجد مسؤول لهذه الشركة"
+    "noAdmin": "لا يوجد مسؤول لهذه الشركة",
+    "contactEmail": "البريد الإلكتروني للتواصل",
+    "details": "بيانات الشركة"
   },
   "orderStatus": {
     "PENDING_APPROVAL": "بانتظار الموافقة",
@@ -654,8 +670,13 @@
       "unknown": {
         "title": "إشعار",
         "body": ""
-      }
-    }
+      },
+      "PLATFORM_ANNOUNCEMENT": "إشعار من المنصة"
+    },
+    "unread": "{{count}} غير مقروء",
+    "unreadOnly": "غير المقروءة فقط",
+    "failed": "تعذّر تحميل الإشعارات.",
+    "markRead": "تعليم كمقروء"
   },
   "support": {
     "title": "الدعم",
@@ -706,7 +727,10 @@
     "confirm": "تأكيد",
     "changeSuccess": "تم تغيير رقم الجوال بنجاح",
     "done": "تم",
-    "back": "رجوع"
+    "back": "رجوع",
+    "account": "بيانات الحساب",
+    "security": "الأمان وتسجيل الدخول",
+    "failed": "تعذّر تحميل بيانات الحساب."
   },
   "billing": {
     "commissionTitle": "عمولة المنصة",
@@ -927,7 +951,156 @@
     "signInPhone": "رقم الدخول",
     "signInPhoneHint": "هذا هو الرقم الذي يسجّل به المسؤول دخوله — وليس هاتف الشركة.",
     "noAdmin": "لا يوجد مسؤول لهذه الشركة"
+  },
+  "driverBlocked": "أبلغ السائق بذلك وطلب المساعدة — تم إخطار مكتب النقل.",
+  "adminDashboard": {
+    "greeting": "مرحباً {{name}}",
+    "subtitle": "نظرة عامة على أداء منصة CIRO FUEL بالكامل",
+    "loading": "جارٍ تحميل أرقام المنصة…",
+    "failed": "تعذّر تحميل أرقام المنصة.",
+    "quickActions": "إجراءات سريعة",
+    "defaultPeriod": "الفترة الافتراضية هي الشهر الحالي",
+    "basisNote": "عدد الطلبات يشمل كل الطلبات المُنشأة خلال الفترة بجميع حالاتها، أمّا حجم التداول والكميات فتحتسب الطلبات المُسلَّمة فقط.",
+    "cards": {
+      "fuelCompanies": "شركات البترول",
+      "transportCompanies": "الشركات الناقلة",
+      "stations": "إجمالي المحطات",
+      "orders": "الطلبات في الفترة",
+      "tradingVolume": "حجم التداول",
+      "litres": "الكميات المتداولة"
     },
-    "driverBlocked": "أبلغ السائق بذلك وطلب المساعدة — تم إخطار مكتب النقل."
+    "charts": {
+      "companies": "توزيع الشركات",
+      "companyUnit": "شركة",
+      "orders": "حالة الطلبات",
+      "orderUnit": "طلب"
+    },
+    "companyType": {
+      "FUEL": "شركات بترول",
+      "TRANSPORT": "شركات نقل"
+    },
+    "actions": {
+      "invoices": "عرض الفواتير",
+      "invoicesSubtitle": "الفواتير و المستحقات",
+      "addTransporter": "إضافة شركة نقل",
+      "addTransporterSubtitle": "إضافة ناقل جديد",
+      "addStationOwner": "إضافة مالك محطة",
+      "addStationOwnerSubtitle": "تسجيل مالك ومحطة جديدة",
+      "announce": "إرسال إشعار للمنصة",
+      "announceSubtitle": "تنبيه كل مسؤولي الشركات"
+    }
+  },
+  "orderBucket": {
+    "NEW": "جديد",
+    "IN_PROGRESS": "قيد التنفيذ",
+    "COMPLETED": "مكتمل",
+    "REJECTED": "مرفوض",
+    "CANCELLED": "ملغى",
+    "NEEDS_ATTENTION": "يحتاج متابعة",
+    "unknown": "غير معروف"
+  },
+  "adminOrders": {
+    "title": "طلبات المنصة",
+    "subtitle": "كل الطلبات على المنصة",
+    "searchLabel": "البحث برقم الطلب",
+    "searchPlaceholder": "أدخل رقم الطلب (المعرّف)",
+    "searchHint": "البحث بالمعرّف فقط — لا يشمل أسماء الشركات أو المحطات.",
+    "allBuckets": "كل الحالات",
+    "loading": "جارٍ تحميل الطلبات…",
+    "empty": "لا توجد طلبات مطابقة.",
+    "failed": "تعذّر تحميل الطلبات.",
+    "forceComplete": "إغلاق الطلب يدوياً",
+    "forceCompleteReason": "سبب الإغلاق (مطلوب)",
+    "forceCompleteRefused": "لا يمكن إغلاق الطلب في مرحلته الحالية.",
+    "columns": {
+      "reference": "رقم الطلب",
+      "client": "العميل",
+      "fuelAndQuantity": "الوقود / الكمية",
+      "destination": "المستودع ← التسليم",
+      "driver": "السائق",
+      "createdAt": "تاريخ الإنشاء",
+      "status": "الحالة",
+      "value": "القيمة (ر.س)"
+    },
+    "total": "إجمالي الطلبات"
+  },
+  "driverRoster": {
+    "title": "سائقو المنصة",
+    "subtitle": "كل السائقين وشركاتهم الناقلة",
+    "employer": "شركة النقل",
+    "lastTruck": "آخر شاحنة",
+    "neverDriven": "لم يقُد بعد",
+    "dutyState": "الحالة",
+    "loading": "جارٍ تحميل السائقين…",
+    "empty": "لا يوجد سائقون مطابقون.",
+    "failed": "تعذّر تحميل السائقين.",
+    "tabs": {
+      "ALL": "الكل",
+      "ACTIVE": "نشط",
+      "INACTIVE": "غير نشط",
+      "ON_DUTY": "على رأس العمل",
+      "OFF_DUTY": "خارج العمل",
+      "UNKNOWN": "لم يتصل بعد"
+    }
+  },
+  "dutyState": {
+    "ON_DUTY": "على رأس العمل",
+    "OFF_DUTY": "خارج العمل",
+    "UNKNOWN": "لم يتصل بعد"
+  },
+  "announcements": {
+    "title": "إشعارات المنصة",
+    "compose": "إرسال إشعار",
+    "composeTitle": "عنوان الإشعار",
+    "composeBody": "نص الإشعار",
+    "targets": "الشركات المستهدفة",
+    "allCompanies": "كل الشركات النشطة",
+    "queued": "تم وضع الإشعار في قائمة الإرسال — سيصل إلى {{count}} مسؤولاً.",
+    "queuedNote": "الإرسال يتم في الخلفية؛ يمكنك متابعة النتيجة من سجل الإشعارات.",
+    "failedToSend": "تعذّر إرسال الإشعار.",
+    "deliveries": "التسليمات",
+    "delivered": "تم التسليم",
+    "missed": "لم يصل",
+    "failureReason": {
+      "COMPANY_SUSPENDED": "الشركة موقوفة",
+      "ADMIN_DEACTIVATED": "حساب المسؤول معطّل",
+      "NO_ACTIVE_ADMIN": "لا يوجد مسؤول نشط للشركة"
+    }
+  },
+  "operatorAccount": {
+    "activeSessions": "الجلسات النشطة",
+    "lastSignIn": "آخر تسجيل دخول",
+    "neverSignedIn": "لم يسجّل الدخول بعد",
+    "signInNumber": "رقم تسجيل الدخول",
+    "changePhone": "تغيير الرقم",
+    "phoneInUse": "هذا الرقم مسجَّل لحساب آخر.",
+    "verificationCode": "رمز التحقق"
+  },
+  "cashback": {
+    "owed": "المستحق للشركة",
+    "payout": "تسجيل دفعة",
+    "amount": "المبلغ",
+    "method": "طريقة الدفع",
+    "reference": "الرقم المرجعي (مطلوب)",
+    "evidence": "مستند الإثبات",
+    "exceedsBalance": "المبلغ أكبر من المستحق الحالي.",
+    "duplicateReference": "هذا الرقم المرجعي مسجَّل مسبقاً لهذه الشركة.",
+    "recorded": "تم تسجيل الدفعة.",
+    "direction": {
+      "INBOUND": "وارد للمنصة",
+      "OUTBOUND": "صادر من المنصة"
+    }
+  },
+  "transportCompanies": {
+    "orderVolume": "حجم الطلبات",
+    "coveredAreas": "المناطق المغطاة",
+    "parentCompany": "شركة البترول الأم",
+    "parentImmutable": "لا يمكن تغيير الشركة الأم بعد الإنشاء.",
+    "addTitle": "إضافة شركة نقل",
+    "invalidParent": "يجب اختيار شركة بترول صالحة.",
+    "subtitle": "شركات النقل على المنصة ومناطق التغطية لكل شركة",
+    "failed": "تعذّر تحميل الشركات الناقلة.",
+    "empty": "لا توجد شركات نقل بعد.",
+    "firstAdmin": "بيانات المسؤول الأول"
   }
-
+}

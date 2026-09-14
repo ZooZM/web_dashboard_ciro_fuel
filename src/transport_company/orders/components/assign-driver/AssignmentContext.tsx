@@ -74,7 +74,7 @@ export function AssignmentProvider({ children }: { children: ReactNode }) {
   // pre-select nothing, never "first available" (the operator must choose deliberately).
   function selectDriver(candidate: Candidate): void {
     setSelectedDriverId(candidate._id);
-    setSelectedTruckId(candidate.suggestedTruck?._id ?? null);
+    setSelectedTruckId(candidate.suggestedTruck?.id ?? null);
     setReason('');
     setRefusal(null);
   }

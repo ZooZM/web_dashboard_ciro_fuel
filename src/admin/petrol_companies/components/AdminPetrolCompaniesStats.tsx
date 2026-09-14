@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import { CompanyStatus } from '@/constants/order-status';
 import type { FuelCompany } from '@/admin/petrol_companies/api/fuel-companies.api';
 
 interface AdminPetrolCompaniesStatsProps {
@@ -10,9 +11,15 @@ interface AdminPetrolCompaniesStatsProps {
 // would be an N+1 query with no endpoint behind it), so those three cards are dropped
 // rather than fabricated. The operator sees those real per-company figures once they
 // open a company (T238), where a single query genuinely answers them.
+// spec 017 T016/FR-014 — VERIFIED: every figure here is derived from the SAME array the
+// list renders, which is the single `?type=FUEL` result. There is no second, unfiltered
+// call behind the count card, so the card and the rows beneath it cannot disagree. That
+// mattered more than it looked: until spec 017 the backend ignored `type` entirely, so
+// this total has been the platform's whole company count — transporters included — since
+// feature 013, while the rows it sat above were the same (also unfiltered) list.
 export function AdminPetrolCompaniesStats({ companies }: AdminPetrolCompaniesStatsProps) {
   const { t } = useTranslation();
-  const activeCount = companies.filter((c) => c.status === 'ACTIVE').length;
+  const activeCount = companies.filter((c) => c.status === CompanyStatus.ACTIVE).length;
   const suspendedCount = companies.length - activeCount;
 
   return (

@@ -1,6 +1,6 @@
 import { apiClient } from '@/lib/api/api.client';
 import { apiRoutes } from '@/constants/api-routes';
-import { CompanyStatus } from '@/constants/order-status';
+import { CompanyStatus, CompanyType } from '@/constants/order-status';
 import type { FuelType } from '@/constants/order-status';
 import type { CursorPage } from '@/lib/api/pagination';
 import type { BillingBalances, CommissionTerm, CashbackProgramme } from '@/petrol_company/invoices/api/billing.api';
@@ -37,10 +37,29 @@ export interface Station {
   companyId: string;
 }
 
-// Feature 013 T235/FR-087: the operator's fuel companies list — `GET /companies?type=FUEL`
-// already exists (SA-scoped to every company on the platform).
+// Feature 013 T235/FR-087: the operator's fuel companies list.
+//
+// CORRECTED by spec 017 T014 (research R2). This comment previously asserted that
+// `GET /companies?type=FUEL` "already exists". It did not: the handler bound NO query
+// parameters at all, so every call here has returned every company on the platform —
+// transporters included — since feature 013, and the count card above the list has been
+// counting them. The claim in this comment is the reason the defect survived review.
+// The backend now reads `type` (FR-010); this call is unchanged and finally means what
+// it always said.
 export async function listFuelCompanies(): Promise<FuelCompany[]> {
-  const { data } = await apiClient.get<FuelCompany[]>(apiRoutes.companies.list, { params: { type: 'FUEL' } });
+  const { data } = await apiClient.get<FuelCompany[]>(apiRoutes.companies.list, {
+    params: { type: CompanyType.FUEL },
+  });
+  return data;
+}
+
+// spec 017 T015/FR-025 — the same route, the other half of the platform. Lives here
+// beside its sibling rather than in the transport module so the two calls that differ
+// only by one enum value cannot drift apart.
+export async function listTransportCompanies(): Promise<FuelCompany[]> {
+  const { data } = await apiClient.get<FuelCompany[]>(apiRoutes.companies.list, {
+    params: { type: CompanyType.TRANSPORT },
+  });
   return data;
 }
 

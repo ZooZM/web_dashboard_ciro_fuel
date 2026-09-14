@@ -10,8 +10,29 @@ export const AccountMovementKind = {
   COMMISSION_CHARGED: 'COMMISSION_CHARGED',
   CASHBACK_CREDITED: 'CASHBACK_CREDITED',
   PAYMENT_RECORDED: 'PAYMENT_RECORDED',
+  // spec 017 T148/FR-066 — the platform paying a fuel company its accrued
+  // cashback. The only OUTBOUND kind on the platform.
+  CASHBACK_PAID_OUT: 'CASHBACK_PAID_OUT',
 } as const;
 export type AccountMovementKind = (typeof AccountMovementKind)[keyof typeof AccountMovementKind];
+
+/**
+ * spec 017 (operator dashboard) T148/FR-064/FR-071 — which way the money went,
+ * from the COMPANY's point of view.
+ *
+ * **Derived by the platform from `kind` at serialisation, never stored** — so
+ * no existing row migrated and every field this dashboard already read is
+ * unchanged. Without it a cashback the platform paid OUT and a payment the
+ * company paid IN are two rows with a positive amount and no visible
+ * difference between them, which is exactly the confusion FR-071 exists to
+ * prevent.
+ */
+export const AccountMovementDirection = {
+  INBOUND: 'INBOUND',
+  OUTBOUND: 'OUTBOUND',
+} as const;
+export type AccountMovementDirection =
+  (typeof AccountMovementDirection)[keyof typeof AccountMovementDirection];
 
 export const AccountMovementState = {
   RECORDED: 'RECORDED',
@@ -42,6 +63,8 @@ export interface AccountMovement {
   confirmedAt: string | null;
   reversalOfId: string | null;
   createdAt: string;
+  /** Derived from `kind` by the platform (FR-064). */
+  direction: AccountMovementDirection;
 }
 
 export interface MovementListParams {

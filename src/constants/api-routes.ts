@@ -16,6 +16,9 @@ export const apiRoutes = {
     passwordResetRequest: '/auth/password-reset/request',
     passwordResetVerify: '/auth/password-reset/verify',
     passwordResetComplete: '/auth/password-reset/complete',
+    // spec 017 (operator dashboard) — the operator's own identity, session count
+    // and last sign-in. SUPER_ADMIN only; distinct from `me`, which every role reads.
+    meAccount: '/auth/me/account',
   },
   companies: {
     list: '/companies',
@@ -32,6 +35,10 @@ export const apiRoutes = {
     // company; PUT is TRANSPORT_COMPANY_ADMIN and self-only — a fuel company may read what
     // its transporter charges but may never set it.
     deliveryRates: (id: string) => `/companies/${id}/delivery-rates`,
+    // spec 017 (operator dashboard) FR-027 — the OPERATOR's onboarding route. Distinct
+    // from `transporters(id)` above, which is the parent fuel company's own route: this
+    // one NAMES the parent in the body rather than taking it from the actor's tenant.
+    onboardTransporter: '/companies/transporters',
     // `exchangePartners` is REMOVED (feature 016, FR-040, research R10) — its only
     // consumer was the directed model's recipient selector, which no longer exists.
   },
@@ -112,6 +119,9 @@ export const apiRoutes = {
   notifications: {
     list: '/notifications',
     markRead: (id: string) => `/notifications/${id}/read`,
+    // spec 017 T112/FR-047 — already on the platform and role-agnostic; the
+    // dashboard simply never had a constant for it.
+    markAllRead: '/notifications/read-all',
   },
   support: {
     // Corrected from the placeholder `/support` — the real path is
@@ -136,10 +146,32 @@ export const apiRoutes = {
     balancesMe: '/billing/balances/me',
     balancesForCompany: (companyId: string) => `/billing/balances/${companyId}`, // Phase 16 (US13)
   },
+  // spec 017 (operator dashboard) — the platform's own cross-company figures. Every
+  // route here is SUPER_ADMIN-only and has no tenant-scoped equivalent.
+  platform: {
+    overview: '/platform/overview',
+    transportCompanyVolumes: '/platform/transport-company-volumes',
+  },
+  drivers: {
+    // The platform-wide driver roster (FR-038). Deliberately its own route rather than
+    // a widened `users.list`: it carries an employer name and a last-operated truck and
+    // omits every location and trip field (FR-043, FR-044).
+    roster: '/drivers/roster',
+  },
+  announcements: {
+    list: '/announcements',
+    create: '/announcements',
+    detail: (id: string) => `/announcements/${id}`,
+  },
   platformAccount: {
     movements: '/platform-account/movements', // Phase 13 (US10)
     payments: '/platform-account/payments',
     confirmPayment: (id: string) => `/platform-account/payments/${id}/confirm`,
+    // spec 017 (operator dashboard) US8 — what the platform owes a fuel company, and
+    // recording that it paid. No payment provider is integrated: these record that
+    // money moved elsewhere (FR-065, FR-066).
+    cashbackOwed: (companyId: string) => `/platform-account/cashback/${companyId}/owed`,
+    cashbackPayouts: (companyId: string) => `/platform-account/cashback/${companyId}/payouts`,
   },
   // Feature 016 (broadcast fuel exchange offers) — replaces the directed model's
   // `/fuel-exchange/requests` entirely (FR-040); no recipient is ever named on any route.
