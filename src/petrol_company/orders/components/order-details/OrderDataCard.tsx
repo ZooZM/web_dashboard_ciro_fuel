@@ -6,6 +6,18 @@ import { OrderStatusBadge } from '../OrderStatusBadge';
 // (immutable, R2 — never re-derived from the company's current pricing) — absent, not
 // invented, on an order placed before this field existed. Every fabricated field (fake
 // commission-per-litre, fake ETA/distance, fake note) is gone (FR-047/FR-048).
+// The DELIVERY FEE does not exist until the order is ROUTED. `PricingService` resolves
+// the fuel line alone at creation and leaves the haul unpriced on purpose: the delivery leg
+// is priced by the company that performs it, and which company that is only becomes known at
+// routing (`transport-pricing.service.ts`). Rendering it with a bare `.toLocaleString()`
+// therefore threw `Cannot read properties of undefined` on EVERY order in
+// `PENDING_APPROVAL` — and because this card sits inside the order-detail route with no
+// error boundary, the whole screen white-screened. The fuel company admin could not open,
+// and so could not approve, any order at all.
+function money(value: number | undefined | null): string {
+  return typeof value === 'number' ? value.toLocaleString() : '—';
+}
+
 export function OrderDataCard() {
   const { t } = useTranslation();
   const { order } = useOrderDetailContext();
@@ -28,7 +40,7 @@ export function OrderDataCard() {
       <div className="grid grid-cols-2 gap-y-8 gap-x-4 mb-8 border-b border-slate-100 pb-8 px-2">
         <div className="flex flex-col gap-1 text-right">
           <span className="text-slate-400 text-xs font-bold">{t('orders.quantity')}</span>
-          <span className="text-[#162155] text-base font-black">{order.quantityLiters.toLocaleString()} L</span>
+          <span className="text-[#162155] text-base font-black">{money(order.quantityLiters)} L</span>
         </div>
         <div className="flex flex-col gap-1 text-right">
           <span className="text-slate-400 text-xs font-bold">{t('drivers.fuelTypes')}</span>
@@ -43,7 +55,7 @@ export function OrderDataCard() {
         <div className="flex flex-col gap-1 text-right">
           <span className="text-slate-400 text-xs font-bold">{t('orders.finalPrice')}</span>
           <span className="text-[#162155] text-base font-black">
-            {(order.finalPrice ?? order.estimatedPrice).toLocaleString()}
+            {money(order.finalPrice ?? order.estimatedPrice)}
           </span>
         </div>
       </div>
@@ -53,13 +65,13 @@ export function OrderDataCard() {
           <div className="flex flex-col gap-1 text-right">
             <span className="text-slate-400 text-xs font-bold">{t('orders.fuelLineTotal')}</span>
             <span className="text-[#162155] text-sm font-black">
-              {priceBreakdown.fuelLineTotal.toLocaleString()} {priceBreakdown.currency}
+              {money(priceBreakdown.fuelLineTotal)} {priceBreakdown.currency}
             </span>
           </div>
           <div className="flex flex-col gap-1 text-right">
             <span className="text-slate-400 text-xs font-bold">{t('orders.deliveryFee')}</span>
             <span className="text-[#162155] text-sm font-black">
-              {priceBreakdown.deliveryFee.toLocaleString()} {priceBreakdown.currency}
+              {money(priceBreakdown.deliveryFee)} {priceBreakdown.currency}
             </span>
           </div>
           <div className="flex flex-col gap-1 text-right">
@@ -67,7 +79,7 @@ export function OrderDataCard() {
               {t('orders.serviceFee')} ({priceBreakdown.serviceFeePercent}%)
             </span>
             <span className="text-[#162155] text-sm font-black">
-              {priceBreakdown.serviceFee.toLocaleString()} {priceBreakdown.currency}
+              {money(priceBreakdown.serviceFee)} {priceBreakdown.currency}
             </span>
           </div>
           <div className="flex flex-col gap-1 text-right">
@@ -75,7 +87,7 @@ export function OrderDataCard() {
               {t('orders.tax')} ({priceBreakdown.taxRatePercent}%)
             </span>
             <span className="text-[#162155] text-sm font-black">
-              {priceBreakdown.tax.toLocaleString()} {priceBreakdown.currency}
+              {money(priceBreakdown.tax)} {priceBreakdown.currency}
             </span>
           </div>
         </div>

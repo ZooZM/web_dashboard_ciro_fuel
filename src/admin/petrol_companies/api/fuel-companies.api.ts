@@ -94,10 +94,19 @@ export async function onboardFuelCompany(input: OnboardFuelCompanyInput): Promis
   if (input.commercialRegister) {
     formData.append('commercialRegister', input.commercialRegister);
   }
-  const { data } = await apiClient.post<FuelCompany>(apiRoutes.companies.create, formData, {
-    headers: { 'Content-Type': 'multipart/form-data' },
-  });
-  return data;
+  // `POST /companies` answers with an ENVELOPE — `{ company, admin }` — never a bare
+  // company (companies.controller.ts). Typed as `FuelCompany`, `data._id` was
+  // `undefined`, so a successful onboard navigated the operator to
+  // `/admin/petrol-companies/undefined` and fired `?fuelCompanyId=undefined` at the
+  // platform (a 500 and a 400) — the company existed, but the operator saw a broken
+  // page and would reasonably retry into a duplicate-name refusal. The transport
+  // company's own onboarding call already types this envelope correctly.
+  const { data } = await apiClient.post<{ company: FuelCompany; admin: { id: string; email: string } }>(
+    apiRoutes.companies.create,
+    formData,
+    { headers: { 'Content-Type': 'multipart/form-data' } },
+  );
+  return data.company;
 }
 
 // T243/FR-090 — suspend or reinstate. The administrator's own sign-in refusal (with the

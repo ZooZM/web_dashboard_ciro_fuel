@@ -43,7 +43,33 @@ export async function getPricingConfig(companyId: string): Promise<PricingConfig
   }
 }
 
+/**
+ * The four fields the platform's update DTO accepts, and nothing else.
+ *
+ * GET returns MORE than [PricingConfig] declares — the stored config carries
+ * an `updatedAt` the interface never mentioned — and the card seeds its form
+ * straight from that response, so saving echoed the extra field back. The DTO
+ * is `forbidNonWhitelisted`, so the platform refused the whole request with
+ * `property updatedAt should not exist` and the delivery-pricing card could
+ * not be saved AT ALL: not the tanker sizes, not the delivery fee, not the
+ * service fee, not the tax rate.
+ *
+ * Picking the fields explicitly — rather than deleting the one known extra —
+ * means a future server-side addition cannot reintroduce this.
+ */
+function toPricingConfigPayload(config: PricingConfig): PricingConfig {
+  return {
+    deliveryFee: config.deliveryFee,
+    serviceFeePercent: config.serviceFeePercent,
+    taxRatePercent: config.taxRatePercent,
+    tankerCapacitiesLiters: config.tankerCapacitiesLiters,
+  };
+}
+
 export async function setPricingConfig(companyId: string, config: PricingConfig): Promise<PricingConfig> {
-  const { data } = await apiClient.put<PricingConfig>(apiRoutes.companies.pricingConfig(companyId), config);
+  const { data } = await apiClient.put<PricingConfig>(
+    apiRoutes.companies.pricingConfig(companyId),
+    toPricingConfigPayload(config),
+  );
   return data;
 }
