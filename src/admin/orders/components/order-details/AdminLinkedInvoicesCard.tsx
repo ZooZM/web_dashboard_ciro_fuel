@@ -183,7 +183,7 @@ export function AdminLinkedInvoicesCard() {
           <div className="flex items-center gap-4">
             <div className="bg-slate-50 text-slate-500 w-28 h-10 rounded-2xl flex items-center p-1">
               <img src="/transportCompany/orderPage/orderDetails/Sadaad.png" alt="Sadaat" className="h-full object-contain shrink-0" />
-              <span className="font-bold text-sm whitespace-nowrap flex-1 text-center">سداد</span>
+              {/* <span className="font-bold text-sm whitespace-nowrap flex-1 text-center">سداد</span> */}
             </div>
             <button className="w-10 h-10 flex items-center justify-center rounded-lg bg-blue-50 hover:bg-blue-100 transition-colors shrink-0">
               <Download className="w-5 h-5 text-blue-600" />
@@ -191,28 +191,7 @@ export function AdminLinkedInvoicesCard() {
           </div>
         </div>
 
-        {/* 4. Aramco */}
-        <div className="flex items-center justify-between p-3 border border-slate-100 rounded-xl bg-white shadow-sm">
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-blue-600 rounded-2xl p-1 flex items-center justify-center shrink-0">
-              <img src="/transportCompany/orderPage/orderDetails/invoiceIcon.svg" alt="" className="w-full h-full object-contain brightness-0 invert" />
-            </div>
-            <div className="flex flex-col text-right gap-1">
-              <span className="text-[#162155] font-black text-sm">فاتورة أرامكو</span>
-              <span className="text-slate-400 text-[11px] ">صدرت 16/07/2026</span>
-            </div>
-          </div>
 
-          <div className="flex items-center gap-4">
-            <div className="bg-slate-50 text-slate-500 w-28 h-10 rounded-2xl flex items-center p-1">
-              <img src="/transportCompany/orderPage/orderDetails/Aramco.svg" alt="Aramco" className="h-full object-contain shrink-0" />
-              <span className="font-bold text-sm whitespace-nowrap flex-1 text-center">أرامكو</span>
-            </div>
-            <button className="w-10 h-10 flex items-center justify-center rounded-lg bg-blue-50 hover:bg-blue-100 transition-colors shrink-0">
-              <Download className="w-5 h-5 text-blue-600" />
-            </button>
-          </div>
-        </div>
 
         <AramcoInvoiceCard/>
       </div>

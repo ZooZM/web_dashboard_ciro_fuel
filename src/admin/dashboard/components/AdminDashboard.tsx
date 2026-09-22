@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useSession } from '@/stores/session.store';
 import { StatCard } from '@/transport_company/home/components/StatCard';
 import { ProgressOrdersCard } from '@/transport_company/home/components/ProgressOrdersCard';
+import { InvoicesSection } from '@/transport_company/home/components/InvoicesSection';
 import { ActionCard } from '@/transport_company/home/components/ActionCard';
 import { DoughnutSection } from '@/transport_company/home/components/DoughnutSection';
 import { motion } from 'framer-motion';
@@ -126,9 +127,8 @@ export function AdminDashboard() {
           </div>
         )}
 
-        {data && <Overview data={data} />}
 
-        {/* ── Orders in progress ── */}
+        {/* ── Orders in progress & Invoices Bar Chart ── */}
         <motion.div layout className="grid grid-cols-1 gap-4 mb-6">
           <ProgressOrdersCard onViewAllClick={() => navigate('/admin/order-tracking')} />
         </motion.div>
@@ -169,6 +169,8 @@ export function AdminDashboard() {
             />
           </div>
         </div>
+
+        {data && <Overview data={data} />}
 
         {/*
           T036 — REMOVED and recorded (FR-078): `MapTrackingCard`, whose
@@ -253,7 +255,8 @@ function Overview({ data }: { data: PlatformOverview }) {
       </p>
 
       {/* ── Charts ── */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
+        <InvoicesSection />
         <DoughnutSection
           title={t('adminDashboard.charts.companies')}
           total={String(companyTotal)}

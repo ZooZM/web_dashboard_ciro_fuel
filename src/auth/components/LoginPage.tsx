@@ -122,11 +122,10 @@ export function LoginPage() {
                     className="border-0 focus-visible:ring-0 shadow-none h-full rounded-none bg-transparent pt-5 pb-1 px-0 text-sm font-medium placeholder:text-slate-300"
                   />
                 </div>
-                <div className="flex items-center px-4 border-r border-slate-200 text-slate-600 bg-transparent h-10 shrink-0 gap-1.5" dir="ltr">
+                <div className="flex items-center px-3 border-r border-slate-200 text-slate-600 bg-transparent h-10 shrink-0 gap-1.5" dir="ltr">
                   <img src="/signIn/phone.svg" alt="Phone" className="w-4 h-4 ml-1 object-contain" />
                   <div className="w-[1px] h-10 bg-slate-200 mx-1"></div>
                   <span className="text-xs font-medium mt-0.5 text-slate-600">+966</span>
-                  <ChevronDown className="w-3 h-3 mt-1.5 text-slate-400" />
                 </div>
               </div>
               {fieldError && (

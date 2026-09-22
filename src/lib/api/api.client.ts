@@ -6,6 +6,7 @@ import type { RefreshResponse } from '@/auth/types';
 
 export const apiClient = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
+  headers: { 'ngrok-skip-browser-warning': 'true' },
   // NOTE: the platform issues no auth cookie — the refresh token travels in the request
   // body (see runRefresh() below, feature 013 T024). `withCredentials` is harmless but
   // does nothing for auth today; left on rather than removed, since some other same-site
