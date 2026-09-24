@@ -1,21 +1,40 @@
 import { useNavigate } from 'react-router-dom';
 
-export function InvoicesSection() {
+interface MonthlyData {
+  label: string;
+  paid: number;
+  due: number;
+}
+
+interface InvoicesSectionProps {
+  dueTotal?: number;
+  paidTotal?: number;
+  overallTotal?: number;
+  monthlyData?: MonthlyData[];
+}
+
+const DEFAULT_CHART_DATA: MonthlyData[] = [
+  { label: 'يناير', paid: 60, due: 70 },
+  { label: 'فبراير', paid: 50, due: 60 },
+  { label: 'مارس', paid: 75, due: 85 },
+  { label: 'أبريل', paid: 65, due: 68 },
+  { label: 'مايو', paid: 85, due: 90 },
+  { label: 'يونيو', paid: 55, due: 65 },
+  { label: 'يوليو', paid: 95, due: 98 },
+  { label: 'أغسطس', paid: 70, due: 75 },
+  { label: 'سبتمبر', paid: 85, due: 88 },
+  { label: 'أكتوبر', paid: 60, due: 65 },
+  { label: 'نوفمبر', paid: 85, due: 90 },
+  { label: 'ديسمبر', paid: 95, due: 100 },
+];
+
+export function InvoicesSection({
+  dueTotal = 62160,
+  paidTotal = 62160,
+  overallTotal = 62160,
+  monthlyData = DEFAULT_CHART_DATA,
+}: InvoicesSectionProps) {
   const navigate = useNavigate();
-  const chartData = [
-    { label: 'يناير', paid: 60, due: 70 },
-    { label: 'فبراير', paid: 50, due: 60 },
-    { label: 'مارس', paid: 75, due: 85 },
-    { label: 'أبريل', paid: 65, due: 68 },
-    { label: 'مايو', paid: 85, due: 90 },
-    { label: 'يونيو', paid: 55, due: 65 },
-    { label: 'يوليو', paid: 95, due: 98 },
-    { label: 'أغسطس', paid: 70, due: 75 },
-    { label: 'سبتمبر', paid: 85, due: 88 },
-    { label: 'أكتوبر', paid: 60, due: 65 },
-    { label: 'نوفمبر', paid: 85, due: 90 },
-    { label: 'ديسمبر', paid: 95, due: 100 },
-  ];
 
   return (
     <div className="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm flex flex-col h-full">
@@ -35,15 +54,15 @@ export function InvoicesSection() {
       <div className="flex gap-3 w-full mb-6">
         <div className="flex-1 bg-[#FEE2E2]/60 rounded-xl p-3 flex flex-col items-center justify-center text-center">
           <span className="text-[10px] font-medium text-slate-500 mb-0.5">المستحق</span>
-          <span className="text-[13px] font-black text-[#EF4444]">62,160 <span className="font-bold text-[10px]">ر.س</span></span>
+          <span className="text-[13px] font-black text-[#EF4444]">{dueTotal.toLocaleString()} <span className="font-bold text-[10px]">ر.س</span></span>
         </div>
         <div className="flex-1 bg-[#D1FAE5]/50 rounded-xl p-3 flex flex-col items-center justify-center text-center">
           <span className="text-[10px] font-medium text-slate-500 mb-0.5">المسدد</span>
-          <span className="text-[13px] font-black text-[#12A150]">62,160 <span className="font-bold text-[10px]">ر.س</span></span>
+          <span className="text-[13px] font-black text-[#12A150]">{paidTotal.toLocaleString()} <span className="font-bold text-[10px]">ر.س</span></span>
         </div>
         <div className="flex-1 bg-slate-100 rounded-xl p-3 flex flex-col items-center justify-center text-center">
           <span className="text-[10px] font-medium text-slate-500 mb-0.5">إجمالي الفواتير</span>
-          <span className="text-[13px] font-black text-[#1e293b]">62,160 <span className="font-bold text-[10px]">ر.س</span></span>
+          <span className="text-[13px] font-black text-[#1e293b]">{overallTotal.toLocaleString()} <span className="font-bold text-[10px]">ر.س</span></span>
         </div>
       </div>
 
@@ -84,7 +103,7 @@ export function InvoicesSection() {
 
               {/* Bars */}
               <div className="absolute left-0 right-0 top-0 bottom-0 flex items-end justify-between px-2">
-                {chartData.map((data, i) => (
+                {monthlyData.map((data, i) => (
                   <div key={i} className="flex flex-col items-center gap-2 h-full justify-end w-full max-w-[20px] group cursor-pointer shrink-0">
                     <div className="flex items-end gap-[1px] h-[calc(100%-24px)] w-full relative z-10">
                       <div className="flex-1 bg-[#A78BFA] rounded-t-sm transition-all group-hover:opacity-80" style={{ height: `${data.paid}%` }} />

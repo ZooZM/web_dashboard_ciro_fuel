@@ -177,14 +177,24 @@ export function AssignLists() {
           <div className="flex items-center bg-slate-100 p-1 rounded-full gap-1">
             <button
               onClick={() => setTankFilter(tankFilter === 'ALUMINIUM' ? 'all' : 'ALUMINIUM')}
-              className={`px-3 py-1 rounded-full text-xs font-bold transition-colors ${tankFilter === 'ALUMINIUM' ? 'bg-white text-slate-800 shadow-sm' : 'text-slate-500'}`}
+              className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold transition-colors ${tankFilter === 'ALUMINIUM' ? 'bg-white text-slate-800 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
             >
+              <img 
+                src="/petrolCompany/orderDetails/aluminum.svg" 
+                alt="" 
+                className={`w-3.5 h-3.5 object-contain transition-opacity ${tankFilter === 'ALUMINIUM' ? 'opacity-100' : 'opacity-60 grayscale'}`} 
+              />
               {t('trucks.materialAluminium')}
             </button>
             <button
               onClick={() => setTankFilter(tankFilter === 'IRON' ? 'all' : 'IRON')}
-              className={`px-3 py-1 rounded-full text-xs font-bold transition-colors ${tankFilter === 'IRON' ? 'bg-white text-slate-800 shadow-sm' : 'text-slate-500'}`}
+              className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold transition-colors ${tankFilter === 'IRON' ? 'bg-white text-slate-800 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
             >
+              <img 
+                src="/petrolCompany/orderDetails/iron.svg" 
+                alt="" 
+                className={`w-3.5 h-3.5 object-contain transition-opacity ${tankFilter === 'IRON' ? 'opacity-100' : 'opacity-60 grayscale'}`} 
+              />
               {t('trucks.materialIron')}
             </button>
           </div>

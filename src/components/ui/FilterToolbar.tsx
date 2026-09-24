@@ -131,67 +131,7 @@ export function FilterToolbar({
       <div className="flex items-center justify-between p-4 flex-wrap gap-4">
         {/* Right side (Search & Buttons) in RTL */}
         <div className="flex items-center gap-4 flex-1">
-          {/* Sort Button */}
-          <div className="relative" ref={sortRef}>
-            <button 
-              onClick={() => setIsSortOpen(!isSortOpen)}
-              className={cn(
-                "flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-colors",
-                isSortOpen ? "bg-blue-50 text-blue-600" : "text-slate-700 hover:bg-slate-50"
-              )}
-            >
-              <img src="/transportCompany/orderPage/arrange.svg" className='w-4 h-4' alt="" />
-              ترتيب
-            </button>
-            
-            {/* Sort Dropdown */}
-            {isSortOpen && (
-              <div className="absolute right-0 top-full mt-2 w-[240px] bg-white rounded-xl shadow-[0_4px_20px_-4px_rgba(0,0,0,0.1)] border border-slate-100 overflow-hidden z-50">
-                {sortGroups.map((group, index) => (
-                  <div key={group.id} className={cn("flex", index !== sortGroups.length - 1 && "border-b border-slate-100")}>
-                    {/* Icon column (Right side in RTL) */}
-                    <div className="w-14 shrink-0 flex items-center justify-center border-l border-slate-100 bg-white">
-                      {group.icon}
-                    </div>
-                    {/* Options column (Left side in RTL) */}
-                    <div className="flex-1 flex flex-col bg-white">
-                      {group.items.map((item, itemIdx) => (
-                        <button 
-                          key={item.id} 
-                          className={cn(
-                            "flex items-center justify-start gap-4 w-full px-4 py-2 hover:bg-blue-50 group transition-colors",
-                            itemIdx !== group.items.length - 1 && "border-b border-slate-50"
-                          )}
-                        >
-                          {item.direction === 'desc' ? (
-                            <TrendingDown className="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-500" />
-                          ) : (
-                            <TrendingUp className="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-500" />
-                          )}
-                          <span className="text-[13px] font-bold text-slate-700 group-hover:text-blue-700 ">{item.label}</span>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-
-          <div className="w-px h-6 bg-slate-200"></div>
-
-          {/* Filter Button */}
-          <button 
-            onClick={() => setIsFilterOpen(!isFilterOpen)}
-            className={cn(
-              "flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-colors",
-              isFilterOpen || Object.keys(activeFilters).length > 0 ? "text-blue-600" : "text-slate-700 hover:bg-slate-50"
-            )}
-          >
-            <img src="/transportCompany/orderPage/filter.svg" className='w-4 h-4' alt="" />
-            تصفية
-          </button>
-
+      
           {/* Search Input */}
           <div className="relative w-full max-w-[300px]">
             <input 

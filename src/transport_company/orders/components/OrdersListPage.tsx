@@ -163,6 +163,8 @@ export function OrdersListPage() {
           onPrev={() => setCursors((c) => c.slice(0, -1))}
           onNext={() => data?.nextCursor && setCursors((c) => [...c, data.nextCursor ?? undefined])}
           className="border-t border-slate-200"
+          itemCount={orders.length}
+          itemName="طلب"
         />
       </div>
     </div>

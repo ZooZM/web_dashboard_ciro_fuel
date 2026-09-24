@@ -7,6 +7,24 @@ export interface OrderSummary {
   completedInPeriod: number;
   driversOnDuty: number;
   outstandingSettlements: { amount: number; currency: string; count: number };
+  
+  // Newly added for charts
+  invoicesSummary?: {
+    dueTotal: number;
+    paidTotal: number;
+    overallTotal: number;
+    monthlyData: { label: string; paid: number; due: number }[];
+  };
+  trucksStatus?: {
+    available: number;
+    busy: number;
+    outOfService: number;
+  };
+  driversStatus?: {
+    onTrip: number;
+    available: number;
+    onLeave: number;
+  };
 }
 
 /** FR-067: the whole dashboard home in one request. */

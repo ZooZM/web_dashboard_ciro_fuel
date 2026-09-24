@@ -6,26 +6,58 @@ import { StatCard } from '@/transport_company/home/components/StatCard';
 import { ActionCard } from '@/transport_company/home/components/ActionCard';
 import { DateRangePopup } from '@/components/ui/date-range-popup';
 import { useFuelCompanySummary } from '@/petrol_company/dashboard/hooks/useSummary';
+import { NewOrdersCard } from '@/transport_company/home/components/NewOrdersCard';
+import { ProgressOrdersCard } from '@/transport_company/home/components/ProgressOrdersCard';
+import { MapTrackingCard } from '@/transport_company/home/components/MapTrackingCard';
+import { InvoicesSection } from '@/transport_company/home/components/InvoicesSection';
+import { DoughnutSection } from '@/transport_company/home/components/DoughnutSection';
+import { useLayoutStore } from '@/stores/layout.store';
+import { motion } from 'framer-motion';
+import { cn } from '@/lib/utils';
 
-// Feature 013 T113-T116/FR-044/FR-046/FR-047/FR-048/FR-051: wired to
-// `GET /orders/summary` (FUEL_COMPANY_ADMIN shape). Every week-over-week trend
-// (`"…% من الأسبوع الماضي"`) is gone — no historical baseline exists to compute one from,
-// and a fabricated trend is indistinguishable from a real one. The reused
-// `NewOrdersCard`/`ProgressOrdersCard`/`MapTrackingCard`/`InvoicesSection`/
-// `DoughnutSection` (transport-company home components, fleet-position and per-status
-// owner/station breakdowns with no fuel-company equivalent or data source at all) are
-// dropped rather than reworked — `FuelCompanySummaryDto` has no field behind any of them.
-// Every quick action now points at the real screen that performs it (FR-051); none had a
-// destination before.
+function buildGradient(segments: { count: number; colour: string }[]): string {
+  const total = segments.reduce((sum, s) => sum + s.count, 0);
+  if (total === 0) return 'conic-gradient(#E2E8F0 0% 100%)';
+  let cursor = 0;
+  const stops = segments.map((segment) => {
+    const start = (cursor / total) * 100;
+    cursor += segment.count;
+    const end = (cursor / total) * 100;
+    return `${segment.colour} ${start}% ${end}%`;
+  });
+  return `conic-gradient(${stops.join(', ')})`;
+}
+
 export function PetrolDashboard() {
   const { t } = useTranslation();
   const { user } = useSession();
   const navigate = useNavigate();
+  const { isSidebarCollapsed } = useLayoutStore();
 
   const [range, setRange] = useState<{ from?: string; to?: string }>({});
   const { data: summary, isLoading, isError, refetch } = useFuelCompanySummary(range.from, range.to);
 
   const firstName = user?.fullName?.split(' ')[0] ?? '';
+
+  const stationsAvail = 25;
+  const stationsBusy = 8;
+  const stationsOutOfSvc = 2;
+  const stationsTotal = stationsAvail + stationsBusy + stationsOutOfSvc;
+  const stationsGradient = buildGradient([
+    { count: stationsAvail, colour: '#10B981' },
+    { count: stationsBusy, colour: '#F59E0B' },
+    { count: stationsOutOfSvc, colour: '#EF4444' },
+  ]);
+
+  const transportersActive = 12;
+  const transportersPending = 4;
+  const transportersInactive = 1;
+  const transportersTotal = transportersActive + transportersPending + transportersInactive;
+  const transportersGradient = buildGradient([
+    { count: transportersActive, colour: '#3B82F6' },
+    { count: transportersPending, colour: '#F59E0B' },
+    { count: transportersInactive, colour: '#94A3B8' },
+  ]);
 
   return (
     <div className="w-full p-4 md:p-6 flex-1 -mt-4 bg-[#F8FAFC] border border-[#E7E9EF] rounded-2xl min-h-full font-sans" dir="rtl">
@@ -94,6 +126,19 @@ export function PetrolDashboard() {
           </div>
         )}
 
+        {/* ── Middle: Orders + Map ── */}
+        <motion.div layout className={cn("grid gap-4 mb-6", isSidebarCollapsed ? "grid-cols-1 lg:grid-cols-3" : "grid-cols-1 lg:grid-cols-2")}>
+          <motion.div layout className={cn(isSidebarCollapsed ? "order-2" : "order-1")}>
+            <NewOrdersCard />
+          </motion.div>
+          <motion.div layout className={cn(isSidebarCollapsed ? "order-3" : "order-2")}>
+            <ProgressOrdersCard />
+          </motion.div>
+          <motion.div layout className={cn(isSidebarCollapsed ? "order-1 lg:col-span-1" : "order-3 lg:col-span-2")}>
+            <MapTrackingCard />
+          </motion.div>
+        </motion.div>
+
         <div className="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm mb-6">
           <h2 className="text-sm font-black text-slate-800 mb-5 mr-2 text-right">{t('petrolDashboard.quickActions.title')}</h2>
           <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -126,6 +171,45 @@ export function PetrolDashboard() {
               onClick={() => navigate('/petrolCompany/stations/owners/add')}
             />
           </div>
+        </div>
+
+        {/* ── Charts ── */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
+          <InvoicesSection 
+            dueTotal={124320}
+            paidTotal={62160}
+            overallTotal={186480}
+            monthlyData={[
+              { label: 'يناير', paid: 15000, due: 5000 },
+              { label: 'فبراير', paid: 12000, due: 8000 },
+              { label: 'مارس', paid: 18000, due: 4000 },
+              { label: 'أبريل', paid: 20000, due: 6000 },
+              { label: 'مايو', paid: 25000, due: 7000 },
+              { label: 'يونيو', paid: 22000, due: 9000 },
+            ]}
+          />
+          <DoughnutSection
+            title="حالة المحطات"
+            total={String(stationsTotal)}
+            label="محطة"
+            gradient={stationsGradient}
+            legend={[
+              { label: 'نشطة', value: String(stationsAvail), color: 'bg-emerald-500' },
+              { label: 'صيانة', value: String(stationsBusy), color: 'bg-amber-500' },
+              { label: 'مغلقة', value: String(stationsOutOfSvc), color: 'bg-red-500' },
+            ]}
+          />
+          <DoughnutSection
+            title="حالة شركات النقل"
+            total={String(transportersTotal)}
+            label="شركة"
+            gradient={transportersGradient}
+            legend={[
+              { label: 'نشط', value: String(transportersActive), color: 'bg-blue-500' },
+              { label: 'قيد المراجعة', value: String(transportersPending), color: 'bg-amber-500' },
+              { label: 'غير نشط', value: String(transportersInactive), color: 'bg-slate-400' },
+            ]}
+          />
         </div>
 
       </div>

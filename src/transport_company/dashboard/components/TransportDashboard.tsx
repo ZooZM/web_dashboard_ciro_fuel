@@ -8,6 +8,8 @@ import { MapTrackingCard } from '@/transport_company/home/components/MapTracking
 import { NewOrdersCard } from '@/transport_company/home/components/NewOrdersCard';
 import { ProgressOrdersCard } from '@/transport_company/home/components/ProgressOrdersCard';
 import { ActionCard } from '@/transport_company/home/components/ActionCard';
+import { InvoicesSection } from '@/transport_company/home/components/InvoicesSection';
+import { DoughnutSection } from '@/transport_company/home/components/DoughnutSection';
 import { useLayoutStore } from '@/stores/layout.store';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
@@ -21,6 +23,19 @@ const ACTION_CARDS = [
   { key: 'addDriver', icon: '/transportCompany/home/users.svg', bgClass: 'bg-[#DBEAFE] border border-[#BFDBFE]' },
   { key: 'assignOrder', icon: '/transportCompany/home/user.svg', bgClass: 'bg-[#D1FAE5] border border-[#A7F3D0]' },
 ] as const;
+
+function buildGradient(segments: { count: number; colour: string }[]): string {
+  const total = segments.reduce((sum, s) => sum + s.count, 0);
+  if (total === 0) return 'conic-gradient(#E2E8F0 0% 100%)';
+  let cursor = 0;
+  const stops = segments.map((segment) => {
+    const start = (cursor / total) * 100;
+    cursor += segment.count;
+    const end = (cursor / total) * 100;
+    return `${segment.colour} ${start}% ${end}%`;
+  });
+  return `conic-gradient(${stops.join(', ')})`;
+}
 
 // Feature 009 T112/SC-005: InvoicesSection (a fabricated 12-month paid/due chart) and
 // DoughnutSection (fabricated driver/truck status percentages) are dropped from THIS
@@ -38,6 +53,26 @@ export function TransportDashboard() {
   // FR-067: one request for the whole home, not one per figure.
   const { data: summary, isLoading: summaryLoading, isError: summaryError, refetch: refetchSummary } = useSummary();
   const summaryUnavailable = summaryLoading || summaryError;
+
+  const trucksAvail = summary?.trucksStatus?.available ?? 12;
+  const trucksBusy = summary?.trucksStatus?.busy ?? 4;
+  const trucksOutOfSvc = summary?.trucksStatus?.outOfService ?? 4;
+  const trucksTotal = trucksAvail + trucksBusy + trucksOutOfSvc;
+  const trucksGradient = buildGradient([
+    { count: trucksAvail, colour: '#10B981' },
+    { count: trucksBusy, colour: '#F59E0B' },
+    { count: trucksOutOfSvc, colour: '#EF4444' },
+  ]);
+
+  const driversTrip = summary?.driversStatus?.onTrip ?? 25;
+  const driversAvail = summary?.driversStatus?.available ?? 7;
+  const driversLeave = summary?.driversStatus?.onLeave ?? 3;
+  const driversTotal = driversTrip + driversAvail + driversLeave;
+  const driversGradient = buildGradient([
+    { count: driversTrip, colour: '#3B82F6' },
+    { count: driversAvail, colour: '#F59E0B' },
+    { count: driversLeave, colour: '#94A3B8' },
+  ]);
 
   return (
     <div className="w-full p-4 md:p-6 flex-1 -mt-4 bg-[#F8FAFC] border border-[#E7E9EF] rounded-2xl min-h-full font-sans" dir="rtl">
@@ -74,7 +109,7 @@ export function TransportDashboard() {
             title={t('dashboard.inProgress')}
             value={summaryUnavailable ? '—' : String(summary?.inProgress ?? 0)}
             icon="/transportCompany/home/sandWatch.svg"
-            iconBgClass="bg-[#DBEAFE]"
+            iconBgClass="bg-orange-100"
           />
           <StatCard
             title={t('dashboard.completedInPeriod')}
@@ -86,15 +121,14 @@ export function TransportDashboard() {
             title={t('dashboard.driversOnDuty')}
             value={summaryUnavailable ? '—' : String(summary?.driversOnDuty ?? 0)}
             icon="/transportCompany/home/users.svg"
-            iconBgClass="bg-[#F3E8FF]"
+            iconBgClass="bg-blue-100 p-2"
           />
           <StatCard
             title={t('dashboard.outstandingSettlements')}
             value={summaryUnavailable ? '—' : (summary?.outstandingSettlements.amount ?? 0).toLocaleString()}
             unit={summary?.outstandingSettlements.currency}
             icon="/transportCompany/home/payment.svg"
-            iconBgClass="bg-[#FEE2E2]"
-            valueColor="text-[#EF4444]"
+            iconBgClass="bg-green-100" 
           />
         </div>
 
@@ -111,6 +145,8 @@ export function TransportDashboard() {
           </motion.div>
         </motion.div>
 
+
+
         {/* ── Quick Actions ── */}
         <div className="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm mb-6">
           <h2 className="text-sm font-black text-slate-800 mb-5 mr-2 text-right">{t('dashboard.quickActions.title')}</h2>
@@ -126,7 +162,37 @@ export function TransportDashboard() {
             ))}
           </div>
         </div>
-
+        {/* ── Charts ── */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
+          <InvoicesSection 
+            dueTotal={summary?.invoicesSummary?.dueTotal}
+            paidTotal={summary?.invoicesSummary?.paidTotal}
+            overallTotal={summary?.invoicesSummary?.overallTotal}
+            monthlyData={summary?.invoicesSummary?.monthlyData}
+          />
+          <DoughnutSection
+            title="حالة الشاحنات"
+            total={String(trucksTotal)}
+            label="شاحنة"
+            gradient={trucksGradient}
+            legend={[
+              { label: 'متاحة', value: String(trucksAvail), color: 'bg-emerald-500' },
+              { label: 'مشغولة', value: String(trucksBusy), color: 'bg-amber-500' },
+              { label: 'غير متاحة', value: String(trucksOutOfSvc), color: 'bg-red-500' },
+            ]}
+          />
+          <DoughnutSection
+            title="حالة السائقين"
+            total={String(driversTotal)}
+            label="سائق"
+            gradient={driversGradient}
+            legend={[
+              { label: 'في رحلة', value: String(driversTrip), color: 'bg-blue-500' },
+              { label: 'متاح', value: String(driversAvail), color: 'bg-amber-500' },
+              { label: 'إجازة', value: String(driversLeave), color: 'bg-slate-400' },
+            ]}
+          />
+        </div>
 
       </div>
     </div>

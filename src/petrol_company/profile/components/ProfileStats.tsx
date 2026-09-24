@@ -14,33 +14,33 @@ export function ProfileStats() {
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
-      <div className="bg-white border border-[#E7E9EF] rounded-2xl p-5 shadow-sm flex items-center justify-start gap-4 w-full flex-row-reverse">
-        <div className="flex flex-col gap-1 text-right ml-auto">
+      <div className="bg-white border border-[#E7E9EF] rounded-2xl p-5 shadow-sm flex items-center justify-start gap-4 w-full">
+        <div className="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center shrink-0 border border-blue-100">
+          <img src="/petrolCompany/owner/user.svg" alt="" className="w-6 h-6 object-contain" />
+        </div>
+        <div className="flex flex-col gap-1 text-right">
           <span className="text-[#858C95] font-bold text-xs">{t('profile.stationOwnersCount')}</span>
           <span className="text-[#162155] font-black text-xl">{summary?.stationOwnersCount ?? '—'}</span>
         </div>
-        <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center shrink-0 border border-blue-100">
-          <img src="/petrolCompany/owner/user.svg" alt="" className="w-5 h-5" />
-        </div>
       </div>
 
-      <div className="bg-white border border-[#E7E9EF] rounded-2xl p-5 shadow-sm flex items-center justify-start gap-4 w-full flex-row-reverse">
-        <div className="flex flex-col gap-1 text-right ml-auto">
+      <div className="bg-white border border-[#E7E9EF] rounded-2xl p-5 shadow-sm flex items-center justify-start gap-4 w-full">
+        <div className="w-12 h-12 rounded-full bg-orange-50 flex items-center justify-center shrink-0 border border-orange-100">
+          <img src="/transportCompany/HelpPage/station.svg" alt="" className="w-6 h-6 object-contain" />
+        </div>
+        <div className="flex flex-col gap-1 text-right">
           <span className="text-[#858C95] font-bold text-xs">{t('profile.stationsCount')}</span>
           <span className="text-[#162155] font-black text-xl">{summary?.stationsCount ?? '—'}</span>
         </div>
-        <div className="w-10 h-10 rounded-full bg-orange-50 flex items-center justify-center shrink-0 border border-orange-100">
-          <img src="/petrolCompany/station/station.svg" alt="" className="w-5 h-5" />
-        </div>
       </div>
 
-      <div className="bg-white border border-[#E7E9EF] rounded-2xl p-5 shadow-sm flex items-center justify-start gap-4 w-full flex-row-reverse">
-        <div className="flex flex-col gap-1 text-right ml-auto">
+      <div className="bg-white border border-[#E7E9EF] rounded-2xl p-5 shadow-sm flex items-center justify-start gap-4 w-full">
+        <div className="w-12 h-12 rounded-full bg-green-50 flex items-center justify-center shrink-0 border border-green-100">
+          <img src="/petrolCompany/greenTruck.svg" alt="" className="w-6 h-6 object-contain" />
+        </div>
+        <div className="flex flex-col gap-1 text-right">
           <span className="text-[#858C95] font-bold text-xs">{t('profile.transportersCount')}</span>
           <span className="text-[#162155] font-black text-xl">{transporters?.length ?? '—'}</span>
-        </div>
-        <div className="w-10 h-10 rounded-full bg-green-50 flex items-center justify-center shrink-0 border border-green-100">
-          <img src="/petrolCompany/transporters/truck.svg" alt="" className="w-5 h-5" />
         </div>
       </div>
     </div>

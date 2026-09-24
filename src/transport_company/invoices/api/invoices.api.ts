@@ -6,6 +6,7 @@ import type { Invoice } from '@/transport_company/invoices/types';
 export interface InvoiceListParams {
   state?: 'ISSUED' | 'SETTLED' | 'VOID';
   cursor?: string;
+  invoiceId?: string;
 }
 
 export async function listInvoices(params: InvoiceListParams): Promise<CursorPage<Invoice>> {

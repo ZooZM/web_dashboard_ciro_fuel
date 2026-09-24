@@ -130,7 +130,7 @@ export const NAV_BY_ROLE: Partial<Record<Role, NavEntry[]>> = {
     { to: '/petrolCompany/companies', icon: '/sideBar/greyTruck.svg', label: 'شركات النقل' },
     { to: '/petrolCompany/stations', icon: '/sideBar/stations.svg', label: 'المحطات', iconClassName: 'h-7 w-7' },
     { to: '/petrolCompany/invoices', icon: '/sideBar/order.svg', label: 'الفواتير و المدفوعات' },
-    { to: '/petrolCompany/support', icon: '/petrolCompany/support.svg', label: 'الدعم' },
+    { to: '/petrolCompany/support', icon: '/sideBar/customerService.svg', label: 'الدعم' },
     { to: '/petrolCompany/PlatformAccountPage', icon: '/sideBar/Property%201=Transaction.svg', label: 'حساب المنصة' },
     { to: '/petrolCompany/notifications', icon: '/sideBar/notification.svg', label: 'الاشعارات' },
   ],
