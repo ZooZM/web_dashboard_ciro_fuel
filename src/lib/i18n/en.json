@@ -34,7 +34,8 @@
     "notAvailable": "Not available",
     "viewDetails": "View details",
     "choose": "Choose…",
-    "saving": "Saving…"
+    "saving": "Saving…",
+    "previous": "Previous"
   },
   "auth": {
     "login": {
@@ -187,7 +188,13 @@
     "comingSoon": "Coming soon",
     "timeline": "Timeline",
     "overridden": "Overridden",
-    "noTransporterYet": "Not routed to a transporter yet"
+    "noTransporterYet": "Not routed to a transporter yet",
+    "paymentMethod": "Payment method",
+    "subtitle": "Manage and follow every fuel transport order",
+    "completedThisMonth": "Completed this month",
+    "searchById": "Search by order number...",
+    "noMatch": "No order with this number",
+    "station": "Station"
   },
   "drivers": {
     "title": "Drivers",
@@ -207,7 +214,15 @@
     "locationOnMap": "Location on the map",
     "trackTruck": "Track the truck",
     "name": "Name",
-    "phone": "Phone"
+    "phone": "Phone",
+    "total": "Total drivers",
+    "activePlural": "Active",
+    "inactivePlural": "Inactive",
+    "available": "Available",
+    "onMission": "On a delivery",
+    "searchPlaceholder": "Search by driver name, phone or email...",
+    "itemName": "driver",
+    "noMatch": "No drivers match your search"
   },
   "clients": {
     "title": "Clients",
@@ -410,7 +425,9 @@
     "selectDelivery": "Select a delivery to track",
     "viewOrder": "View order",
     "stalePosition": "Position may be stale — last updated {{seconds}}s ago",
-    "liveTitle": "Live shipment tracking"
+    "liveTitle": "Live shipment tracking",
+    "searchPlaceholder": "Search by order number or address...",
+    "noMatch": "No matching orders"
   },
   "stalled": {
     "title": "Stalled delivery",

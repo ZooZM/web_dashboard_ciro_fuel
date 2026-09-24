@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useTracking } from './TrackingContext';
@@ -10,7 +10,15 @@ import { useTracking } from './TrackingContext';
 export function TrackingOrderDetails() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { pathname } = useLocation();
   const { selectedOrder } = useTracking();
+  // This page is mounted under /admin, /petrolCompany and /transport; each has its own
+  // order-detail route, so the button stays inside the surface it was opened from.
+  const basePath = pathname.startsWith('/admin')
+    ? '/admin'
+    : pathname.startsWith('/petrolCompany')
+      ? '/petrolCompany'
+      : '/transport';
 
   if (!selectedOrder) {
     return (
@@ -24,7 +32,7 @@ export function TrackingOrderDetails() {
     <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm flex flex-col gap-4 w-full">
       <div className="flex flex-row-reverse items-start justify-between">
         <button
-          onClick={() => navigate(`/transport/orders/${selectedOrder._id}`)}
+          onClick={() => navigate(`${basePath}/orders/${selectedOrder._id}`)}
           className="flex items-center gap-2 bg-blue-600 text-white px-5 py-2.5 rounded-xl text-sm font-bold hover:bg-blue-700 transition-colors shrink-0"
         >
           {t('tracking.viewOrder')}

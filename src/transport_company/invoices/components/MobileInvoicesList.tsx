@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { useSettleInvoice } from '@/transport_company/invoices/hooks/useInvoices';
 import type { Invoice } from '@/transport_company/invoices/types';
+import { PaymentMethodPill } from '@/transport_company/orders/components/PaymentMethodPill';
 
 export function MobileInvoicesList({ invoices }: { invoices: Invoice[] }) {
   const { t } = useTranslation();
@@ -34,6 +35,12 @@ export function MobileInvoicesList({ invoices }: { invoices: Invoice[] }) {
             <div className="flex flex-col gap-1 text-right">
               <span className="text-slate-400 text-[10px] font-bold">{t('invoices.issued')}</span>
               <span className="text-slate-800 font-bold text-sm" dir="ltr">{new Date(invoice.createdAt).toLocaleDateString()}</span>
+            </div>
+            <div className="flex flex-col gap-1 text-right col-span-2">
+              <span className="text-slate-400 text-[10px] font-bold mb-1">{t('orders.paymentMethod')}</span>
+              <div>
+                <PaymentMethodPill method={invoice.method} />
+              </div>
             </div>
           </div>
 

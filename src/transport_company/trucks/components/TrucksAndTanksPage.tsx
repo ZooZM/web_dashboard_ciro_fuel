@@ -33,7 +33,7 @@ export function TrucksAndTanksPage() {
   const entityName = activeTab === 'tanks' ? t('trucks.tankEntity') : t('trucks.truckEntity');
 
   return (
-    <div className="p-6 w-full h-full space-y-6" dir="rtl">
+    <div className="p-6 w-full h-full space-y-6 border border-[#E7E9EF] rounded-2xl" dir="rtl">
       <div className="mb-6">
         <h1 className="text-2xl font-black text-blue-900 mb-2">{t('trucks.title')}</h1>
         <p className="text-sm font-bold text-slate-400">{t('trucks.subtitle')}</p>

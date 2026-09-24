@@ -14,6 +14,16 @@ vi.mock('@/transport_company/orders/hooks/useOrders', () => ({
   useOrdersList: () => mockQuery,
 }));
 
+// The page's stat cards read `GET /orders/summary` — a separate query from the list whose
+// three states this suite is about, so it is held steady (and successful) here.
+vi.mock('@/transport_company/dashboard/hooks/useSummary', () => ({
+  useSummary: () => ({
+    data: { awaitingAssignment: 0, inProgress: 0, completedInPeriod: 0, driversOnDuty: 0 },
+    isLoading: false,
+    isError: false,
+  }),
+}));
+
 vi.mock('react-router-dom', async (importOriginal) => ({
   ...(await importOriginal<typeof import('react-router-dom')>()),
   useNavigate: () => vi.fn(),

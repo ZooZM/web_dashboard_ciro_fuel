@@ -17,7 +17,7 @@ interface Notification {
   isRead: boolean;
 }
 
-const notifications: Notification[] = [
+const initialNotifications: Notification[] = [
   {
     id: '1',
     type: 'success',
@@ -36,8 +36,8 @@ const notifications: Notification[] = [
     title: 'تم حل العطل',
     orderId: 'ORD-2024-256',
     description: 'يمكنك الآن مواصلة تتبع شحناتك لحظة بلحظة. نرجو ان تقوم بإبلاغ الدعم في حال وجود أي أعطال أو مشاكل.',
-    time: '06:26 م',
-    elapsed: 'قبل 5 دقائق',
+    time: '05:10 م',
+    elapsed: 'قبل ساعة',
     icon: '/transportCompany/notification/about.svg',
     date: 'الثلاثاء 10 أغسطس 2026',
     isRead: false,
@@ -48,8 +48,8 @@ const notifications: Notification[] = [
     title: 'تم تسليم الطلب',
     orderId: 'ORD-2024-256',
     description: 'تم قبول طلب الوقود ORD-2024-256 وجاري تحضير الشحنة الآن.',
-    time: '06:26 م',
-    elapsed: 'قبل 5 دقائق',
+    time: '02:30 م',
+    elapsed: 'قبل 4 ساعات',
     icon: '/transportCompany/notification/notification.svg',
     date: 'الثلاثاء 10 أغسطس 2026',
     isRead: false,
@@ -60,11 +60,11 @@ const notifications: Notification[] = [
     title: 'تم تحصيل الفاتورة',
     orderId: 'ORD-2024-256',
     description: 'لديك فاتورة مستحقة الدفع بقيمة 12,450 ريال. يرجى السداد قبل نهاية الشهر.',
-    time: '06:26 م',
-    elapsed: 'قبل 5 دقائق',
+    time: '11:00 ص',
+    elapsed: 'قبل 7 ساعات',
     icon: '/transportCompany/notification/invoice.svg',
     date: 'الثلاثاء 10 أغسطس 2026',
-    isRead: false,
+    isRead: true,
   },
   {
     id: '5',
@@ -72,19 +72,19 @@ const notifications: Notification[] = [
     title: 'تم تسليم الطلب',
     orderId: 'ORD-2024-256',
     description: 'تم قبول طلب الوقود ORD-2024-256 وجاري تحضير الشحنة الآن.',
-    time: '06:26 م',
-    elapsed: 'قبل 5 دقائق',
+    time: '09:15 م',
+    elapsed: 'قبل يوم',
     icon: '/transportCompany/notification/notification.svg',
     date: 'الاثنين 09 أغسطس 2026',
-    isRead: false,
+    isRead: true,
   },
   {
     id: '6',
     type: 'system',
     title: 'تحديث النظام',
     description: 'تم تحديث التطبيق إلى الإصدار الجديد مع تحسينات في الأداء والاستقرار.',
-    time: '06:26 م',
-    elapsed: 'قبل 5 دقائق',
+    time: '04:20 م',
+    elapsed: 'قبل يومين',
     icon: '/transportCompany/notification/setting.svg',
     date: 'الاثنين 09 أغسطس 2026',
     isRead: false,
@@ -95,11 +95,11 @@ const notifications: Notification[] = [
     title: 'توقف السائق في الطريق',
     orderId: 'ORD-2024-256',
     description: 'توقف السائق محمد إبراهيم عن الحركة لأكثر من 10 دقائق أثناء تنفيذ طلب نقل الوقود.',
-    time: '06:26 م',
-    elapsed: 'قبل 5 دقائق',
+    time: '10:05 ص',
+    elapsed: 'قبل يومين',
     icon: '/transportCompany/notification/about.svg',
     date: 'الاثنين 09 أغسطس 2026',
-    isRead: false,
+    isRead: true,
   },
   {
     id: '8',
@@ -107,11 +107,11 @@ const notifications: Notification[] = [
     title: 'تم تسليم الطلب',
     orderId: 'ORD-2024-256',
     description: 'تم قبول طلب الوقود ORD-2024-256 وجاري تحضير الشحنة الآن.',
-    time: '06:26 م',
-    elapsed: 'قبل 5 دقائق',
+    time: '08:00 ص',
+    elapsed: 'قبل 3 أيام',
     icon: '/transportCompany/notification/notification.svg',
     date: 'الاثنين 09 أغسطس 2026',
-    isRead: false,
+    isRead: true,
   },
 ];
 
@@ -136,6 +136,7 @@ export function NotificationsPage() {
   const [activeFilter, setActiveFilter] = useState('الكل');
   const [isMuted, setIsMuted] = useState(false);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [notificationsData, setNotificationsData] = useState(initialNotifications);
 
   const filters = ['الكل', 'عاجل', 'الطلبات', 'الفواتير', 'تنبيه', 'النظام'];
 
@@ -146,13 +147,36 @@ export function NotificationsPage() {
     );
   };
 
+  const filteredNotifications = notificationsData.filter(notif => {
+    if (activeFilter === 'الكل') return true;
+    if (activeFilter === 'عاجل') return notif.type === 'error';
+    if (activeFilter === 'الطلبات') return notif.type === 'info';
+    if (activeFilter === 'الفواتير') return notif.type === 'success';
+    if (activeFilter === 'تنبيه') return notif.type === 'warning';
+    if (activeFilter === 'النظام') return notif.type === 'system';
+    return true;
+  });
+
   // Group by date
-  const groupedNotifications = notifications.reduce((acc, notif) => {
+  const groupedNotifications = filteredNotifications.reduce((acc, notif) => {
     const group = acc[notif.date] ?? [];
     group.push(notif);
     acc[notif.date] = group;
     return acc;
   }, {} as Record<string, Notification[]>);
+
+  const handleSelectAllOrMarkRead = () => {
+    if (selectedIds.length > 0) {
+      // Mark selected as read
+      setNotificationsData(prev => 
+        prev.map(n => selectedIds.includes(n.id) ? { ...n, isRead: true } : n)
+      );
+      setSelectedIds([]);
+    } else {
+      // Select All current filtered
+      setSelectedIds(filteredNotifications.map(n => n.id));
+    }
+  };
 
   const dateEntries = Object.entries(groupedNotifications);
 
@@ -230,8 +254,11 @@ export function NotificationsPage() {
         <div className='mt-10'>
           {/* Mark as read action row */}
           <div className="px-8 pb-6 flex justify-end">
-            <button className="flex items-center gap-2 text-[13px] text-[#2563EB] hover:text-blue-700 font-medium transition-colors">
-              تحديد الكل / المحدد كمقروء
+            <button 
+              onClick={handleSelectAllOrMarkRead}
+              className="flex items-center gap-2 text-[13px] text-[#2563EB] hover:text-blue-700 font-medium transition-colors"
+            >
+              {selectedIds.length > 0 ? 'تعيين كمقروء' : 'تحديد الكل'}
               <img src="/transportCompany/notification/seen.svg" className="w-[18px] h-[18px]" alt="" />
             </button>
           </div>
@@ -298,7 +325,7 @@ export function NotificationsPage() {
                           <div
                             className={cn(
                               "flex-1 min-w-0 flex items-center gap-4 px-3 sm:px-5 py-4 rounded-[14px] border transition-all hover:shadow-md cursor-pointer group",
-                              styles.card
+                              notif.isRead ? "bg-white border-slate-100 opacity-70" : styles.card
                             )}
                           >
                             {/* Right side: Checkmark + Time */}

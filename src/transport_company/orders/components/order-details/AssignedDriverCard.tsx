@@ -1,6 +1,7 @@
 import { Phone } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useOrderDetailContext } from './OrderDetailContext';
+import { TankTileIcon, TruckTileIcon } from './VehicleTileIcons';
 
 /**
  * Feature 009 T033/SC-005: real `driverSummary`/`tankSummary` — the fixed rating, fixed
@@ -82,21 +83,40 @@ export function AssignedDriverCard() {
         </div>
       )}
 
-      <div className="grid grid-cols-2 gap-y-6 gap-x-4">
-        <div className="flex flex-col gap-1.5 text-right">
-          <span className="text-slate-400 text-sm font-bold">{t('trucks.plateNumber')}</span>
-          <span className="text-[#162155] font-black text-base" dir="ltr">{order.driverSummary.plateNumber}</span>
+      {order.etaMinutes != null && (
+        <div className="grid grid-cols-2 gap-y-6 gap-x-4">
+          <div className="flex flex-col gap-1.5 text-right">
+            <span className="text-slate-400 text-[11px] font-bold">{t('assign.eta')}</span>
+            <span className="text-[#162155] font-black text-sm">{order.etaMinutes} {t('assign.minutes')}</span>
+          </div>
+        </div>
+      )}
+
+      {/* Plate and tank tiles. The design's tank tile read "capacity 20,000 L"; the order's
+          tank snapshot carries code and material only (capacity is not snapshotted), so the
+          tile shows what the order actually froze at assignment. */}
+      <div className="grid grid-cols-2 gap-4">
+        <div className="border border-slate-200 rounded-xl p-3 flex items-center justify-start gap-2">
+          <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center shrink-0">
+            <TruckTileIcon />
+          </div>
+          <div className="flex flex-col gap-0.5 text-right">
+            <span className="text-slate-400 text-[11px] font-bold">{t('trucks.plateNumber')}</span>
+            <span className="text-[#162155] font-black text-xs" dir="ltr">{order.driverSummary.plateNumber}</span>
+          </div>
         </div>
         {order.tankSummary && (
-          <div className="flex flex-col gap-1.5 text-right">
-            <span className="text-slate-400 text-sm font-bold">{t('trucks.tankCode')}</span>
-            <span className="text-[#162155] font-black text-base" dir="ltr">{order.tankSummary.code}</span>
-          </div>
-        )}
-        {order.etaMinutes != null && (
-          <div className="flex flex-col gap-1.5 text-right">
-            <span className="text-slate-400 text-sm font-bold">{t('assign.eta')}</span>
-            <span className="text-[#162155] font-black text-base">{order.etaMinutes} {t('assign.minutes')}</span>
+          <div className="border border-slate-200 rounded-xl p-3 flex items-center justify-start gap-2">
+            <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center shrink-0">
+              <TankTileIcon />
+            </div>
+            <div className="flex flex-col gap-0.5 text-right">
+              <span className="text-slate-400 text-[11px] font-bold">{t('trucks.tankCode')}</span>
+              <span className="text-[#162155] font-black text-xs" dir="ltr">{order.tankSummary.code}</span>
+              <span className="text-slate-400 text-[10px] font-bold">
+                {t(order.tankSummary.material === 'IRON' ? 'trucks.materialIron' : 'trucks.materialAluminium')}
+              </span>
+            </div>
           </div>
         )}
       </div>

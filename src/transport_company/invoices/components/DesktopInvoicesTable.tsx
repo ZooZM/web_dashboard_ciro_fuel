@@ -3,6 +3,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Button } from '@/components/ui/button';
 import { useSettleInvoice } from '@/transport_company/invoices/hooks/useInvoices';
 import type { Invoice } from '@/transport_company/invoices/types';
+import { PaymentMethodPill } from '@/transport_company/orders/components/PaymentMethodPill';
 
 /**
  * Feature 009 T115/SC-005: real invoices — company/station/owner/delivery-fee columns are
@@ -22,6 +23,7 @@ export function DesktopInvoicesTable({ invoices }: { invoices: Invoice[] }) {
             <TableHead className="font-bold text-slate-700 text-[12px] text-right py-4 pr-6 pl-2">{t('invoices.title')}</TableHead>
             <TableHead className="font-bold text-slate-700 text-[12px] text-right py-4 px-2">{t('orders.title')}</TableHead>
             <TableHead className="font-bold text-slate-700 text-[12px] text-center py-4 px-2">{t('invoices.amount')}</TableHead>
+            <TableHead className="font-bold text-slate-700 text-[12px] text-center py-4 px-2">{t('orders.paymentMethod')}</TableHead>
             <TableHead className="font-bold text-slate-700 text-[12px] text-center py-4 px-2">{t('invoices.issued')}</TableHead>
             <TableHead className="font-bold text-slate-700 text-[12px] text-center py-4 px-2">{t('orders.status')}</TableHead>
             <TableHead className="font-bold text-slate-700 text-[12px] text-center py-4 pl-6 pr-2">{t('invoices.action')}</TableHead>
@@ -38,6 +40,9 @@ export function DesktopInvoicesTable({ invoices }: { invoices: Invoice[] }) {
               </TableCell>
               <TableCell className="align-middle text-center py-4 px-2">
                 <span className="text-slate-800 font-bold text-[12px]">{invoice.amount.toLocaleString()}</span>
+              </TableCell>
+              <TableCell className="align-middle text-center py-4 px-2">
+                <PaymentMethodPill method={invoice.method} />
               </TableCell>
               <TableCell className="align-middle text-center py-4 px-2">
                 <span className="text-slate-500 text-[11px]" dir="ltr">{new Date(invoice.createdAt).toLocaleDateString()}</span>
