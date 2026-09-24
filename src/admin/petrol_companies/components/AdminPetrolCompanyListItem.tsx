@@ -32,10 +32,10 @@ export function AdminPetrolCompanyListItem({ company, isLast }: AdminPetrolCompa
         </div>
       </div>
 
-      <div className="flex items-center justify-center bg-gray-100 rounded-2xl px-6 py-2.5 w-full flex-1 max-w-[400px] mx-auto">
+      <div className="flex items-center justify-center w-full flex-1 mx-auto">
         <div className={cn(
-          "px-4 py-1.5 rounded-xl text-xs font-bold shrink-0",
-          isActive ? "bg-green-100/50 text-green-600" : "bg-red-100/50 text-red-500"
+          "px-6 py-2 rounded-xl text-xs font-bold shrink-0",
+          isActive ? "bg-[#E4F7EC] text-[#12A150]" : "bg-[#FEF2F2] text-[#EF4444]"
         )}>
           {isActive ? t('adminCompanies.active') : t('adminCompanies.suspended')}
         </div>

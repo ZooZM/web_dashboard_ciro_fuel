@@ -107,7 +107,7 @@ export const NAV_BY_ROLE: Partial<Record<Role, NavEntry[]>> = {
     // Feature 013 T239/T240/FR-055/FR-056/FR-059/FR-062a/FR-062b: the operator's write
     // surface for the platform-wide commission rate and cashback programme — absent for
     // every fuel company admin entirely (FR-091).
-    { to: '/admin/billing-settings', icon: '/sideBar/percentage.svg', label: 'إعدادات العمولة' },
+    { to: '/admin/billing-settings', icon: '/sideBar/offer.svg', label: 'إعدادات العمولة' },
     { to: '/admin/notifications', icon: '/sideBar/notification.svg', label: 'الاشعارات', badge: 5 },
   ],
   [Role.FUEL_COMPANY_ADMIN]: [

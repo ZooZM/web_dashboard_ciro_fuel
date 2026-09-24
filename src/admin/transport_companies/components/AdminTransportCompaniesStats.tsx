@@ -46,7 +46,7 @@ export function AdminTransportCompaniesStats({
       <StatBox
         label={t('transportCompanies.orderVolume')}
         value={totalOrders}
-        icon="/petrolCompany/transporters/details/receipt.svg"
+        icon="/petrolCompany/owner/greenOrder.svg"
         iconBg="bg-green-50"
       />
       <StatBox

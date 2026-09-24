@@ -1,4 +1,6 @@
 import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useState } from 'react';
+import toast from 'react-hot-toast';
 import { cn } from '@/lib/utils';
 import { AdminCreditLimitRequestCard } from './AdminCreditLimitRequestCard';
 import { AdminCreditLimitCard } from './AdminCreditLimitCard';
@@ -20,8 +22,9 @@ const MOCK_ORDERS = [
 export function AdminStationOwnerDetailsPage() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
-  const owner = {
+  const [owner, setOwner] = useState({
     id: id || 'TRN-2024-001',
     name: 'محمد أحمد',
     isActive: true,
@@ -35,7 +38,7 @@ export function AdminStationOwnerDetailsPage() {
     mobile: '05xxxxxxxx',
     contactMobile: '920-xxxxxx',
     contactEmail: 'support@cirofuel.sa'
-  };
+  });
 
   return (
     <div className="flex flex-col p-6 max-w-[1600px] mx-auto w-full gap-6" dir="rtl">
@@ -138,7 +141,7 @@ export function AdminStationOwnerDetailsPage() {
                 </div>
                 <span className="font-black text-slate-900 text-lg">معلومات المالك</span>
               </div>
-              <button className="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center hover:bg-blue-100 transition-colors">
+              <button onClick={() => setIsEditModalOpen(true)} className="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center hover:bg-blue-100 transition-colors">
                   <img src="/transportCompany/orderPage/orderDetails/edit.svg" alt="" />
               </button>
             </div>
@@ -281,6 +284,76 @@ export function AdminStationOwnerDetailsPage() {
 
       </div>
 
+      <MockEditModal 
+        isOpen={isEditModalOpen} 
+        onClose={() => setIsEditModalOpen(false)} 
+        initialName={owner.name}
+        initialEmail={owner.email}
+        onSave={(name, email) => {
+          setOwner(prev => ({ ...prev, name, email }));
+        }}
+      />
+    </div>
+  );
+}
+
+function MockEditModal({ 
+  isOpen, 
+  onClose, 
+  initialName, 
+  initialEmail, 
+  onSave 
+}: { 
+  isOpen: boolean; 
+  onClose: () => void; 
+  initialName: string; 
+  initialEmail: string; 
+  onSave: (name: string, email: string) => void;
+}) {
+  const [name, setName] = useState(initialName);
+  const [email, setEmail] = useState(initialEmail);
+
+  if (!isOpen) return null;
+
+  const handleSave = () => {
+    onSave(name, email);
+    toast.success('تم حفظ التعديلات بنجاح');
+    onClose();
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
+      <div className="w-full max-w-md bg-white rounded-2xl p-6 shadow-xl flex flex-col gap-4 text-right" dir="rtl">
+        <h2 className="text-xl font-black text-slate-900">تعديل معلومات المالك</h2>
+        <div className="flex flex-col gap-4 mt-2">
+          <div className="flex flex-col gap-1.5">
+            <label className="text-sm font-bold text-slate-700">الاسم الكامل</label>
+            <input 
+              type="text" 
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-bold text-slate-900 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all" 
+            />
+          </div>
+          <div className="flex flex-col gap-1.5">
+            <label className="text-sm font-bold text-slate-700">البريد الإلكتروني</label>
+            <input 
+              type="email" 
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-bold text-slate-900 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all" 
+            />
+          </div>
+        </div>
+        <div className="flex items-center gap-3 mt-6">
+          <button onClick={handleSave} className="flex-1 py-3 bg-blue-600 text-white rounded-xl text-sm font-bold hover:bg-blue-700 transition-colors">
+            حفظ التعديلات
+          </button>
+          <button onClick={onClose} className="flex-1 py-3 bg-slate-100 text-slate-600 rounded-xl text-sm font-bold hover:bg-slate-200 transition-colors">
+            إلغاء
+          </button>
+        </div>
+      </div>
     </div>
   );
 }

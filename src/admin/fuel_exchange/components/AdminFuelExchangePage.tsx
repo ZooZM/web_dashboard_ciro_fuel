@@ -24,7 +24,7 @@ export function AdminFuelExchangePage() {
 
   const STAT_CARDS = [
     {
-      title: t('fuelExchange.filterAll'),
+      title: 'طلبات واردة بانتظار الرد',
       value: String(items.length),
       icon: '/petrolCompany/requests/arrowUp.svg',
       iconBgClass: 'bg-blue-50',
@@ -32,7 +32,7 @@ export function AdminFuelExchangePage() {
       titleColor: 'text-slate-500',
     },
     {
-      title: t('fuelExchange.state.OPEN'),
+      title: 'طلبات صادرة قيد الانتظار',
       value: String(openCount),
       icon: '/petrolCompany/requests/arrowDown.svg',
       iconBgClass: 'bg-orange-50',
@@ -40,7 +40,7 @@ export function AdminFuelExchangePage() {
       titleColor: 'text-slate-500',
     },
     {
-      title: t('fuelExchange.state.AWARDED'),
+      title: 'تم القبول (الشهر)',
       value: String(awardedCount),
       icon: '/petrolCompany/requests/rightCheck.svg',
       iconBgClass: 'bg-emerald-50',
@@ -54,11 +54,20 @@ export function AdminFuelExchangePage() {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
         <div className="flex flex-col items-start text-right">
           <h1 className="text-2xl font-black text-slate-900">{t('fuelExchange.title')}</h1>
-          <p className="text-sm font-semibold text-slate-500 mt-1">{t('adminCompanies.exchangeOversightSubtitle')}</p>
+          <p className="text-sm font-semibold text-slate-500 mt-1">طلبات توريد وقود بين شركات البترول الشريكة</p>
         </div>
       </div>
 
       <FuelExchangeStats cards={STAT_CARDS} />
+
+      <div className="mb-4 relative w-full md:w-1/3">
+        <input
+          type="text"
+          placeholder="ابحث بكود أو إسم المالك..."
+          className="w-full bg-white border border-slate-200 rounded-lg pl-4 pr-10 py-2.5 text-sm focus:outline-none focus:border-blue-500 font-semibold"
+        />
+        <img src="/petrolCompany/requests/search.svg" alt="" className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4" />
+      </div>
 
       <div className="bg-white border border-slate-200 rounded-2xl shadow-sm p-4 md:p-6">
         {isLoading ? (
