@@ -99,12 +99,18 @@ export function AddPetrolCompanyPage() {
 
           <div className="flex flex-col gap-6 flex-1">
             <div className="flex items-start gap-6">
-              <label className="w-24 h-24 bg-blue-50 rounded-2xl border border-blue-200 flex flex-col items-center justify-center cursor-pointer hover:bg-blue-100 transition-colors shrink-0">
+              <label className="w-24 h-24 bg-blue-50 rounded-2xl border border-blue-200 flex flex-col items-center justify-center cursor-pointer hover:bg-blue-100 transition-colors shrink-0 overflow-hidden relative">
                 <input type="file" accept=".jpg,.jpeg,.png,.pdf" className="hidden" onChange={(e) => setCommercialRegister(e.target.files?.[0] ?? null)} />
-                <img src="/petrolCompany/transporters/addTransporter/image.svg" alt="Upload" className="w-10 h-10 mb-2" />
-                <span className="text-[10px] font-bold text-blue-500 text-center px-1">
-                  {commercialRegister ? commercialRegister.name.slice(0, 12) : t('adminCompanies.commercialRegister')}
-                </span>
+                {commercialRegister && commercialRegister.type.startsWith('image/') ? (
+                  <img src={URL.createObjectURL(commercialRegister)} alt="Preview" className="w-full h-full object-cover" />
+                ) : (
+                  <>
+                    <img src="/petrolCompany/transporters/addTransporter/image.svg" alt="Upload" className="w-10 h-10 mb-2" />
+                    <span className="text-[10px] font-bold text-blue-500 text-center px-1">
+                      {commercialRegister ? commercialRegister.name.slice(0, 12) : t('adminCompanies.commercialRegister')}
+                    </span>
+                  </>
+                )}
               </label>
               <div className="flex w-full mt-3 flex-col">
                 <label className="text-sm font-bold text-slate-700 mb-2">{t('adminCompanies.companyName')} <span className="text-red-500">*</span></label>

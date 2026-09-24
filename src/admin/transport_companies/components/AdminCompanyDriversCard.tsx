@@ -100,6 +100,16 @@ export function AdminCompanyDriversCard({ companyId }: { companyId: string }) {
           </button>
         ))}
       </div>
+
+      {drivers.length > 0 && (
+        <button
+          onClick={() => navigate('/admin/drivers')}
+          className="flex items-center justify-center gap-2 px-5 py-2 mt-4 rounded-xl border border-blue-100 text-blue-600 bg-white hover:bg-blue-50 transition-colors w-full shadow-sm"
+        >
+          <img src="/petrolCompany/station/arrowRight.svg" alt="" className="w-4 h-4" />
+          <span className="text-xs font-bold">عرض المزيد</span>
+        </button>
+      )}
     </div>
   );
 }
