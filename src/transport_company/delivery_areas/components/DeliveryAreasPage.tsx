@@ -141,7 +141,7 @@ export function DeliveryAreasPage() {
   }
 
   return (
-    <div className="p-4 md:p-6 w-full h-full space-y-6 bg-slate-50/50 min-h-screen" dir="rtl">
+    <div className="p-4 md:p-6 w-full h-full space-y-6 border border-slate-200 rounded-2xl bg-slate-50/50 min-h-screen" dir="rtl">
       <div className="mb-6">
         <h1 className="text-2xl font-black text-blue-900 mb-2">{t('deliveryAreas.title')}</h1>
         <p className="text-sm font-bold text-slate-400">{t('deliveryAreas.subtitle')}</p>

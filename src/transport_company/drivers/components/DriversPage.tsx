@@ -6,6 +6,8 @@ import { cn } from '@/lib/utils';
 import { DriversStats } from './DriversStats';
 import { DesktopDriversTable } from './DesktopDriversTable';
 import { MobileDriversList } from './MobileDriversList';
+import { FilterToolbar } from '@/components/ui/FilterToolbar';
+import { Pagination } from '@/components/ui/pagination';
 import { useDriversList } from '@/transport_company/drivers/hooks/useDrivers';
 
 type FilterTab = 'all' | 'active' | 'inactive';
@@ -15,10 +17,16 @@ type FilterTab = 'all' | 'active' | 'inactive';
  * fabricated identical rows this screen showed are gone. A suspended driver stops appearing
  * as an assignment candidate at the platform level (dispatch.service.ts's `isActive: true`
  * query filter) — this list simply reflects that same real state.
+ *
+ * Search and paging are client-side: the endpoint returns the company's whole roster as a
+ * plain array (no server paging exists), so slicing it here loses nothing.
  */
 export function DriversPage() {
   const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState<FilterTab>('all');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(8);
   const navigate = useNavigate();
 
   const isActiveFilter = activeTab === 'all' ? undefined : activeTab === 'active';
@@ -29,6 +37,17 @@ export function DriversPage() {
     { id: 'active', label: t('drivers.active') },
     { id: 'inactive', label: t('drivers.inactive') },
   ];
+
+  const query = searchQuery.trim().toLowerCase();
+  const filteredDrivers = (drivers ?? []).filter(
+    (d) =>
+      !query ||
+      d.fullName.toLowerCase().includes(query) ||
+      d.phone?.toLowerCase().includes(query) ||
+      d.email?.toLowerCase().includes(query),
+  );
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const paginatedDrivers = filteredDrivers.slice(startIndex, startIndex + itemsPerPage);
 
   return (
     <div className="w-full p-4 md:p-6 flex-1 -mt-4 bg-[#F8FAFC] border border-[#E7E9EF] rounded-2xl min-h-full font-sans" dir="rtl">
@@ -56,7 +75,10 @@ export function DriversPage() {
             return (
               <button
                 key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
+                onClick={() => {
+                  setActiveTab(tab.id);
+                  setCurrentPage(1);
+                }}
                 className={cn(
                   'relative flex-1 sm:flex-none px-4 sm:px-12 py-3 text-sm font-bold transition-colors whitespace-nowrap cursor-pointer text-center',
                   isActive ? 'text-[#162155]' : 'text-slate-500 hover:bg-slate-50',
@@ -77,6 +99,14 @@ export function DriversPage() {
       </div>
 
       <div className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden pt-4 pb-0">
+        <FilterToolbar
+          searchPlaceholder={t('drivers.searchPlaceholder')}
+          onSearch={(val) => {
+            setSearchQuery(val);
+            setCurrentPage(1);
+          }}
+        />
+
         {isLoading ? (
           <p className="text-center text-sm text-slate-400 py-12">{t('common.loading')}</p>
         ) : isError ? (
@@ -88,12 +118,26 @@ export function DriversPage() {
           </div>
         ) : !drivers || drivers.length === 0 ? (
           <p className="text-center text-sm text-slate-400 py-12">{t('drivers.empty')}</p>
+        ) : filteredDrivers.length === 0 ? (
+          <p className="text-center text-sm text-slate-400 py-12">{t('drivers.noMatch')}</p>
         ) : (
           <>
-            <DesktopDriversTable drivers={drivers} />
+            <DesktopDriversTable drivers={paginatedDrivers} />
             <div className="px-4 pb-4 lg:px-0 lg:pb-0">
-              <MobileDriversList drivers={drivers} />
+              <MobileDriversList drivers={paginatedDrivers} />
             </div>
+            <Pagination
+              totalItems={filteredDrivers.length}
+              itemsPerPage={itemsPerPage}
+              currentPage={currentPage}
+              itemName={t('drivers.itemName')}
+              onPageChange={setCurrentPage}
+              onItemsPerPageChange={(items) => {
+                setItemsPerPage(items);
+                setCurrentPage(1);
+              }}
+              className="border-t border-slate-200"
+            />
           </>
         )}
       </div>

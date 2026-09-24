@@ -1,7 +1,8 @@
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { OrderStatusBadge } from './OrderStatusBadge';
-import { isAssignableOrderStatus } from '@/constants/order-status';
+import { PaymentMethodPill } from './PaymentMethodPill';
+import { fuelTypeLabelKey, isAssignableOrderStatus } from '@/constants/order-status';
 import type { Order } from '@/transport_company/orders/types';
 
 export function MobileOrdersList({ orders }: { orders: Order[] }) {
@@ -22,12 +23,15 @@ export function MobileOrdersList({ orders }: { orders: Order[] }) {
         >
           <div className="flex items-center justify-between border-b border-slate-100 pb-3">
             <span className="text-slate-800 font-bold text-sm" dir="ltr">{order._id}</span>
-            <OrderStatusBadge status={order.status} />
+            <div className="flex items-center gap-2">
+              <PaymentMethodPill method={order.paymentMethod} />
+              <OrderStatusBadge status={order.status} />
+            </div>
           </div>
 
           <div className="flex items-center justify-between">
             <div className="flex flex-col gap-0.5 text-right">
-              <span className="text-slate-800 font-bold text-xs">{order.fuelType}</span>
+              <span className="text-slate-800 font-bold text-xs">{t(fuelTypeLabelKey(order.fuelType))}</span>
               <span className="text-slate-400 text-[10px]" dir="ltr">
                 {order.quantityLiters.toLocaleString()} {t('trucks.liters')}
               </span>

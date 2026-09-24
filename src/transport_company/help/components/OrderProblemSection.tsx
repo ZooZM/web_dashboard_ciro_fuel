@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 export function OrderProblemSection() {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -48,22 +49,30 @@ export function OrderProblemSection() {
             <div className="flex flex-col gap-2 text-right">
               <label className="text-slate-500 font-bold text-sm">اختر الطلب</label>
               <div className="relative">
-                <select className="w-full appearance-none bg-white border border-slate-200 rounded-xl px-4 py-3 pr-10 text-right text-slate-700 font-bold text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500" dir="rtl">
-                  <option value="ORD-2024-256">ORD-2024-256</option>
-                  <option value="ORD-2024-257">ORD-2024-257</option>
-                </select>
-                <ChevronDown className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+                <Select defaultValue="ORD-2024-256">
+                  <SelectTrigger className="w-full h-12 bg-white text-slate-700 font-bold text-sm px-4" dir="rtl">
+                    <SelectValue placeholder="اختر الطلب" />
+                  </SelectTrigger>
+                  <SelectContent dir="rtl">
+                    <SelectItem value="ORD-2024-256">ORD-2024-256</SelectItem>
+                    <SelectItem value="ORD-2024-257">ORD-2024-257</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
             </div>
 
             <div className="flex flex-col gap-2 text-right">
               <label className="text-slate-500 font-bold text-sm">نوع المشكلة</label>
               <div className="relative">
-                <select className="w-full appearance-none bg-white border border-slate-200 rounded-xl px-4 py-3 pr-10 text-right text-slate-700 font-bold text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500" dir="rtl">
-                  <option value="other">أخري</option>
-                  <option value="delay">تأخير التوصيل</option>
-                </select>
-                <ChevronDown className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+                <Select defaultValue="other">
+                  <SelectTrigger className="w-full h-12 bg-white text-slate-700 font-bold text-sm px-4" dir="rtl">
+                    <SelectValue placeholder="نوع المشكلة" />
+                  </SelectTrigger>
+                  <SelectContent dir="rtl">
+                    <SelectItem value="other">أخري</SelectItem>
+                    <SelectItem value="delay">تأخير التوصيل</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
             </div>
             

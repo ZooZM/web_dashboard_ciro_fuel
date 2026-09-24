@@ -1,5 +1,6 @@
 import { Info } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { fuelTypeLabelKey } from '@/constants/order-status';
 import { useAssignment } from './AssignmentContext';
 
 /**
@@ -39,7 +40,7 @@ export function AssignOrderDataCard() {
             <div className="flex-1 flex items-center justify-center gap-3 py-3 px-2 whitespace-nowrap">
               <div className="flex flex-col gap-0.5 text-right">
                 <span className="text-slate-400 text-[10px] font-bold">{t('orders.fuelType')}</span>
-                <span className="text-slate-800 font-black text-sm">{order.fuelType}</span>
+                <span className="text-slate-800 font-black text-sm">{t(fuelTypeLabelKey(order.fuelType))}</span>
               </div>
             </div>
           </div>

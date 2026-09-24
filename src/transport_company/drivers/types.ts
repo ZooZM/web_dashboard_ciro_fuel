@@ -9,6 +9,10 @@ export interface Driver {
   phone: string;
   isActive: boolean;
   isOnline?: boolean;
+  isAvailable?: boolean;
+  // Present only while the driver holds a delivery — the same field dispatch reads to mark a
+  // driver BUSY. `GET /users` returns the whole document, so this is already on the wire.
+  activeOrderId?: string;
   ratingAverage?: number;
 }
 

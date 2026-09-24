@@ -34,7 +34,8 @@
     "notAvailable": "غير متاح",
     "viewDetails": "عرض التفاصيل",
     "choose": "اختر…",
-    "saving": "جارٍ الحفظ…"
+    "saving": "جارٍ الحفظ…",
+    "previous": "السابق"
   },
   "auth": {
     "login": {
@@ -187,7 +188,13 @@
     "comingSoon": "قريباً",
     "timeline": "المسار الزمني",
     "overridden": "تم التجاوز",
-    "noTransporterYet": "لم يتم التوجيه لشركة نقل بعد"
+    "noTransporterYet": "لم يتم التوجيه لشركة نقل بعد",
+    "paymentMethod": "طريقة الدفع",
+    "subtitle": "إدارة ومتابعة كل طلبات نقل الوقود",
+    "completedThisMonth": "المكتملة هذا الشهر",
+    "searchById": "ابحث برقم الطلب...",
+    "noMatch": "لا يوجد طلب بهذا الرقم",
+    "station": "المحطة"
   },
   "drivers": {
     "title": "السائقون",
@@ -207,7 +214,15 @@
     "locationOnMap": "الموقع على الخريطة",
     "trackTruck": "تتبع الشاحنة",
     "name": "الاسم",
-    "phone": "رقم الجوال"
+    "phone": "رقم الجوال",
+    "total": "إجمالي السائقين",
+    "activePlural": "نشطون",
+    "inactivePlural": "غير نشطين",
+    "available": "متاحون",
+    "onMission": "في مهمة",
+    "searchPlaceholder": "ابحث باسم السائق أو رقم الجوال أو البريد...",
+    "itemName": "سائق",
+    "noMatch": "لا يوجد سائقون مطابقون للبحث"
   },
   "clients": {
     "title": "العملاء",
@@ -410,7 +425,9 @@
     "selectDelivery": "اختر شحنة لتتبعها",
     "viewOrder": "عرض الطلب",
     "stalePosition": "قد يكون الموقع غير محدّث — آخر تحديث منذ {{seconds}} ثانية",
-    "liveTitle": "تتبع الشحنات المباشرة"
+    "liveTitle": "تتبع الشحنات المباشرة",
+    "searchPlaceholder": "ابحث برقم الطلب أو العنوان...",
+    "noMatch": "لا يوجد طلبات مطابقة"
   },
   "stalled": {
     "title": "معالجة شحنة متعثرة",

@@ -8,7 +8,11 @@ import { OrderStatus } from '@/constants/order-status';
  * Feature 009 T112/SC-005: real `ROUTED_TO_TRANSPORT` orders — the ten identical mock rows
  * are gone. This is the work queue (FR-009); clicking a row goes straight to assignment.
  */
-export function NewOrdersCard() {
+interface NewOrdersCardProps {
+  onViewAllClick?: () => void;
+}
+
+export function NewOrdersCard({ onViewAllClick }: NewOrdersCardProps = {}) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { data, isLoading, isError, refetch } = useOrdersList({ status: OrderStatus.ROUTED_TO_TRANSPORT });
@@ -23,7 +27,7 @@ export function NewOrdersCard() {
           </span>
           <h2 className="text-[17px] font-black text-[#1e293b]">{t('dashboard.newOrders')}</h2>
         </div>
-        <button className="text-[14px] font-bold text-[#2563eb] hover:text-blue-700" onClick={() => navigate('/transport/orders')}>
+        <button className="text-[14px] font-bold text-[#2563eb] hover:text-blue-700" onClick={onViewAllClick ?? (() => navigate('/transport/orders'))}>
           {t('dashboard.viewAll')}
         </button>
       </div>

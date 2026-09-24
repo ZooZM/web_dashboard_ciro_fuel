@@ -2,7 +2,8 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { OrderStatusBadge } from './OrderStatusBadge';
-import { isAssignableOrderStatus } from '@/constants/order-status';
+import { PaymentMethodPill } from './PaymentMethodPill';
+import { fuelTypeLabelKey, isAssignableOrderStatus } from '@/constants/order-status';
 import type { Order } from '@/transport_company/orders/types';
 
 /**
@@ -33,6 +34,7 @@ export function DesktopOrdersTable({ orders }: { orders: Order[] }) {
             <TableHead className="font-bold text-slate-700 text-[12px] text-center py-3 px-2">{t('assign.destinationMap')}</TableHead>
             <TableHead className="font-bold text-slate-700 text-[12px] text-center py-3 px-2">{t('drivers.title')}</TableHead>
             <TableHead className="font-bold text-slate-700 text-[12px] text-center py-3 px-2">{t('orders.status')}</TableHead>
+            <TableHead className="font-bold text-slate-700 text-[12px] text-center py-3 pl-4 pr-2">{t('orders.paymentMethod')}</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -48,7 +50,7 @@ export function DesktopOrdersTable({ orders }: { orders: Order[] }) {
               <TableCell className="align-middle text-center py-3 px-2">
                 <div className="flex flex-col items-center gap-1">
                   <span className="bg-[#FFEDD5] text-[#EA580C] px-2 py-0.5 rounded-full text-[10px] font-bold whitespace-nowrap">
-                    {order.fuelType}
+                    {t(fuelTypeLabelKey(order.fuelType))}
                   </span>
                   <span className="text-slate-600 font-bold text-[11px] whitespace-nowrap" dir="ltr">
                     {order.quantityLiters.toLocaleString()} {t('trucks.liters')}
@@ -67,6 +69,9 @@ export function DesktopOrdersTable({ orders }: { orders: Order[] }) {
               </TableCell>
               <TableCell className="align-middle text-center py-3 px-2">
                 <OrderStatusBadge status={order.status} />
+              </TableCell>
+              <TableCell className="align-middle text-center py-3 pl-4 pr-2">
+                <PaymentMethodPill method={order.paymentMethod} />
               </TableCell>
             </TableRow>
           ))}

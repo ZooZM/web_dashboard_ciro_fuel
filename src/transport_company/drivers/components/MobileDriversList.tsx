@@ -24,10 +24,10 @@ export function MobileDriversList({ drivers }: { drivers: Driver[] }) {
             </div>
             <div
               className={`inline-flex items-center justify-center gap-1.5 px-3 py-1 rounded-full shrink-0 ${
-                driver.isActive ? 'bg-[#DCFCE7]' : 'bg-slate-100'
+                driver.isActive ? 'bg-[#DCFCE7]' : 'bg-red-100'
               }`}
             >
-              <span className={`text-xs font-bold ${driver.isActive ? 'text-[#16A34A]' : 'text-slate-500'}`}>
+              <span className={`text-xs font-bold ${driver.isActive ? 'text-[#16A34A]' : 'text-red-700'}`}>
                 {driver.isActive ? t('drivers.active') : t('drivers.inactive')}
               </span>
             </div>

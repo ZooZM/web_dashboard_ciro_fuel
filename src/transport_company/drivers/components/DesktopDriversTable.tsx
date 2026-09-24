@@ -56,10 +56,10 @@ export function DesktopDriversTable({ drivers }: { drivers: Driver[] }) {
               <TableCell className="align-middle text-center py-3 px-2">
                 <div
                   className={`inline-flex items-center justify-center gap-1.5 px-3 py-1 rounded-full ${
-                    driver.isActive ? 'bg-[#DCFCE7]' : 'bg-slate-100'
+                    driver.isActive ? 'bg-[#DCFCE7]' : 'bg-red-100'
                   }`}
                 >
-                  <span className={`text-[10px] font-bold whitespace-nowrap ${driver.isActive ? 'text-[#16A34A]' : 'text-slate-500'}`}>
+                  <span className={`text-[10px] font-bold whitespace-nowrap ${driver.isActive ? 'text-[#16A34A]' : 'text-red-700'}`}>
                     {driver.isActive ? t('drivers.active') : t('drivers.inactive')}
                   </span>
                 </div>

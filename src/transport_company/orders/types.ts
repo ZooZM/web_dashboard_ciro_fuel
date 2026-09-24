@@ -1,4 +1,4 @@
-import type { FuelType, OrderStatus } from '@/constants/order-status';
+import type { FuelType, OrderStatus, OrderStatusBucket } from '@/constants/order-status';
 import type { StopOrigin, StopReason } from '@/constants/stop-events';
 
 export interface OrderStatusEvent {
@@ -71,11 +71,16 @@ export interface RatingSummary {
  * (stripped for CLIENT server-side); the handover code is never part of this shape at all,
  * on any role (FR-071).
  */
+/** Mirrors the platform's `PaymentMethod` (spec 004 FR-021). DEFERRED is the one a
+ *  transporter carries: it pays the invoice on the client's behalf. */
+export type PaymentMethod = 'DIRECT' | 'DEFERRED' | 'CREDIT';
+
 export interface Order {
   _id: string;
   status: OrderStatus;
   fuelType: FuelType;
   quantityLiters: number;
+  paymentMethod: PaymentMethod;
   estimatedPrice: number;
   finalPrice: number | null;
   priceBreakdown: PriceBreakdown | null;
@@ -175,6 +180,11 @@ export interface OrderListParams {
   // (contracts/rest-api-delta.md Part 5). Passing `page` here has never done anything; the
   // platform's query parser simply ignores unrecognised keys.
   cursor?: string;
+  // spec 017 FR-016/FR-016a: role-agnostic — the scoping plugin still limits both to this
+  // company's own orders. `orderId` is an exact identifier match; a malformed one is an
+  // empty page, never an error.
+  bucket?: OrderStatusBucket;
+  orderId?: string;
 }
 
 // Feature 009 T023: ApproveOrderInput/RejectOrderInput/ForceCompleteOrderInput removed along

@@ -4,6 +4,7 @@ import { cn } from '@/lib/utils';
 import { DesktopInvoicesTable } from './DesktopInvoicesTable';
 import { MobileInvoicesList } from './MobileInvoicesList';
 import { useInvoicesList } from '@/transport_company/invoices/hooks/useInvoices';
+import { CursorPager } from '@/transport_company/orders/components/CursorPager';
 
 type FilterValue = 'ALL' | 'ISSUED' | 'SETTLED';
 
@@ -14,7 +15,14 @@ type FilterValue = 'ALL' | 'ISSUED' | 'SETTLED';
 export function InvoicesListPage() {
   const { t } = useTranslation();
   const [activeFilter, setActiveFilter] = useState<FilterValue>('ALL');
-  const { data, isLoading, isError, refetch } = useInvoicesList(activeFilter === 'ALL' ? {} : { state: activeFilter });
+  // Cursors of every page before the current one — `cursors[i]` opens page i + 1. Before the
+  // pager existed this screen only ever showed the platform's first page.
+  const [cursors, setCursors] = useState<(string | undefined)[]>([undefined]);
+  const cursor = cursors[cursors.length - 1];
+  const { data, isLoading, isError, refetch } = useInvoicesList({
+    ...(activeFilter === 'ALL' ? {} : { state: activeFilter }),
+    ...(cursor ? { cursor } : {}),
+  });
   const invoices = data?.items ?? [];
 
   const FILTERS: { id: FilterValue; label: string }[] = [
@@ -33,7 +41,10 @@ export function InvoicesListPage() {
         {FILTERS.map((filter) => (
           <button
             key={filter.id}
-            onClick={() => setActiveFilter(filter.id)}
+            onClick={() => {
+              setActiveFilter(filter.id);
+              setCursors([undefined]);
+            }}
             className={cn(
               'px-4 sm:px-12 py-3 text-sm font-bold transition-colors whitespace-nowrap',
               activeFilter === filter.id ? 'bg-[#EEF2FF] text-[#162155] border-b-2 border-blue-600' : 'text-slate-500 hover:bg-slate-50',
@@ -64,6 +75,15 @@ export function InvoicesListPage() {
             </div>
           </>
         )}
+
+        <CursorPager
+          page={cursors.length}
+          hasPrev={cursors.length > 1}
+          hasNext={Boolean(data?.nextCursor)}
+          onPrev={() => setCursors((c) => c.slice(0, -1))}
+          onNext={() => data?.nextCursor && setCursors((c) => [...c, data.nextCursor ?? undefined])}
+          className="border-t border-slate-200"
+        />
       </div>
     </div>
   );
