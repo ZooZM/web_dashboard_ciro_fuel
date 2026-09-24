@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { AdminTransportCompaniesStats } from './AdminTransportCompaniesStats';
@@ -21,6 +22,15 @@ export function AdminTransportCompaniesPage() {
 
   const { data: companies, isLoading, isError, refetch } = useTransportCompaniesList();
   const rows = companies ?? [];
+  const [search, setSearch] = useState('');
+
+  // Client-side search is sound here: `GET /companies?type=TRANSPORT` returns the whole
+  // array, not a cursor page, so nothing can be missed. Volumes and stats stay keyed on
+  // every company — the search narrows the list, not the platform totals.
+  const query = search.trim();
+  const visible = query
+    ? rows.filter((c) => c.name.includes(query) || c._id.includes(query))
+    : rows;
 
   const volumes = useTransportCompanyVolumes({
     companyIds: rows.map((company) => company._id),
@@ -58,6 +68,21 @@ export function AdminTransportCompaniesPage() {
       <AdminTransportCompaniesStats companies={rows} totalOrders={totalOrders} />
 
       <div className="bg-white border border-[#E7E9EF] rounded-2xl shadow-sm flex flex-col p-4 mb-8">
+        <div className="flex flex-col md:flex-row items-center justify-start gap-4 mb-4">
+          <div className="relative w-full md:w-[300px] h-[40px]">
+            <div className="absolute right-3 top-1/2 -translate-y-1/2">
+              <img src="/petrolCompany/station/search.svg" alt="" className="w-4 h-4" />
+            </div>
+            <input
+              type="text"
+              placeholder={t('adminCompanies.searchPlaceholder')}
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="w-full h-full bg-slate-50 border border-slate-200 rounded-xl pr-10 pl-4 text-xs font-bold text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
+            />
+          </div>
+        </div>
+
         {/* FR-076: loading, empty and failed each render distinctly. */}
         {isLoading && (
           <p className="py-16 text-center text-sm font-medium text-slate-400">
@@ -84,14 +109,21 @@ export function AdminTransportCompaniesPage() {
           </p>
         )}
 
-        {!isLoading && !isError && rows.length > 0 && (
+        {/* A search that matches nothing is not the same as a platform with no transporters. */}
+        {!isLoading && !isError && rows.length > 0 && visible.length === 0 && (
+          <p className="p-8 text-center text-slate-500 text-sm font-bold">
+            {t('transportCompanies.noMatches')}
+          </p>
+        )}
+
+        {!isLoading && !isError && visible.length > 0 && (
           <div className="flex flex-col border border-slate-100 rounded-xl overflow-hidden">
-            {rows.map((company, index) => (
+            {visible.map((company, index) => (
               <AdminTransportCompanyListItem
                 key={company._id}
                 company={company}
                 orderCount={volumeByCompany.get(company._id)}
-                isLast={index === rows.length - 1}
+                isLast={index === visible.length - 1}
               />
             ))}
           </div>

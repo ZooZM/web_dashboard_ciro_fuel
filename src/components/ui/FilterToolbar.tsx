@@ -23,6 +23,7 @@ interface FilterToolbarProps {
   onExport?: () => void;
   filters?: FilterOptionDef[];
   hasDateRange?: boolean;
+  initialSearchTerm?: string;
   onApplyFilters?: (filters: Record<string, string>, dateRange: { from: string; to: string }) => void;
 }
 
@@ -32,11 +33,17 @@ export function FilterToolbar({
   onExport,
   filters = [],
   hasDateRange = false,
+  initialSearchTerm = '',
   onApplyFilters
 }: FilterToolbarProps) {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [isSortOpen, setIsSortOpen] = useState(false);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState(initialSearchTerm);
+  
+  // Sync if initialSearchTerm changes externally
+  useEffect(() => {
+    setSearchTerm(initialSearchTerm);
+  }, [initialSearchTerm]);
   
   // Local state for the filter panel
   const [localFilters, setLocalFilters] = useState<Record<string, string>>({});

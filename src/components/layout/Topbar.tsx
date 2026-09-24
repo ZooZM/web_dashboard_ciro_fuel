@@ -45,7 +45,7 @@ export function Topbar() {
 
   return (
 
-    <header className="flex h-16 sm:h-20 shrink-0 items-center justify-between border-b rounded-xl mx-4 md:mx-6 mb-2 border-slate-200 bg-white px-3 sm:px-4 md:px-6 shadow-sm gap-1 sm:gap-4" dir="ltr">
+    <header className="flex h-16 sm:h-20 shrink-0 items-center justify-between border-b rounded-2xl mx-4 md:mx-6 mt-4 md:mt-6 mb-2 border-slate-200 bg-white px-3 sm:px-4 md:px-6 shadow-sm gap-1 sm:gap-4" dir="ltr">
       {/* Left side: Logo & Mobile Toggle */}
       <div className="flex items-center shrink-0">
         <img

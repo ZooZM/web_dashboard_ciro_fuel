@@ -1,17 +1,51 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ChevronDown } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from '@/lib/toast/toast';
 import { useRequestLoginCode } from '@/auth/hooks/useLoginCode';
-import { toE164Saudi, looksLikeSaudiMobile } from '@/lib/auth/phone';
+import { toE164Saudi, looksLikeSaudiMobile, looksLikeE164 } from '@/lib/auth/phone';
 import { ApiError } from '@/lib/api/api-error';
 import { cn } from '@/lib/utils';
+import { COUNTRIES } from '@/auth/constants/countries';
+
+const SAUDI_CODE = '+966';
+
+/**
+ * Composes the E.164 value the platform requires from the selected country prefix and
+ * whatever the operator typed. Saudi keeps `toE164Saudi` (and its tolerance for `05…`,
+ * `9665…`, `009665…`); any other prefix strips an international `00`/country-code echo and
+ * one national trunk `0`, then prepends the prefix.
+ */
+function composeE164(countryCode: string, input: string): string {
+  if (countryCode === SAUDI_CODE) return toE164Saudi(input);
+  const cc = countryCode.slice(1);
+  let digits = input.replace(/\D/g, '');
+  if (digits.startsWith('00')) digits = digits.slice(2);
+  if (digits.startsWith(cc)) digits = digits.slice(cc.length);
+  if (digits.startsWith('0')) digits = digits.slice(1);
+  return `${countryCode}${digits}`;
+}
 
 export function LoginPage() {
   const navigate = useNavigate();
   const [phone, setPhone] = useState('');
+  const [countryCode, setCountryCode] = useState(SAUDI_CODE);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const isSaudi = countryCode === SAUDI_CODE;
+
+  // Close the country dropdown on an outside click.
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsDropdownOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
   const [touched, setTouched] = useState(false);
   const [remember, setRemember] = useState(false);
   // Set by the server when it says the number belongs to no administrator — only
@@ -20,22 +54,25 @@ export function LoginPage() {
   const [accountError, setAccountError] = useState<string | null>(null);
   const requestCode = useRequestLoginCode();
 
-  // Format feedback belongs on the field, not only in a toast on submit: the number is
-  // composed behind a fixed +966 chip, so "9 digits starting with 5" is the whole rule and
-  // the operator can be told the moment it is not met.
+  // Format feedback belongs on the field, not only in a toast on submit: behind the +966
+  // chip "9 digits starting with 5" is the whole rule and the operator can be told the
+  // moment it is not met. Other prefixes get the generic E.164 check only — the platform
+  // validates E.164, and this screen has no per-country numbering plan to be stricter with.
   const digits = phone
     .replace(/\D/g, '')
     .replace(/^00966/, '')
     .replace(/^966/, '')
     .replace(/^0/, '');
-  const e164 = toE164Saudi(phone);
-  const isValidFormat = looksLikeSaudiMobile(e164);
+  const e164 = composeE164(countryCode, phone);
+  const isValidFormat = isSaudi ? looksLikeSaudiMobile(e164) : looksLikeE164(e164);
   const formatError =
     !touched || phone.trim() === '' || isValidFormat
       ? null
-      : digits.length !== 9
-        ? `رقم الجوال يجب أن يتكوّن من ٩ أرقام (أدخلت ${digits.length})`
-        : 'رقم الجوال يجب أن يبدأ بالرقم ٥';
+      : !isSaudi
+        ? 'رقم الجوال غير صحيح'
+        : digits.length !== 9
+          ? `رقم الجوال يجب أن يتكوّن من ٩ أرقام (أدخلت ${digits.length})`
+          : 'رقم الجوال يجب أن يبدأ بالرقم ٥';
   // One error slot on the field: a malformed number is reported before the server is
   // asked at all, so the two can never contradict each other.
   const fieldError = formatError ?? accountError;
@@ -44,8 +81,8 @@ export function LoginPage() {
     e.preventDefault();
     setTouched(true);
     setAccountError(null);
-    // Saudi-specific, not the generic E.164 check: this field sits behind a fixed +966
-    // chip, so a number of any other length is a typo, and the platform's 202-for-everything
+    // Saudi-specific (for the default +966 prefix), not the generic E.164 check: a number of
+    // any other length is a typo, and the platform's 202-for-everything
     // response (FR-015) would otherwise turn that typo into an unexplained missing SMS.
     if (!isValidFormat) {
       toast.error('يرجى إدخال رقم جوال صحيح');
@@ -63,7 +100,7 @@ export function LoginPage() {
         if (err instanceof ApiError && err.error === 'PHONE_NOT_REGISTERED') {
           // Kept on the field rather than in a toast: it names the thing the operator
           // must change, and a toast disappears before they have retyped it.
-          setAccountError('لا يوجد حساب إداري مسجّل بهذا الرقم'+e164);
+          setAccountError(`لا يوجد حساب إداري مسجّل بهذا الرقم ${e164}`);
           return;
         }
         toast.error('تعذّر إرسال رمز التحقق. حاول مرة أخرى.');
@@ -99,7 +136,8 @@ export function LoginPage() {
             <div className="space-y-1.5">
               <div
                 className={cn(
-                  'relative flex items-center bg-white rounded-2xl border overflow-hidden shadow-sm h-14 focus-within:ring-1',
+                  // No overflow-hidden: it would clip the country dropdown below.
+                  'relative flex items-center bg-white rounded-2xl border shadow-sm h-14 focus-within:ring-1',
                   fieldError
                     ? 'border-red-400 focus-within:border-red-500 focus-within:ring-red-500'
                     : 'border-slate-200 focus-within:border-primary focus-within:ring-primary',
@@ -110,7 +148,7 @@ export function LoginPage() {
                   <Input
                     type="text"
                     inputMode="numeric"
-                    placeholder="5X XXX XXXX"
+                    placeholder={isSaudi ? '5X XXX XXXX' : 'XXXXXXXXX'}
                     value={phone}
                     onChange={(e) => {
                       setPhone(e.target.value);
@@ -122,10 +160,50 @@ export function LoginPage() {
                     className="border-0 focus-visible:ring-0 shadow-none h-full rounded-none bg-transparent pt-5 pb-1 px-0 text-sm font-medium placeholder:text-slate-300"
                   />
                 </div>
-                <div className="flex items-center px-3 border-r border-slate-200 text-slate-600 bg-transparent h-10 shrink-0 gap-1.5" dir="ltr">
+                <div className="flex items-center px-3 border-r border-slate-200 text-slate-600 bg-transparent h-10 shrink-0 gap-1.5" dir="ltr" ref={dropdownRef}>
                   <img src="/signIn/phone.svg" alt="Phone" className="w-4 h-4 ml-1 object-contain" />
                   <div className="w-[1px] h-10 bg-slate-200 mx-1"></div>
-                  <span className="text-xs font-medium mt-0.5 text-slate-600">+966</span>
+                  <div className="relative">
+                    <button
+                      type="button"
+                      onClick={() => setIsDropdownOpen((open) => !open)}
+                      aria-haspopup="listbox"
+                      aria-expanded={isDropdownOpen}
+                      className="flex items-center gap-1.5 px-1 py-1 rounded-lg hover:bg-slate-50 transition-colors cursor-pointer"
+                    >
+                      <span className="text-xs font-medium text-slate-600" dir="ltr">{countryCode}</span>
+                      <ChevronDown className={cn('w-3 h-3 text-slate-400 transition-transform', isDropdownOpen && 'rotate-180')} />
+                    </button>
+
+                    {isDropdownOpen && (
+                      <div
+                        role="listbox"
+                        className="absolute top-full left-0 mt-2 bg-white border border-slate-100 rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] z-50 min-w-[140px] py-1 animate-in fade-in slide-in-from-top-2 duration-200"
+                      >
+                        {COUNTRIES.map((country) => (
+                          <button
+                            key={country.code}
+                            type="button"
+                            role="option"
+                            aria-selected={countryCode === country.code}
+                            onClick={() => {
+                              setCountryCode(country.code);
+                              setIsDropdownOpen(false);
+                              setAccountError(null);
+                            }}
+                            className={cn(
+                              'w-full flex items-center gap-2.5 px-3 py-2 text-xs font-medium hover:bg-blue-50 transition-colors cursor-pointer',
+                              countryCode === country.code ? 'bg-blue-50 text-blue-700' : 'text-slate-700',
+                            )}
+                          >
+                            <img src={country.flag} alt={country.name} className="w-5 h-3.5 object-cover rounded-[2px] shadow-sm" />
+                            <span>{country.name}</span>
+                            <span className="text-slate-400 ml-auto">{country.code}</span>
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
               {fieldError && (

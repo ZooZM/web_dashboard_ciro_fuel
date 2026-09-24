@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
 import type { Invoice } from '@/petrol_company/invoices/api/invoices.api';
+import { PaymentMethodPill } from '@/transport_company/orders/components/PaymentMethodPill';
 
 interface MobileInvoicesListProps {
   invoices: Invoice[];
@@ -39,7 +40,9 @@ export function MobileInvoicesList({ invoices, onSettle }: MobileInvoicesListPro
             </div>
             <div className="flex flex-col gap-1 text-right">
               <span className="text-slate-400 text-[10px] font-bold">{t('invoices.method')}</span>
-              <span className="text-[#162155] font-bold text-xs mt-1">{t(`invoices.methodLabel.${invoice.method}`)}</span>
+              <div className="mt-1">
+                <PaymentMethodPill method={invoice.method} />
+              </div>
             </div>
             <div className="flex flex-col gap-1 text-right col-span-2">
               <span className="text-slate-400 text-[10px] font-bold">{t('invoices.issued')}</span>

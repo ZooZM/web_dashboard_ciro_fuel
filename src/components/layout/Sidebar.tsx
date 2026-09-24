@@ -14,7 +14,6 @@ function NavItem({ to, icon: Icon, label, badge, active, isCollapsed, iconClassN
   return (
     <NavLink
       to={to}
-      title={isCollapsed ? label : undefined}
       className={({ isActive }) =>
         cn(
           'flex items-center rounded-xl group relative transition-all duration-300',
@@ -34,12 +33,12 @@ function NavItem({ to, icon: Icon, label, badge, active, isCollapsed, iconClassN
                 alt={label}
                 className={cn(
                   "transition-all duration-300 object-contain",
-                  iconClassName || (isCollapsed ? "h-5 w-5" : "h-5 w-5 "),
+                  iconClassName || "h-6 w-6",
                   (isActive || active) ? "brightness-0 invert" : "opacity-70 group-hover:opacity-100"
                 )}
               />
             ) : (
-              <Icon className={cn("transition-all duration-300", iconClassName || (isCollapsed ? "h-5 w-5" : "h-5  w-5"), (isActive || active) ? "text-white" : "text-slate-400 group-hover:text-slate-200")} />
+              <Icon className={cn("transition-all duration-300", iconClassName || "h-6 w-6", (isActive || active) ? "text-white" : "text-slate-400 group-hover:text-slate-200")} />
             )}
           </motion.div>
 
@@ -70,6 +69,14 @@ function NavItem({ to, icon: Icon, label, badge, active, isCollapsed, iconClassN
               {badge}
             </motion.span>
           ) : null}
+
+          {/* Custom Tooltip for Collapsed State (replaces the native `title`) */}
+          {isCollapsed && (
+            <div className="absolute top-1/2 -translate-y-1/2 right-[calc(100%+12px)] px-4 py-2 bg-[#EEF2FF] text-[#2563EB] text-xs font-black rounded-xl opacity-0 group-hover:opacity-100 transition-all duration-200 pointer-events-none whitespace-nowrap shadow-sm border border-blue-100 z-50 flex items-center translate-x-2 group-hover:translate-x-0">
+              {label}
+              <div className="absolute top-1/2 -translate-y-1/2 -right-1 w-2 h-2 bg-[#EEF2FF] border-r border-b border-blue-100 rotate-[-45deg]"></div>
+            </div>
+          )}
         </>
       )}
     </NavLink>
@@ -174,8 +181,9 @@ export function Sidebar() {
         }}
         transition={{ type: "spring", stiffness: 300, damping: 30 }}
         className={cn(
-          "flex h-screen shrink-0 flex-col bg-[#0b1121] border-l border-slate-800/50 overflow-hidden",
-          isMobile ? "fixed top-0 right-0 z-50" : "sticky top-0"
+          // No overflow-hidden: the collapsed-state tooltips render outside the rail.
+          "flex h-screen shrink-0 flex-col bg-[#0b1121] border-l border-slate-800/50 z-50",
+          isMobile ? "fixed top-0 right-0" : "sticky top-0"
         )}
       >
         <div className={cn("pt-4 pb-2 flex flex-col transition-all duration-300 shrink-0", isCollapsed ? "px-3" : "px-4")}>
@@ -202,7 +210,7 @@ export function Sidebar() {
               title={isCollapsed ? "توسيع القائمة" : "طي القائمة"}
             >
               <motion.div animate={{ rotate: isCollapsed ? 180 : 0 }} transition={{ type: "spring", stiffness: 200, damping: 20 }}>
-                <img src="/sideBar/Menu.svg" alt="Menu" className={cn("transition-all duration-300 object-contain", isCollapsed ? "h-5 w-8 scale-90" : "h-6 w-10 scale-110")} />
+                <img src="/sideBar/Menu.svg" alt="Menu" className="transition-all duration-300 object-contain h-6 w-6" />
               </motion.div>
             </motion.button>
           </div>
@@ -315,10 +323,10 @@ export function Sidebar() {
             layout="position"
             onClick={() => logout()}
             className={cn(
-              "flex items-center rounded-xl border border-slate-700/50 bg-transparent hover:bg-slate-800/50 overflow-hidden transition-all duration-300",
+              "flex items-center rounded-xl border border-slate-700/50 bg-transparent hover:bg-slate-800/50 transition-all duration-300 group relative",
               isCollapsed ? "justify-center mx-auto w-11 h-11 p-0" : "px-3 py-2.5 w-full justify-between"
             )}
-            title="تسجيل الخروج"
+            aria-label="تسجيل الخروج"
           >
             <AnimatePresence initial={false}>
               {!isCollapsed && (
@@ -334,8 +342,16 @@ export function Sidebar() {
               )}
             </AnimatePresence>
             <motion.div layout="position" className="relative z-10 pl-1">
-              <LogOut className={cn("-scale-x-100 shrink-0 transition-all duration-300 text-red-500", isCollapsed ? "h-5 w-5" : "h-5 w-5")} />
+              <LogOut className={cn("-scale-x-100 shrink-0 transition-all duration-300 text-red-500", "h-6 w-6")} />
             </motion.div>
+
+            {/* Custom Tooltip for Collapsed State */}
+            {isCollapsed && (
+              <div className="absolute top-1/2 -translate-y-1/2 right-[calc(100%+12px)] px-4 py-2 bg-red-50 text-red-600 text-xs font-black rounded-xl opacity-0 group-hover:opacity-100 transition-all duration-200 pointer-events-none whitespace-nowrap shadow-sm border border-red-100 z-50 flex items-center translate-x-2 group-hover:translate-x-0">
+                تسجيل الخروج
+                <div className="absolute top-1/2 -translate-y-1/2 -right-1 w-2 h-2 bg-red-50 border-r border-b border-red-100 rotate-[-45deg]"></div>
+              </div>
+            )}
           </motion.button>
         </div>
       </motion.aside>

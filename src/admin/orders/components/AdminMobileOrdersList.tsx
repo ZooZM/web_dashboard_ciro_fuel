@@ -1,13 +1,15 @@
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { OrderStatusBadge } from '@/transport_company/orders/components/OrderStatusBadge';
+import { PaymentMethodPill } from '@/transport_company/orders/components/PaymentMethodPill';
 import type { Order } from '@/transport_company/orders/types';
 
 /**
  * spec 017 (operator dashboard) T057/FR-017 — the narrow-screen counterpart of
  * `AdminDesktopOrdersTable`, on the same live fields and with the same
- * removals: no platform commission (`Order` carries no such field at all) and
- * no payment-method badge (the mock's value was an index parity, not a field).
+ * removals: no platform commission (`Order` carries no such field at all). The
+ * payment-method row shows the order's real `paymentMethod`, not the design's
+ * "Sadad" vs "bank transfer" (see the desktop table's comment).
  */
 export function AdminMobileOrdersList({ orders }: { orders: Order[] }) {
   const navigate = useNavigate();
@@ -49,6 +51,11 @@ export function AdminMobileOrdersList({ orders }: { orders: Order[] }) {
               label={t('adminOrders.columns.value')}
               value={(order.finalPrice ?? order.estimatedPrice).toLocaleString()}
             />
+          </div>
+
+          <div className="flex items-center justify-between border-t border-slate-100 pt-3">
+            <span className="text-slate-500 text-[11px] font-bold">{t('orders.paymentMethod')}</span>
+            <PaymentMethodPill method={order.paymentMethod} />
           </div>
         </div>
       ))}

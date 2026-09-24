@@ -4,6 +4,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { toast } from '@/lib/toast/toast';
 import { useRequestLoginCode, useVerifyLoginCode } from '@/auth/hooks/useLoginCode';
 import { ApiError } from '@/lib/api/api-error';
+import { COUNTRIES } from '@/auth/constants/countries';
 
 const CODE_LENGTH = 6; // FR-043 — OtpPrimitivesService.generateCode() is 6-digit
 const RESEND_SECONDS = 45;
@@ -14,6 +15,11 @@ export function VerifyPage() {
 
   const phone: string = location.state?.phone || '';
   const remember: boolean = location.state?.remember ?? false;
+  // The flag is derived from the E.164 number itself (longest matching prefix), so the
+  // phone stays the only thing LoginPage hands over.
+  const country = [...COUNTRIES]
+    .sort((a, b) => b.code.length - a.code.length)
+    .find((c) => phone.startsWith(c.code));
 
   const verifyCode = useVerifyLoginCode();
   const resendCode = useRequestLoginCode();
@@ -115,7 +121,12 @@ export function VerifyPage() {
               <p className="text-sm text-slate-500 mt-2 leading-relaxed">
                 تم إرسال رمز مكون من 6 أرقام إلى
                 <br />
-                <span className="font-bold text-slate-800 inline-block mx-1" dir="ltr">{phone || '+9665X XXX XXXX'}</span>
+                <span className="font-bold text-slate-800 inline-flex items-center gap-1.5 mx-1" dir="ltr">
+                  {country && (
+                    <img src={country.flag} alt={country.name} className="w-5 h-3.5 object-cover rounded-[2px] shadow-sm inline-block" />
+                  )}
+                  {phone || '+9665X XXX XXXX'}
+                </span>
                 <button type="button" onClick={() => navigate('/', { replace: true })} className="text-[#F97316] hover:text-orange-600 font-medium text-xs mr-2">تغيير الرقم</button>
               </p>
             </div>

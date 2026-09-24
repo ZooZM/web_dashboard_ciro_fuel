@@ -6,11 +6,11 @@ export function AppShell() {
   return (
     <div className="flex h-svh bg-slate-50 overflow-hidden font-sans" dir="rtl">
       <Sidebar />
-      <div className="flex flex-1 flex-col overflow-y-auto overflow-x-hidden bg-slate-50">
-        <div className="sticky top-0 z-40 bg-slate-50 pt-2">
+      <div className="flex flex-1 flex-col overflow-y-auto overflow-x-hidden bg-slate-50 relative">
+        <div className="sticky top-0 z-40 bg-slate-50 pb-2">
           <Topbar />
         </div>
-        <main className="flex-1 p-4 md:p-6 bg-slate-50">
+        <main className="flex-1 p-4 md:p-6 pt-2 md:pt-4 bg-slate-50">
           <div className="min-h-full flex flex-col">
             <Outlet />
           </div>

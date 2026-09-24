@@ -12,6 +12,7 @@ interface DateRangePopupProps {
   onApply?: (range: { from: string; to: string }) => void;
   className?: string;
   triggerClassName?: string;
+  customTrigger?: (displayString: string, hasSelection: boolean) => React.ReactNode;
 }
 
 export function DateRangePopup({
@@ -20,6 +21,7 @@ export function DateRangePopup({
   onApply,
   className,
   triggerClassName,
+  customTrigger,
 }: DateRangePopupProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [date, setDate] = useState<DateRange | undefined>(() => {
@@ -76,15 +78,17 @@ export function DateRangePopup({
           triggerClassName
         )}
       >
-        <div className="flex items-center gap-3 w-full h-full">
-          <img src="/filter/date.svg" className="w-4 h-4 shrink-0" alt="Date" />
-          <span
-            className={cn("text-[11px] font-bold truncate mt-0.5", hasSelection ? "text-slate-700 font-mono" : "text-slate-500")}
-            dir={hasSelection ? "ltr" : "rtl"}
-          >
-            {displayString}
-          </span>
-        </div>
+        {customTrigger ? customTrigger(displayString, hasSelection) : (
+          <div className="flex items-center gap-3 w-full h-full">
+            <img src="/filter/date.svg" className="w-4 h-4 shrink-0" alt="Date" />
+            <span
+              className={cn("text-[11px] font-bold truncate mt-0.5", hasSelection ? "text-slate-700 font-mono" : "text-slate-500")}
+              dir={hasSelection ? "ltr" : "rtl"}
+            >
+              {displayString}
+            </span>
+          </div>
+        )}
       </button>
 
       {/* Popup Content */}

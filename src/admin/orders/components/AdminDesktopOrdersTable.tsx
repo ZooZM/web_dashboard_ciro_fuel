@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { OrderStatusBadge } from '@/transport_company/orders/components/OrderStatusBadge';
+import { PaymentMethodPill } from '@/transport_company/orders/components/PaymentMethodPill';
 import type { Order } from '@/transport_company/orders/types';
 
 /**
@@ -17,8 +18,11 @@ import type { Order } from '@/transport_company/orders/types';
  * runtime condition, which is why the column is deleted rather than
  * conditionally hidden.
  *
- * The mock's separate `paymentMethod` badge column goes too: the value it
- * rendered was an index parity (`index % 2`), not a field.
+ * The mock's separate `paymentMethod` badge column rendered an index parity
+ * (`index % 2`) as "Sadad" vs "bank transfer" — neither is an order's payment
+ * method. The refreshed design's payment-method column is kept, but shows the
+ * order's real `paymentMethod` (`DIRECT | DEFERRED | CREDIT`) through the
+ * transport screen's `PaymentMethodPill`.
  */
 export function AdminDesktopOrdersTable({ orders }: { orders: Order[] }) {
   const navigate = useNavigate();
@@ -52,6 +56,9 @@ export function AdminDesktopOrdersTable({ orders }: { orders: Order[] }) {
             </TableHead>
             <TableHead className="font-bold text-slate-700 text-[12px] text-center py-3 pl-4 pr-2 min-w-[110px]">
               {t('adminOrders.columns.value')}
+            </TableHead>
+            <TableHead className="font-bold text-slate-700 text-[12px] text-center py-3 pl-4 pr-2 min-w-[100px]">
+              {t('orders.paymentMethod')}
             </TableHead>
           </TableRow>
         </TableHeader>
@@ -128,6 +135,10 @@ export function AdminDesktopOrdersTable({ orders }: { orders: Order[] }) {
                 <span className="text-green-600 font-black text-[12px]">
                   {(order.finalPrice ?? order.estimatedPrice).toLocaleString()}
                 </span>
+              </TableCell>
+
+              <TableCell className="align-middle text-center py-3 pl-4 pr-2">
+                <PaymentMethodPill method={order.paymentMethod} />
               </TableCell>
             </TableRow>
           ))}

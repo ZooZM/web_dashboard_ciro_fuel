@@ -3,12 +3,14 @@ import { useTranslation } from 'react-i18next';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { cn } from '@/lib/utils';
 import type { Invoice } from '@/petrol_company/invoices/api/invoices.api';
+import { PaymentMethodPill } from '@/transport_company/orders/components/PaymentMethodPill';
 
 // Feature 013 T103/FR-041/FR-098: wired to real `Invoice` documents. Dropped: an
 // "invoice number" (only `_id` exists), station/owner/transporter display names (a list
 // row has no batch endpoint to resolve them without N extra fetches per page), a platform
 // commission figure (invoice-level, not tracked — Phase 12 scope), "سداد/تحويل بنكي"
-// payment-method labels (fabricated; the real values are DIRECT/DEFERRED/CREDIT) and an
+// payment-method labels (fabricated; the real values are DIRECT/DEFERRED/CREDIT; the refresh's
+// pill design is kept via `PaymentMethodPill`, keyed on the real `method`) and an
 // export action (no export capability exists anywhere on the platform).
 interface DesktopInvoicesTableProps {
   invoices: Invoice[];
@@ -48,9 +50,7 @@ export function DesktopInvoicesTable({ invoices, onSettle }: DesktopInvoicesTabl
               </TableCell>
 
               <TableCell className="align-middle text-center py-4 px-2">
-                <span className="inline-flex items-center bg-[#eff6ff] px-3 py-1.5 rounded-full border border-blue-100 text-[#3b82f6] text-[11px] font-bold">
-                  {t(`invoices.methodLabel.${invoice.method}`)}
-                </span>
+                <PaymentMethodPill method={invoice.method} />
               </TableCell>
 
               <TableCell className="align-middle text-center py-4 px-2">

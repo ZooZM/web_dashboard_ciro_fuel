@@ -4,6 +4,7 @@ import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
 import { AdminDesktopOrdersTable } from './AdminDesktopOrdersTable';
 import { AdminMobileOrdersList } from './AdminMobileOrdersList';
+import { CursorPager } from '@/transport_company/orders/components/CursorPager';
 import { useAdminOrders, usePlatformOrderSummary } from '@/admin/orders/hooks/useAdminOrders';
 import {
   OrderStatusBucket,
@@ -84,7 +85,9 @@ export function AdminOrdersPage() {
   const [bucket, setBucket] = useState<OrderStatusBucket | 'ALL'>('ALL');
   const [searchInput, setSearchInput] = useState('');
   const [orderId, setOrderId] = useState<string | undefined>(undefined);
-  const [cursor, setCursor] = useState<string | undefined>(undefined);
+  // A stack of visited cursors, so the pager can step back as well as forward.
+  const [cursors, setCursors] = useState<(string | undefined)[]>([undefined]);
+  const cursor = cursors[cursors.length - 1];
 
   const summary = usePlatformOrderSummary();
   const { data, isLoading, isError, refetch } = useAdminOrders({
@@ -143,7 +146,7 @@ export function AdminOrdersPage() {
               key={option}
               onClick={() => {
                 setBucket(option);
-                setCursor(undefined);
+                setCursors([undefined]);
               }}
               className={cn(
                 'relative px-5 py-2 text-sm font-bold rounded-full transition-colors whitespace-nowrap cursor-pointer shrink-0',
@@ -183,7 +186,7 @@ export function AdminOrdersPage() {
           onSubmit={(event) => {
             event.preventDefault();
             setOrderId(searchInput.trim() || undefined);
-            setCursor(undefined);
+            setCursors([undefined]);
           }}
         >
           <label
@@ -249,26 +252,17 @@ export function AdminOrdersPage() {
                 Cursor paging, not page numbers: the platform returns
                 `{ items, nextCursor }` and cannot yield a total for a page
                 count. The mock's `Pagination` component asked for a
-                `totalItems` the platform has never produced.
+                `totalItems` the platform has never produced — the refreshed
+                design's numbered pager is drawn as `CursorPager` instead.
               */}
-              <div className="flex items-center justify-between gap-3 px-4 py-4 border-t border-slate-100">
-                <button
-                  type="button"
-                  disabled={!cursor}
-                  onClick={() => setCursor(undefined)}
-                  className="px-4 py-2 rounded-xl border border-slate-200 text-sm font-bold text-slate-600 disabled:opacity-40"
-                >
-                  {t('common.first')}
-                </button>
-                <button
-                  type="button"
-                  disabled={!data?.nextCursor}
-                  onClick={() => setCursor(data?.nextCursor ?? undefined)}
-                  className="px-4 py-2 rounded-xl bg-slate-800 text-white text-sm font-bold disabled:opacity-40"
-                >
-                  {t('common.next')}
-                </button>
-              </div>
+              <CursorPager
+                page={cursors.length}
+                hasPrev={cursors.length > 1}
+                hasNext={!!data?.nextCursor}
+                onPrev={() => setCursors((c) => c.slice(0, -1))}
+                onNext={() => data?.nextCursor && setCursors((c) => [...c, data.nextCursor ?? undefined])}
+                className="border-t border-slate-100"
+              />
             </>
           )}
         </div>

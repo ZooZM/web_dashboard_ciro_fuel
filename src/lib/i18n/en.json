@@ -1118,6 +1118,7 @@
     "subtitle": "The transport companies on the platform and the areas each covers",
     "failed": "Could not load the transport companies.",
     "empty": "No transport companies yet.",
-    "firstAdmin": "First administrator"
+    "firstAdmin": "First administrator",
+    "noMatches": "No matching companies"
   }
 }
